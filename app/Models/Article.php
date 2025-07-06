@@ -15,8 +15,9 @@ class Article extends Model
         'price',
         'detail',
         'category_id',
-        'image',
     ];
+    
+    protected $with = ['images'];
 
     public function category()
     {
@@ -27,7 +28,7 @@ class Article extends Model
     {
         return $this->hasMany(Command::class);
     }
-
+    
     public function images()
     {
         return $this->hasMany(ArticleImage::class)->orderBy('sort_order');

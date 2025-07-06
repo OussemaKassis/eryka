@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // Homepage: List all articles
 Route::get('/', [App\Http\Controllers\ShopController::class, 'articlesHome'])->name('shop.home');
+// Route::redirect('/', '/admin');
 
 // Checkout page for an article
 Route::get('/checkout/{article}', [App\Http\Controllers\ShopController::class, 'checkout'])->name('shop.checkout');
