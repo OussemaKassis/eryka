@@ -64,3 +64,25 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+commands:
+cd eryka
+composer install
+npm install
+npm run build
+copy .env.example .env
+php artisan key:generate
+php artisan migrate
+mklink /j "public\storage" "storage\app\public"
+icacls "storage" /grant "IUSR:(OI)(CI)F" /T
+icacls "bootstrap/cache" /grant "IUSR:(OI)(CI)F" /T
+php artisan filament:upgrade
+mkdir -p storage/app/public/articles
+php artisan config:clear
+php artisan config:cache
+php artisan view:clear
+php artisan route:clear
+php artisan storage:link
+php artisan make:filament-user
+php artisan serve
