@@ -15,8 +15,13 @@ class Article extends Model
         'price',
         'detail',
         'category_id',
+        'quantity',
     ];
-    
+
+    protected $casts = [
+        'quantity' => 'integer',
+    ];
+
     protected $with = ['images'];
 
     public function category()
@@ -28,7 +33,7 @@ class Article extends Model
     {
         return $this->hasMany(Command::class);
     }
-    
+
     public function images()
     {
         return $this->hasMany(ArticleImage::class)->orderBy('sort_order');
@@ -37,5 +42,10 @@ class Article extends Model
     public function getMainImageAttribute()
     {
         return $this->images->first()->image_path ?? $this->image;
+    }
+
+    public function getInStockAttribute(): bool
+    {
+        return $this->quantity > 0;
     }
 }

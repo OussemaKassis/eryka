@@ -1,219 +1,177 @@
-/* resources/css/app.css */
-:root {
-    --primary: #4f46e5;
-    --primary-hover: #4338ca;
-    --background: #f9fafb;
-    --card-bg: #ffffff;
-    --text: #1f2937;
-    --text-light: #6b7280;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    line-height: 1.6;
-    color: var(--text);
-    background-color: var(--background);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .container {
+/* resources/css/app.css — overrides layered on top of the Furni template styles */
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* The template's hero image is hard-coded to max-width:780px and bleeds out of
+   its column below the lg breakpoint, causing horizontal scroll on mobile/tablet. */
+.hero-img-wrap img {
+    max-width: 100%;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-  
-  /* Navigation */
-  .navbar {
-    background-color: white;
-    box-shadow: var(--shadow);
-    padding: 1rem 0;
-    margin-bottom: 2rem;
-  }
-  
-  .nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary);
-    text-decoration: none;
-  }
-  
-  /* Alert */
-  .alert {
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 0.375rem;
-  }
-  
-  .alert-success {
-    background-color: #d1fae5;
-    color: #065f46;
-  }
-  
-  /* Article Grid */
-  .articles-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 2rem 0;
-  }
-  
-  .article-card {
-    background: var(--card-bg);
-    border-radius: 0.5rem;
+}
+
+.hero-img-wrap:after {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .hero-img-wrap img {
+        max-width: 780px;
+        width: auto;
+    }
+
+    .hero-img-wrap:after {
+        display: block;
+    }
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
     overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #dce5e4;
+    border-radius: 10px;
+}
+
+.slider {
     display: flex;
-    flex-direction: column;
-  }
-  
-  .article-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-  }
-  
-  .article-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .article-content {
-    padding: 1.5rem;
-    flex: 1;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-color: #dce5e4;
+}
+
+.slider-nav {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
     display: flex;
-    flex-direction: column;
-  }
-  
-  .article-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
-  
-  .article-description {
-    color: var(--text-light);
-    margin-bottom: 1rem;
-    flex-grow: 1;
-  }
-  
-  .article-price {
-    font-weight: bold;
-    color: var(--primary);
-    font-size: 1.25rem;
-    margin: 1rem 0;
-  }
-  
-  .btn {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.375rem;
-    text-decoration: none;
-    text-align: center;
-    font-weight: 500;
-    transition: background-color 0.2s;
-    border: none;
+    justify-content: center;
+}
+
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.6);
     cursor: pointer;
-    margin-top: auto;
-  }
-  
-  .btn:hover {
-    background: var(--primary-hover);
-  }
-  
-  /* Checkout Page */
-  .checkout-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-  }
-  
-  .checkout-card {
-    background: white;
-    border-radius: 0.5rem;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-  
-  .checkout-content {
+    transition: all 0.3s ease;
+}
+
+.slider-dot:hover,
+.slider-dot.active {
+    background: #3b5d50;
+    transform: scale(1.2);
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
     display: flex;
-    flex-direction: column;
-    padding: 2rem;
-  }
-  
-  .checkout-image {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-    align-self: center;
-  }
-  
-  .checkout-title {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1.25rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-  }
-  
-  .form-control {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-  }
-  
-  .form-control:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-  }
-  
-  .grid-cols-2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  
-  @media (max-width: 768px) {
-    .grid-cols-2 {
-      grid-template-columns: 1fr;
-    }
-    
-    .checkout-content {
-      flex-direction: column;
-    }
-    
-    .checkout-image {
-      max-width: 100%;
-    }
-  }
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.slider-arrow:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.slider-arrow.prev {
+    left: 10px;
+}
+
+.slider-arrow.next {
+    right: 10px;
+}
+
+/* The navbar forces all descendant links to white (for the dark nav bar),
+   which bleeds into the Bootstrap dropdown menu's white background and makes
+   the category dropdown text invisible. Force it back to dark text there. */
+.custom-navbar .dropdown-menu .dropdown-item {
+    color: #2f2f2f !important;
+}
+
+.custom-navbar .dropdown-menu .dropdown-item:hover,
+.custom-navbar .dropdown-menu .dropdown-item:focus {
+    color: #ffffff !important;
+    background-color: #3b5d50;
+}
+
+/* Branded footer — dark, on-brand background instead of the template's plain
+   white footer, to bookend the page with the same color as the hero/navbar. */
+.footer-section-branded {
+    background: #3b5d50;
+    color: rgba(255, 255, 255, 0.75);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-section-branded:before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 170px;
+    background-image: url('/vendor/furni/images/dots-light.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+.footer-section-branded .footer-logo-wrap .footer-logo {
+    color: #ffffff;
+}
+
+.footer-section-branded a {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.footer-section-branded a:hover {
+    color: #f9bf29;
+}
+
+.footer-section-branded .footer-heading {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.footer-section-branded .links-wrap ul li,
+.footer-section-branded ul li {
+    margin-bottom: 12px;
+}
+
+.footer-section-branded .border-top {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.footer-section-branded .border-top.copyright p {
+    color: rgba(255, 255, 255, 0.55);
+}

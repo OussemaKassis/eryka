@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {
@@ -26,9 +23,18 @@ class CategoryResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('parent_id')
+                    ->label('Parent Category (Famille)')
+                    ->helperText('Leave empty to make this a top-level "famille". Pick a parent to make this a "sous-famille".')
+                    ->options(fn (?Category $record) => Category::topLevel()
+                        ->when($record, fn ($query) => $query->where('id', '!=', $record->id))
+                        ->pluck('title', 'id'))
+                    ->searchable()
+                    ->nullable(),
                 Forms\Components\Textarea::make('description'),
                 Forms\Components\FileUpload::make('image')
                     ->image()
+                    ->disk('public')
                     ->directory('categories')
                     ->nullable(),
             ]);
@@ -40,6 +46,9 @@ class CategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('title')->searchable(),
+                Tables\Columns\TextColumn::make('parent.title')
+                    ->label('Famille')
+                    ->placeholder('— (top-level famille)'),
                 Tables\Columns\TextColumn::make('description')->limit(30),
                 Tables\Columns\ImageColumn::make('image')->disk('public'),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),

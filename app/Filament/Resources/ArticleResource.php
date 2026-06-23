@@ -3,17 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ArticleResource\Pages;
-use App\Filament\Resources\ArticleResource\RelationManagers;
 use App\Models\Article;
-use App\Models\ArticleImage;
+use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Storage;
 
 class ArticleResource extends Resource
 {
@@ -32,47 +29,37 @@ class ArticleResource extends Resource
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric(),
+                Forms\Components\TextInput::make('quantity')
+                    ->label('Stock Quantity')
+                    ->helperText('How many units are available. Shows as "Out of Stock" on the site when this hits 0.')
+                    ->required()
+                    ->numeric()
+                    ->minValue(0)
+                    ->default(0),
                 Forms\Components\RichEditor::make('detail')->nullable(),
                 Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'title')
+                    ->label('Category')
+                    ->options(fn () => Category::with('parent')->get()->mapWithKeys(
+                        fn (Category $category) => [
+                            $category->id => $category->parent
+                                ? "{$category->parent->title} › {$category->title}"
+                                : $category->title,
+                        ]
+                    ))
+                    ->searchable()
                     ->required(),
                 Forms\Components\FileUpload::make('images')
                     ->label('Article Images')
                     ->image()
+                    ->disk('public')
                     ->directory('articles')
                     ->multiple()
                     ->reorderable()
                     ->appendFiles()
-                    ->saveUploadedFileUsing(function ($file, $get, $set, $record) {
-                        $path = $file->store('articles', 'public');
-                        
-                        if ($record) {
-                            $sortOrder = ($record->images()->max('sort_order') ?? 0) + 1;
-                            $record->images()->create([
-                                'image_path' => str_replace('public/', '', $path),
-                                'sort_order' => $sortOrder
-                            ]);
-                            return null;
-                        }
-                        
-                        return $path;
-                    })
-                    ->dehydrated(false)
                     ->downloadable()
                     ->openable()
                     ->nullable()
-                    ->columnSpanFull()
-                    ->afterStateUpdated(function ($state, $set, $record) {
-                        if (!$record) {
-                            $set('pending_images', $state);
-                        }
-                    })
-                    ->afterStateHydrated(function (Forms\Set $set, $state) {
-                        // This ensures existing images are shown in the form when editing
-                        if (is_array($state)) {
-                            $set('existing_images', $state);
-                        }
-                    }),
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -83,7 +70,17 @@ class ArticleResource extends Resource
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('title')->searchable(),
                 Tables\Columns\TextColumn::make('description')->limit(30),
-                Tables\Columns\TextColumn::make('price'),
+                Tables\Columns\TextColumn::make('price')->money('usd'),
+                Tables\Columns\TextColumn::make('quantity')
+                    ->label('Stock')
+                    ->sortable()
+                    ->badge()
+                    ->color(fn (int $state): string => match (true) {
+                        $state <= 0 => 'danger',
+                        $state <= 5 => 'warning',
+                        default => 'success',
+                    })
+                    ->formatStateUsing(fn (int $state): string => $state <= 0 ? 'Out of stock' : (string) $state),
                 Tables\Columns\TextColumn::make('category.title')->label('Category'),
                 Tables\Columns\ViewColumn::make('images')
                     ->label('Images')
@@ -114,23 +111,6 @@ class ArticleResource extends Resource
         return [
             //
         ];
-    }
-    
-    public static function afterCreate($record, array $data): void
-    {
-        if (isset($data['pending_images'])) {
-            foreach ($data['pending_images'] as $index => $path) {
-                $record->images()->create([
-                    'image_path' => str_replace('public/', '', $path),
-                    'sort_order' => $index
-                ]);
-            }
-        }
-    }
-    
-    public static function afterSave($record, array $data): void
-    {
-        // Handle any additional save logic if needed
     }
 
     public static function getPages(): array

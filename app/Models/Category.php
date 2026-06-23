@@ -13,10 +13,31 @@ class Category extends Model
         'title',
         'description',
         'image',
+        'parent_id',
     ];
 
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    public function scopeTopLevel($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    public function isFamily(): bool
+    {
+        return $this->parent_id === null;
     }
 }

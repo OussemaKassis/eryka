@@ -1,19 +1,41 @@
 @extends('layouts.app')
+
+@section('hero-title', $category->title)
+@section('hero-subtitle', $category->parent ? $category->parent->title . ' › ' . $category->title : ($category->description ?? null))
+
 @section('content')
-<div class="container mx-auto py-8">
-    <a href="{{ route('shop.index') }}" class="text-blue-500 hover:underline">&larr; Back to categories</a>
-    <h1 class="text-2xl font-bold mb-6 mt-2">{{ $category->title }}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        @foreach($category->articles as $article)
-            <a href="{{ route('shop.checkout', $article->id) }}" class="block bg-white rounded shadow hover:shadow-lg transition p-4">
-                @if($article->image)
-                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="w-full h-40 object-cover rounded mb-4">
-                @endif
-                <h2 class="text-lg font-semibold mb-2">{{ $article->title }}</h2>
-                <p class="text-gray-600 mb-2">{{ $article->description }}</p>
-                <p class="text-green-700 font-bold">${{ $article->price }}</p>
-            </a>
-        @endforeach
+<div id="products" class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <a href="{{ route('shop.products') }}" class="btn btn-sm mb-5">&larr; All Products</a>
+
+        @if($category->parent)
+            <p class="mb-5">
+                <a href="{{ route('shop.category', $category->parent->id) }}">{{ $category->parent->title }}</a>
+                <span class="mx-1">›</span>
+                <span>{{ $category->title }}</span>
+            </p>
+        @endif
+
+        @if($category->children->isNotEmpty())
+            <h2 class="section-title mb-4">Sous-familles</h2>
+            <div class="row mb-5">
+                @foreach($category->children as $child)
+                    <div class="col-12 col-md-4 col-lg-3 mb-4">
+                        <a href="{{ route('shop.category', $child->id) }}" class="btn w-100">{{ $child->title }}</a>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+        <div class="row">
+            @forelse($articles as $article)
+                @include('shop.partials.product-card', ['article' => $article])
+            @empty
+                <div class="col-12 text-center">
+                    <p>No products in this category yet.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 </div>
 @endsection

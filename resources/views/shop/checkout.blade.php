@@ -1,136 +1,110 @@
 @extends('layouts.app')
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize checkout slider
-        const checkoutSlider = document.getElementById('checkout-slider');
-        if (checkoutSlider) {
-            window.checkoutSlider = {
-                currentSlide: 0,
-                totalSlides: checkoutSlider.children.length
-            };
-        }
-    });
-
-    function moveSlide(sliderId, direction) {
-        const slider = window[`${sliderId}Slider`];
-        slider.currentSlide = (slider.currentSlide + direction + slider.totalSlides) % slider.totalSlides;
-        updateSlider(sliderId);
-    }
-
-    function goToSlide(sliderId, slideIndex) {
-        window[`${sliderId}Slider`].currentSlide = slideIndex;
-        updateSlider(sliderId);
-    }
-
-    function updateSlider(sliderId) {
-        const slider = window[`${sliderId}Slider`];
-        const sliderElement = document.getElementById(`${sliderId}-slider`);
-        const dots = document.querySelectorAll(`#${sliderId}-slider-nav .slider-dot`);
-        
-        // Update slide position
-        if (sliderElement) {
-            sliderElement.style.transform = `translateX(-${slider.currentSlide * 100}%)`;
-        }
-        
-        // Update active dot
-        if (dots.length > 0) {
-            dots.forEach((dot, index) => {
-                if (index === slider.currentSlide) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-    }
-</script>
-@endpush
+@section('hero-title', $article->title)
 
 @section('content')
-<div class="checkout-container">
-    <a href="{{ url('/') }}" class="btn" style="margin-bottom: 1rem;">&larr; Back to Shop</a>
-    
-    <div class="checkout-card">
-        <div class="checkout-content">
-            <div class="slider-container" style="max-width: 400px; margin: 0 auto 2rem;">
-                <div class="slider" id="checkout-slider">
-                    @if($article->images->count() > 0)
-                        @foreach($article->images as $image)
-                            <div class="slide" 
-                                 style="background-image: url('{{ asset('storage/' . $image->image_path) }}')">
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <a href="{{ url('/') }}" class="btn btn-sm mb-5">&larr; Back to Shop</a>
+
+        <div class="row">
+            <div class="col-md-6 mb-5 mb-md-0">
+                <div class="p-3 p-lg-4 border bg-white">
+                    <div class="product-thumbnail slider-container" style="height: 400px;">
+                        @if($article->quantity <= 0)
+                            <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">Out of Stock</span>
+                        @elseif($article->quantity <= 5)
+                            <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">Only {{ $article->quantity }} left</span>
+                        @endif
+
+                        <div class="slider" id="slider-{{ $article->id }}">
+                            @if($article->images->count() > 0)
+                                @foreach($article->images as $image)
+                                    <div class="slide"
+                                         style="background-image: url('{{ asset('storage/' . $image->image_path) }}')">
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="slide" style="background: #dce5e4;"></div>
+                            @endif
+                        </div>
+
+                        @if($article->images->count() > 1)
+                            <button class="slider-arrow prev" type="button" onclick="moveSlide('{{ $article->id }}', -1)">&#10094;</button>
+                            <button class="slider-arrow next" type="button" onclick="moveSlide('{{ $article->id }}', 1)">&#10095;</button>
+                            <div class="slider-nav" id="slider-nav-{{ $article->id }}">
+                                @foreach($article->images as $key => $image)
+                                    <span class="slider-dot {{ $loop->first ? 'active' : '' }}"
+                                          onclick="goToSlide('{{ $article->id }}', {{ $key }})"></span>
+                                @endforeach
                             </div>
-                        @endforeach
-                    @else
-                        <div class="slide" style="background: #eee; display: flex; align-items: center; justify-content: center;">
-                            No Image Available
+                        @endif
+                    </div>
+
+                    <p class="mt-4 mb-0 text-black">{{ $article->description }}</p>
+                    <strong class="product-price d-block mt-3" style="font-size: 1.5rem;">${{ number_format($article->price, 2) }}</strong>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h2 class="h3 mb-3 text-black">Order Details</h2>
+                <div class="p-3 p-lg-4 border bg-white">
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     @endif
+
+                    <form action="{{ route('shop.order.submit', $article->id) }}" method="POST">
+                        @csrf
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="quantity" class="text-black">Quantity <span class="text-danger">*</span></label>
+                                <input type="number" id="quantity" name="quantity" min="1" max="{{ $article->quantity }}" value="1" required class="form-control" {{ $article->quantity <= 0 ? 'disabled' : '' }}>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="customer_first_name" class="text-black">First Name <span class="text-danger">*</span></label>
+                                <input type="text" id="customer_first_name" name="customer_first_name" required class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="customer_last_name" class="text-black">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" id="customer_last_name" name="customer_last_name" required class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="city" class="text-black">City <span class="text-danger">*</span></label>
+                                <input type="text" id="city" name="city" required class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="email" class="text-black">Email <span class="text-danger">*</span></label>
+                                <input type="email" id="email" name="email" required class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone_number" class="text-black">Phone Number <span class="text-danger">*</span></label>
+                                <input type="text" id="phone_number" name="phone_number" required class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="text-black">Address <span class="text-danger">*</span></label>
+                            <textarea id="address" name="address" required class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg py-3 w-100 mt-3" {{ $article->quantity <= 0 ? 'disabled' : '' }}>
+                            {{ $article->quantity <= 0 ? 'Out of Stock' : 'Submit Order' }}
+                        </button>
+                    </form>
                 </div>
-                
-                @if($article->images->count() > 1)
-                    <button class="slider-arrow prev" onclick="moveSlide('checkout', -1)">❮</button>
-                    <button class="slider-arrow next" onclick="moveSlide('checkout', 1)">❯</button>
-                    <div class="slider-nav" id="checkout-slider-nav">
-                        @foreach($article->images as $key => $image)
-                            <span class="slider-dot {{ $loop->first ? 'active' : '' }}" 
-                                  onclick="goToSlide('checkout', {{ $key }})"></span>
-                        @endforeach
-                    </div>
-                @endif
             </div>
-            
-            <h1 class="checkout-title">{{ $article->title }}</h1>
-            <p style="margin-bottom: 1.5rem;">{{ $article->description }}</p>
-            <p class="article-price" style="margin-bottom: 1.5rem;">${{ $article->price }}</p>
-            
-            @if($errors->any())
-                <div class="alert" style="background: #fee2e2; color: #b91c1c; margin-bottom: 1.5rem;">
-                    <ul style="list-style: inside; padding-left: 0.5rem;">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            
-            <form action="{{ route('shop.order.submit', $article->id) }}" method="POST">
-                @csrf
-                <div class="grid-cols-2">
-                    <div class="form-group">
-                        <label for="quantity">Quantity</label>
-                        <input type="number" id="quantity" name="quantity" min="1" value="1" required class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_first_name">First Name</label>
-                        <input type="text" id="customer_first_name" name="customer_first_name" required class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_last_name">Last Name</label>
-                        <input type="text" id="customer_last_name" name="customer_last_name" required class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" id="city" name="city" required class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone_number">Phone Number</label>
-                        <input type="text" id="phone_number" name="phone_number" required class="form-control">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <textarea id="address" name="address" required class="form-control" rows="3"></textarea>
-                </div>
-                
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Submit Order</button>
-            </form>
         </div>
     </div>
 </div>

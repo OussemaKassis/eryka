@@ -15,10 +15,31 @@ use Illuminate\Support\Facades\Route;
 
 // Homepage: List all articles
 Route::get('/', [App\Http\Controllers\ShopController::class, 'articlesHome'])->name('shop.home');
-// Route::redirect('/', '/admin');
 
-// Checkout page for an article
+// Static pages
+Route::get('/about', [App\Http\Controllers\ShopController::class, 'about'])->name('shop.about');
+Route::get('/contact', [App\Http\Controllers\ShopController::class, 'contact'])->name('shop.contact');
+Route::post('/contact', [App\Http\Controllers\ShopController::class, 'contactSubmit'])->name('shop.contact.submit');
+
+// All products, optionally filtered by category
+Route::get('/products', [App\Http\Controllers\ShopController::class, 'products'])->name('shop.products');
+
+// Category page (famille or sous-famille)
+Route::get('/category/{category}', [App\Http\Controllers\CategoryController::class, 'show'])->name('shop.category');
+
+// Product detail page
+Route::get('/product/{article}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.product');
+
+// Checkout page for an article (quick "Buy Now" flow)
 Route::get('/checkout/{article}', [App\Http\Controllers\ShopController::class, 'checkout'])->name('shop.checkout');
 
 // Order submission (POST)
 Route::post('/checkout/{article}', [App\Http\Controllers\ShopController::class, 'orderSubmit'])->name('shop.order.submit');
+
+// Cart
+Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{article}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{article}', [App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove/{article}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/checkout', [App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
+Route::post('/cart/checkout', [App\Http\Controllers\CartController::class, 'checkoutSubmit'])->name('cart.checkout.submit');
