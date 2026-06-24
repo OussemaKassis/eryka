@@ -23,6 +23,7 @@ class ContactMessageResource extends Resource
             ->schema([
                 TextInput::make('name')->disabled(),
                 TextInput::make('email')->disabled(),
+                TextInput::make('phone')->disabled(),
                 Textarea::make('message')->disabled()->columnSpanFull(),
             ]);
     }
@@ -33,6 +34,7 @@ class ContactMessageResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
+                Tables\Columns\TextColumn::make('phone')->searchable(),
                 Tables\Columns\TextColumn::make('message')->limit(50),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
             ])

@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
-@section('hero-title', 'Checkout')
+@section('hero-title', __('site.checkout'))
 
 @section('content')
 <div class="untree_co-section before-footer-section">
     <div class="container">
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
-                <h2 class="h3 mb-3 text-black">Your Order</h2>
+                <h2 class="h3 mb-3 text-black">{{ __('site.your_order') }}</h2>
                 <div class="p-3 p-lg-4 border bg-white">
                     <table class="table site-block-order-table mb-4">
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>Total</th>
+                                <th>{{ __('site.product') }}</th>
+                                <th>{{ __('site.total') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,17 +24,17 @@
                                 </tr>
                             @endforeach
                             <tr>
-                                <td class="text-black"><strong>Order Total</strong></td>
+                                <td class="text-black"><strong>{{ __('site.order_total') }}</strong></td>
                                 <td class="text-black"><strong>${{ number_format($total, 2) }}</strong></td>
                             </tr>
                         </tbody>
                     </table>
-                    <a href="{{ route('cart.index') }}" class="btn btn-sm">&larr; Back to Cart</a>
+                    <a href="{{ route('cart.index') }}" class="btn btn-sm">&larr; {{ __('site.back_to_cart') }}</a>
                 </div>
             </div>
 
             <div class="col-md-6">
-                <h2 class="h3 mb-3 text-black">Shipping Details</h2>
+                <h2 class="h3 mb-3 text-black">{{ __('site.shipping_details') }}</h2>
                 <div class="p-3 p-lg-4 border bg-white">
                     @if($errors->any())
                         <div class="alert alert-danger">
@@ -50,37 +50,37 @@
                         @csrf
                         <div class="form-group row">
                             <div class="col-md-6">
-                                <label for="customer_first_name" class="text-black">First Name <span class="text-danger">*</span></label>
+                                <label for="customer_first_name" class="text-black">{{ __('site.first_name') }} <span class="text-danger">*</span></label>
                                 <input type="text" id="customer_first_name" name="customer_first_name" required class="form-control">
                             </div>
                             <div class="col-md-6">
-                                <label for="customer_last_name" class="text-black">Last Name <span class="text-danger">*</span></label>
+                                <label for="customer_last_name" class="text-black">{{ __('site.last_name') }} <span class="text-danger">*</span></label>
                                 <input type="text" id="customer_last_name" name="customer_last_name" required class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-md-6">
-                                <label for="city" class="text-black">City <span class="text-danger">*</span></label>
+                                <label for="city" class="text-black">{{ __('site.city') }} <span class="text-danger">*</span></label>
                                 <input type="text" id="city" name="city" required class="form-control">
                             </div>
                             <div class="col-md-6">
-                                <label for="phone_number" class="text-black">Phone Number <span class="text-danger">*</span></label>
+                                <label for="phone_number" class="text-black">{{ __('site.phone_number') }} <span class="text-danger">*</span></label>
                                 <input type="text" id="phone_number" name="phone_number" required class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="email" class="text-black">Email <span class="text-danger">*</span></label>
+                            <label for="email" class="text-black">{{ __('site.email') }} <span class="text-danger">*</span></label>
                             <input type="email" id="email" name="email" required class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <label for="address" class="text-black">Address <span class="text-danger">*</span></label>
+                            <label for="address" class="text-black">{{ __('site.address') }} <span class="text-danger">*</span></label>
                             <textarea id="address" name="address" required class="form-control" rows="3"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg py-3 w-100 mt-3">Place Order</button>
+                        <button type="submit" class="btn btn-primary btn-lg py-3 w-100 mt-3">{{ __('site.place_order') }}</button>
                     </form>
                 </div>
             </div>

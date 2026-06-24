@@ -24,6 +24,16 @@ class Article extends Model
 
     protected $with = ['images'];
 
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = ucfirst($value);
+    }
+
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = $value === null ? null : ucfirst($value);
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

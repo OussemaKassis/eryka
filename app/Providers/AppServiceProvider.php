@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\SocialLink;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,11 @@ class AppServiceProvider extends ServiceProvider
             $view->with(
                 'navFamilies',
                 Category::topLevel()->with('children')->orderBy('title')->get()
+            );
+
+            $view->with(
+                'socialLinks',
+                SocialLink::where('is_active', true)->orderBy('sort_order')->get()
             );
         });
     }

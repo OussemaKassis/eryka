@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('hero-title', 'Your Cart')
+@section('hero-title', __('site.your_cart'))
 
 @section('content')
 <div class="untree_co-section before-footer-section">
@@ -12,8 +12,8 @@
         @if($items->isEmpty())
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <p class="mb-4">Your cart is empty.</p>
-                    <a href="{{ route('shop.home') }}" class="btn btn-primary">Continue Shopping</a>
+                    <p class="mb-4">{{ __('site.cart_empty') }}</p>
+                    <a href="{{ route('shop.home') }}" class="btn btn-primary">{{ __('site.continue_shopping') }}</a>
                 </div>
             </div>
         @else
@@ -23,12 +23,12 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th class="product-thumbnail">Image</th>
-                                    <th class="product-name">Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                    <th>Remove</th>
+                                    <th class="product-thumbnail">{{ __('site.image') }}</th>
+                                    <th class="product-name">{{ __('site.product') }}</th>
+                                    <th>{{ __('site.price') }}</th>
+                                    <th>{{ __('site.quantity') }}</th>
+                                    <th>{{ __('site.total') }}</th>
+                                    <th>{{ __('site.remove') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,7 +47,7 @@
                                             <form action="{{ route('cart.update', $item['article']->id) }}" method="POST" class="cart-update-form d-flex align-items-center justify-content-center gap-2">
                                                 @csrf
                                                 <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="{{ $item['article']->quantity }}" class="form-control text-center" style="max-width: 80px;" data-cart-quantity>
-                                                <noscript><button type="submit" class="btn btn-sm">Update</button></noscript>
+                                                <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
                                             </form>
                                         </td>
                                         <td data-cart-subtotal>${{ number_format($item['subtotal'], 2) }}</td>
@@ -70,13 +70,13 @@
                     <div class="p-3 p-lg-4 border bg-white">
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <span class="text-black">Total</span>
+                                <span class="text-black">{{ __('site.total') }}</span>
                             </div>
                             <div class="col-md-6 text-end">
                                 <strong class="text-black" data-cart-total>${{ number_format($total, 2) }}</strong>
                             </div>
                         </div>
-                        <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-lg py-3 w-100">Proceed to Checkout</a>
+                        <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-lg py-3 w-100">{{ __('site.proceed_to_checkout') }}</a>
                     </div>
                 </div>
             </div>

@@ -6,7 +6,7 @@
 @section('content')
 <div id="products" class="untree_co-section product-section before-footer-section">
     <div class="container">
-        <a href="{{ route('shop.products') }}" class="btn btn-sm mb-5">&larr; All Products</a>
+        <a href="{{ route('shop.products') }}" class="btn btn-sm mb-5">&larr; {{ __('site.all_products') }}</a>
 
         @if($category->parent)
             <p class="mb-5">
@@ -17,7 +17,7 @@
         @endif
 
         @if($category->children->isNotEmpty())
-            <h2 class="section-title mb-4">Sous-familles</h2>
+            <h2 class="section-title mb-4">{{ __('site.sous_familles') }}</h2>
             <div class="row mb-5">
                 @foreach($category->children as $child)
                     <div class="col-12 col-md-4 col-lg-3 mb-4">
@@ -32,7 +32,7 @@
                 @include('shop.partials.product-card', ['article' => $article])
             @empty
                 <div class="col-12 text-center">
-                    <p>No products in this category yet.</p>
+                    <p>{{ __('site.no_products_in_category') }}</p>
                 </div>
             @endforelse
         </div>

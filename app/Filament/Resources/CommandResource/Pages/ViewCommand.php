@@ -3,10 +3,14 @@
 namespace App\Filament\Resources\CommandResource\Pages;
 
 use App\Filament\Resources\CommandResource;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class CreateCommand extends CreateRecord
+class ViewCommand extends ViewRecord
 {
     protected static string $resource = CommandResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

@@ -1,0 +1,137 @@
+<?php
+
+return [
+
+    // Navigation
+    'nav_home' => 'Home',
+    'nav_products' => 'Products',
+    'nav_about' => 'About us',
+    'nav_contact' => 'Contact us',
+    'nav_cart' => 'Cart',
+    'nav_admin_login' => 'Admin login',
+
+    // Hero
+    'hero_shop_now' => 'Shop Now',
+    'home_hero_title' => 'Our Furniture Collection',
+    'home_hero_subtitle' => 'Discover quality pieces crafted with care, delivered straight to your door.',
+    'about_hero_title' => 'About Us',
+    'contact_hero_title' => 'Contact Us',
+    'contact_hero_subtitle' => 'Have a question about an order or a product? Send us a message.',
+    'products_hero_subtitle' => 'Browse our full catalog, or filter by category.',
+
+    // Footer
+    'footer_tagline' => 'Quality furniture and home essentials, delivered straight to your door.',
+    'footer_quick_links' => 'Quick Links',
+    'footer_shop' => 'Shop',
+    'footer_your_cart' => 'Your Cart',
+    'footer_admin_login' => 'Admin Login',
+    'footer_copyright' => 'Copyright ©:year :name. All Rights Reserved.',
+
+    // Common / shared
+    'out_of_stock' => 'Out of Stock',
+    'in_stock' => 'In Stock',
+    'only_x_left' => 'Only :qty left',
+    'order_now' => 'Order Now',
+    'quick_view' => 'Quick View',
+    'view_full_details' => 'View Full Details',
+    'add_to_cart' => 'Add to Cart',
+    'buy_now' => 'Buy Now',
+    'back_to_shop' => 'Back to Shop',
+    'back_to_cart' => 'Back to Cart',
+    'view_all_products' => 'View All Products',
+    'all_products' => 'All Products',
+    'no_products_yet' => 'No products available yet.',
+    'no_products_found_category' => 'No products found in this category.',
+    'no_products_in_category' => 'No products in this category yet.',
+    'read_more' => 'Read More',
+    'quantity' => 'Quantity',
+    'price' => 'Price',
+    'image' => 'Image',
+    'product' => 'Product',
+    'total' => 'Total',
+    'remove' => 'Remove',
+    'update' => 'Update',
+    'close' => 'Close',
+    'color' => 'Color',
+    'choose_color' => 'Choose color :color',
+    'shop' => 'Shop',
+
+    // Home page
+    'featured_products' => 'Featured Products',
+    'why_choose_us' => 'Why Choose Us',
+    'feature_shipping_title' => 'Fast & Free Shipping',
+    'feature_shipping_desc' => 'Every order ships fast, at no extra cost to you.',
+    'feature_easy_title' => 'Easy to Shop',
+    'feature_easy_desc' => 'Browse, pick a piece, and place your order in seconds.',
+    'feature_support_title' => '24/7 Support',
+    'feature_support_desc' => "Questions about an order? We're here to help anytime.",
+    'feature_returns_title' => 'Hassle Free Returns',
+    'feature_returns_desc' => 'Not the right fit? Returns are simple and stress-free.',
+    'we_help_title' => 'We Help You Make Modern Interior Design',
+    'we_help_desc' => 'Every piece in our collection is chosen to mix comfort with style, so you can build a home that feels as good as it looks.',
+    'we_help_list_1' => 'Hand-picked, quality-checked furniture',
+    'we_help_list_2' => 'Fast, reliable delivery to your door',
+    'we_help_list_3' => 'Friendly support before and after your order',
+    'we_help_list_4' => 'Simple, hassle-free returns',
+    'explore' => 'Explore',
+    'popular_picks' => 'Popular Picks',
+    'a_quality_piece' => 'A quality piece from our collection.',
+    'testimonials_title' => 'What Our Customers Say',
+    'testimonial_1' => '"Beautiful furniture and the delivery was faster than I expected. The sofa looks even better in my living room than it did online."',
+    'testimonial_2' => '"Ordering was simple and the quality is exactly what was advertised. Already planning my next order with :name."',
+    'testimonial_3' => '"Great customer support and a smooth checkout. Exactly the easy shopping experience I was hoping for."',
+    'verified_buyer' => 'Verified Buyer',
+    'tips_title' => 'Tips & Inspiration',
+    'blog_1_title' => 'First Time Home Owner Ideas',
+    'blog_1_meta' => 'Furnishing tips for your first place',
+    'blog_2_title' => 'How To Keep Your Furniture Clean',
+    'blog_2_meta' => 'Simple care tips that make pieces last',
+    'blog_3_title' => 'Small Space Furniture Ideas',
+    'blog_3_meta' => 'Make the most of every room',
+
+    // About page
+    'why_choose_name' => 'Why Choose :name',
+    'about_lead' => 'We hand-pick every piece in our collection for comfort, durability, and timeless design, so your home feels as good as it looks.',
+
+    // Contact page
+    'our_information' => 'Our Information',
+    'contact_details_soon' => 'Contact details coming soon.',
+    'contact_form_title' => 'Contact Form',
+    'your_name' => 'Your Name',
+    'email_address' => 'Email Address',
+    'phone_number' => 'Phone Number',
+    'message' => 'Message',
+    'send_message' => 'Send Message',
+
+    // Products / category pages
+    'sous_familles' => 'Sub-categories',
+    'no_products_found' => 'No products found.',
+    'sort_newest' => 'Newest',
+    'sort_price_asc' => 'Price: Low to High',
+    'sort_price_desc' => 'Price: High to Low',
+    'sort_name_asc' => 'Name: A-Z',
+    'in_stock_only' => 'In Stock Only',
+
+    // Product detail page
+    'order_details' => 'Order Details',
+    'first_name' => 'First Name',
+    'last_name' => 'Last Name',
+    'city' => 'City',
+    'email' => 'Email',
+    'address' => 'Address',
+    'submit_order' => 'Submit Order',
+
+    // Cart page
+    'your_cart' => 'Your Cart',
+    'cart_empty' => 'Your cart is empty.',
+    'continue_shopping' => 'Continue Shopping',
+    'proceed_to_checkout' => 'Proceed to Checkout',
+
+    // Checkout pages
+    'checkout' => 'Checkout',
+    'your_order' => 'Your Order',
+    'order_total' => 'Order Total',
+    'shipping_details' => 'Shipping Details',
+    'place_order' => 'Place Order',
+
+];

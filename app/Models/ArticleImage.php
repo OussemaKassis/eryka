@@ -12,6 +12,7 @@ class ArticleImage extends Model
     protected $fillable = [
         'article_id',
         'image_path',
+        'color',
         'sort_order'
     ];
 

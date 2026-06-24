@@ -7,12 +7,19 @@
         @foreach($images as $image)
             @if($image && $image->image_path)
                 <div class="relative group">
-                    <img 
-                        src="{{ $image->image_url }}" 
-                        alt="Article Image" 
+                    <img
+                        src="{{ $image->image_url }}"
+                        alt="Article Image"
                         class="w-10 h-10 object-cover rounded-md border border-gray-200"
                         title="{{ basename($image->image_path) }}"
                     >
+                    @if($image->color)
+                        <span
+                            class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border border-white shadow"
+                            style="background-color: {{ $image->color }};"
+                            title="{{ $image->color }}"
+                        ></span>
+                    @endif
                     <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center">
                         <a 
                             href="{{ $image->image_url }}" 

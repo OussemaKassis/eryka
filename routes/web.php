@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Language switcher
+Route::get('/lang/{locale}', [App\Http\Controllers\LocaleController::class, 'switch'])->name('lang.switch');
+
 // Homepage: List all articles
 Route::get('/', [App\Http\Controllers\ShopController::class, 'articlesHome'])->name('shop.home');
 

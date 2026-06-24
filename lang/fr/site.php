@@ -1,0 +1,137 @@
+<?php
+
+return [
+
+    // Navigation
+    'nav_home' => 'Accueil',
+    'nav_products' => 'Produits',
+    'nav_about' => 'À propos',
+    'nav_contact' => 'Contact',
+    'nav_cart' => 'Panier',
+    'nav_admin_login' => 'Connexion admin',
+
+    // Hero
+    'hero_shop_now' => 'Acheter maintenant',
+    'home_hero_title' => 'Notre collection de meubles',
+    'home_hero_subtitle' => 'Découvrez des pièces de qualité fabriquées avec soin, livrées directement chez vous.',
+    'about_hero_title' => 'À propos de nous',
+    'contact_hero_title' => 'Contactez-nous',
+    'contact_hero_subtitle' => 'Une question sur une commande ou un produit ? Envoyez-nous un message.',
+    'products_hero_subtitle' => 'Parcourez notre catalogue complet, ou filtrez par catégorie.',
+
+    // Footer
+    'footer_tagline' => 'Meubles et articles de maison de qualité, livrés directement chez vous.',
+    'footer_quick_links' => 'Liens rapides',
+    'footer_shop' => 'Boutique',
+    'footer_your_cart' => 'Votre panier',
+    'footer_admin_login' => 'Connexion admin',
+    'footer_copyright' => 'Copyright ©:year :name. Tous droits réservés.',
+
+    // Common / shared
+    'out_of_stock' => 'Rupture de stock',
+    'in_stock' => 'En stock',
+    'only_x_left' => 'Plus que :qty en stock',
+    'order_now' => 'Commander',
+    'quick_view' => 'Aperçu rapide',
+    'view_full_details' => 'Voir tous les détails',
+    'add_to_cart' => 'Ajouter au panier',
+    'buy_now' => 'Acheter maintenant',
+    'back_to_shop' => 'Retour à la boutique',
+    'back_to_cart' => 'Retour au panier',
+    'view_all_products' => 'Voir tous les produits',
+    'all_products' => 'Tous les produits',
+    'no_products_yet' => 'Aucun produit disponible pour le moment.',
+    'no_products_found_category' => 'Aucun produit trouvé dans cette catégorie.',
+    'no_products_in_category' => 'Aucun produit dans cette catégorie pour le moment.',
+    'read_more' => 'Lire la suite',
+    'quantity' => 'Quantité',
+    'price' => 'Prix',
+    'image' => 'Image',
+    'product' => 'Produit',
+    'total' => 'Total',
+    'remove' => 'Supprimer',
+    'update' => 'Mettre à jour',
+    'close' => 'Fermer',
+    'color' => 'Couleur',
+    'choose_color' => 'Choisir la couleur :color',
+    'shop' => 'Boutique',
+
+    // Home page
+    'featured_products' => 'Produits en vedette',
+    'why_choose_us' => 'Pourquoi nous choisir',
+    'feature_shipping_title' => 'Livraison rapide & gratuite',
+    'feature_shipping_desc' => 'Chaque commande est expédiée rapidement, sans frais supplémentaires.',
+    'feature_easy_title' => 'Achat facile',
+    'feature_easy_desc' => 'Parcourez, choisissez une pièce, et passez votre commande en quelques secondes.',
+    'feature_support_title' => 'Support 24/7',
+    'feature_support_desc' => 'Une question sur votre commande ? Nous sommes là pour vous aider à tout moment.',
+    'feature_returns_title' => 'Retours sans tracas',
+    'feature_returns_desc' => "Ce n'est pas la bonne pièce ? Les retours sont simples et sans stress.",
+    'we_help_title' => 'Nous vous aidons à créer un intérieur moderne',
+    'we_help_desc' => 'Chaque pièce de notre collection est choisie pour allier confort et style, afin que votre maison se sente aussi bien qu\'elle en a l\'air.',
+    'we_help_list_1' => 'Meubles sélectionnés à la main et contrôlés en qualité',
+    'we_help_list_2' => 'Livraison rapide et fiable chez vous',
+    'we_help_list_3' => 'Support amical avant et après votre commande',
+    'we_help_list_4' => 'Retours simples et sans tracas',
+    'explore' => 'Découvrir',
+    'popular_picks' => 'Sélection populaire',
+    'a_quality_piece' => 'Une pièce de qualité de notre collection.',
+    'testimonials_title' => 'Ce que disent nos clients',
+    'testimonial_1' => '« De très beaux meubles et une livraison plus rapide que prévu. Le canapé est encore plus beau dans mon salon qu\'en photo. »',
+    'testimonial_2' => '« La commande était simple et la qualité est exactement celle annoncée. Je prévois déjà ma prochaine commande chez :name. »',
+    'testimonial_3' => '« Un excellent service client et un passage en caisse fluide. Exactement l\'expérience d\'achat simple que j\'espérais. »',
+    'verified_buyer' => 'Acheteur vérifié',
+    'tips_title' => 'Conseils & Inspiration',
+    'blog_1_title' => 'Idées pour les nouveaux propriétaires',
+    'blog_1_meta' => 'Conseils d\'ameublement pour votre premier logement',
+    'blog_2_title' => 'Comment entretenir vos meubles',
+    'blog_2_meta' => 'Des astuces simples pour faire durer vos meubles',
+    'blog_3_title' => 'Idées meubles pour petits espaces',
+    'blog_3_meta' => 'Tirez le meilleur parti de chaque pièce',
+
+    // About page
+    'why_choose_name' => 'Pourquoi choisir :name',
+    'about_lead' => 'Nous sélectionnons chaque pièce de notre collection pour son confort, sa durabilité et son design intemporel, afin que votre maison se sente aussi bien qu\'elle en a l\'air.',
+
+    // Contact page
+    'our_information' => 'Nos informations',
+    'contact_details_soon' => 'Coordonnées disponibles prochainement.',
+    'contact_form_title' => 'Formulaire de contact',
+    'your_name' => 'Votre nom',
+    'email_address' => 'Adresse e-mail',
+    'phone_number' => 'Numéro de téléphone',
+    'message' => 'Message',
+    'send_message' => 'Envoyer le message',
+
+    // Products / category pages
+    'sous_familles' => 'Sous-familles',
+    'no_products_found' => 'Aucun produit trouvé.',
+    'sort_newest' => 'Plus récents',
+    'sort_price_asc' => 'Prix : croissant',
+    'sort_price_desc' => 'Prix : décroissant',
+    'sort_name_asc' => 'Nom : A-Z',
+    'in_stock_only' => 'En stock uniquement',
+
+    // Product detail page
+    'order_details' => 'Détails de la commande',
+    'first_name' => 'Prénom',
+    'last_name' => 'Nom',
+    'city' => 'Ville',
+    'email' => 'E-mail',
+    'address' => 'Adresse',
+    'submit_order' => 'Valider la commande',
+
+    // Cart page
+    'your_cart' => 'Votre panier',
+    'cart_empty' => 'Votre panier est vide.',
+    'continue_shopping' => 'Continuer mes achats',
+    'proceed_to_checkout' => 'Passer à la caisse',
+
+    // Checkout pages
+    'checkout' => 'Paiement',
+    'your_order' => 'Votre commande',
+    'order_total' => 'Total de la commande',
+    'shipping_details' => 'Détails de livraison',
+    'place_order' => 'Valider la commande',
+
+];

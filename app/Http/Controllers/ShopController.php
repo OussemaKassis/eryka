@@ -5,22 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Command;
+use App\Models\ContactInfo;
 use App\Models\ContactMessage;
+use App\Models\HeroSlide;
+use App\Models\PageHero;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ShopController extends Controller
 {
+    // Shared hero data (admin-managed slides + title/subtitle) for a given page key
+    private function pageHero(string $pageKey): array
+    {
+        return [
+            'pageHero' => PageHero::where('page_key', $pageKey)->first(),
+            'heroSlides' => HeroSlide::where('page_key', $pageKey)->where('is_active', true)->orderBy('sort_order')->get(),
+        ];
+    }
+
     // Homepage: featured articles + marketing sections
     public function articlesHome()
     {
         $articles = Article::with('category')->latest()->take(8)->get();
-        return view('shop.home', compact('articles'));
+        return view('shop.home', ['articles' => $articles] + $this->pageHero('home'));
     }
 
     // All products, optionally filtered by category (and its sub-categories)
     public function products(Request $request)
     {
-        $query = Article::with('category')->latest();
+        $query = Article::with('category');
         $activeCategory = null;
 
         if ($categoryId = $request->query('category')) {
@@ -33,10 +46,30 @@ class ShopController extends Controller
             $query->whereIn('category_id', $categoryIds);
         }
 
+        if ($request->boolean('in_stock')) {
+            $query->where('quantity', '>', 0);
+        }
+
+        match ($request->query('sort')) {
+            'price_asc' => $query->orderBy('price', 'asc'),
+            'price_desc' => $query->orderBy('price', 'desc'),
+            'name_asc' => $query->orderBy('title', 'asc'),
+            default => $query->latest(),
+        };
+
         $articles = $query->get();
         $familyCategories = Category::topLevel()->with('children')->orderBy('title')->get();
+        $hero = $this->pageHero('products');
 
-        return view('shop.products', compact('articles', 'familyCategories', 'activeCategory'));
+        if ($request->wantsJson()) {
+            return response()->json([
+                'title' => $activeCategory ? $activeCategory->title : ($hero['pageHero']->title ?? __('site.all_products')),
+                'subtitle' => $activeCategory ? null : ($hero['pageHero']->subtitle ?? __('site.products_hero_subtitle')),
+                'html' => view('shop.partials.products-grid', compact('articles'))->render(),
+            ]);
+        }
+
+        return view('shop.products', ['articles' => $articles, 'familyCategories' => $familyCategories, 'activeCategory' => $activeCategory] + $hero);
     }
 
     // Product detail page
@@ -71,6 +104,7 @@ class ShopController extends Controller
                 : 'This product is out of stock.',
         ]);
         $validated['article_id'] = $article->id;
+        $validated['group_id'] = (string) Str::uuid();
         Command::create($validated);
         $article->decrement('quantity', $validated['quantity']);
 
@@ -80,12 +114,13 @@ class ShopController extends Controller
 
     public function about()
     {
-        return view('shop.about');
+        return view('shop.about', $this->pageHero('about'));
     }
 
     public function contact()
     {
-        return view('shop.contact');
+        $contactInfos = ContactInfo::where('is_active', true)->orderBy('sort_order')->get();
+        return view('shop.contact', ['contactInfos' => $contactInfos] + $this->pageHero('contact'));
     }
 
     public function contactSubmit(Request $request)
@@ -93,6 +128,7 @@ class ShopController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:50',
             'message' => 'required|string',
         ]);
         ContactMessage::create($validated);

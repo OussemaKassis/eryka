@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Command;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
@@ -123,8 +124,11 @@ class CartController extends Controller
             }
         }
 
+        $groupId = (string) Str::uuid();
+
         foreach ($cart as $articleId => $quantity) {
             Command::create($validated + [
+                'group_id' => $groupId,
                 'article_id' => $articleId,
                 'quantity' => $quantity,
             ]);

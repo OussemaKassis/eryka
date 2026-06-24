@@ -48,17 +48,25 @@ class ArticleResource extends Resource
                     ))
                     ->searchable()
                     ->required(),
-                Forms\Components\FileUpload::make('images')
-                    ->label('Article Images')
-                    ->image()
-                    ->disk('public')
-                    ->directory('articles')
-                    ->multiple()
+                Forms\Components\Repeater::make('images')
+                    ->relationship('images')
+                    ->label('Article Images (up to 3, each with its own color)')
+                    ->schema([
+                        Forms\Components\FileUpload::make('image_path')
+                            ->label('Image')
+                            ->image()
+                            ->disk('public')
+                            ->directory('articles')
+                            ->required(),
+                        Forms\Components\ColorPicker::make('color')
+                            ->label('Color')
+                            ->required(),
+                    ])
+                    ->columns(2)
+                    ->orderColumn('sort_order')
                     ->reorderable()
-                    ->appendFiles()
-                    ->downloadable()
-                    ->openable()
-                    ->nullable()
+                    ->maxItems(3)
+                    ->addActionLabel('Add image')
                     ->columnSpanFull(),
             ]);
     }

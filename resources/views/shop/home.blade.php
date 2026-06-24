@@ -1,20 +1,39 @@
 @extends('layouts.app')
 
-@section('hero-title', 'Our Furniture Collection')
-@section('hero-subtitle', 'Discover quality pieces crafted with care, delivered straight to your door.')
-@section('hero-image')
-    <img src="{{ asset('vendor/furni/images/couch.png') }}" class="img-fluid">
-@endsection
+@section('hero-title', $pageHero->title ?? __('site.home_hero_title'))
+@section('hero-subtitle', $pageHero->subtitle ?? __('site.home_hero_subtitle'))
+
+@if($heroSlides->isNotEmpty())
+    @section('hero-bg-slides')
+        @foreach($heroSlides as $slide)
+            <div class="hero-slide" style="background-image: url('{{ asset('storage/' . $slide->image_path) }}')"></div>
+        @endforeach
+    @endsection
+
+    @if($heroSlides->count() > 1)
+        @section('hero-slider-dots')
+            <div class="hero-slider-dots">
+                @foreach($heroSlides as $key => $slide)
+                    <span class="hero-dot {{ $loop->first ? 'active' : '' }}" onclick="goToHeroSlide({{ $key }})"></span>
+                @endforeach
+            </div>
+        @endsection
+    @endif
+@else
+    @section('hero-image')
+        <img src="{{ asset('vendor/furni/images/couch.png') }}" class="img-fluid">
+    @endsection
+@endif
 
 @section('content')
 <div id="products" class="untree_co-section product-section before-footer-section">
     <div class="container">
         <div class="row mb-5">
             <div class="col-md-6">
-                <h2 class="section-title">Featured Products</h2>
+                <h2 class="section-title">{{ __('site.featured_products') }}</h2>
             </div>
             <div class="col-md-6 text-start text-md-end">
-                <a href="{{ route('shop.products') }}" class="more">View All Products</a>
+                <a href="{{ route('shop.products') }}" class="more">{{ __('site.view_all_products') }}</a>
             </div>
         </div>
 
@@ -23,7 +42,7 @@
                 @include('shop.partials.product-card', ['article' => $article])
             @empty
                 <div class="col-12 text-center">
-                    <p>No products available yet.</p>
+                    <p>{{ __('site.no_products_yet') }}</p>
                 </div>
             @endforelse
         </div>
@@ -34,7 +53,7 @@
     <div class="container">
         <div class="row justify-content-center text-center mb-3">
             <div class="col-lg-7">
-                <h2 class="section-title">Why Choose Us</h2>
+                <h2 class="section-title">{{ __('site.why_choose_us') }}</h2>
             </div>
         </div>
         <div class="row">
@@ -43,8 +62,8 @@
                     <div class="icon">
                         <img src="{{ asset('vendor/furni/images/truck.svg') }}" alt="Image" class="imf-fluid">
                     </div>
-                    <h3>Fast &amp; Free Shipping</h3>
-                    <p>Every order ships fast, at no extra cost to you.</p>
+                    <h3>{{ __('site.feature_shipping_title') }}</h3>
+                    <p>{{ __('site.feature_shipping_desc') }}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
@@ -52,8 +71,8 @@
                     <div class="icon">
                         <img src="{{ asset('vendor/furni/images/bag.svg') }}" alt="Image" class="imf-fluid">
                     </div>
-                    <h3>Easy to Shop</h3>
-                    <p>Browse, pick a piece, and place your order in seconds.</p>
+                    <h3>{{ __('site.feature_easy_title') }}</h3>
+                    <p>{{ __('site.feature_easy_desc') }}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
@@ -61,8 +80,8 @@
                     <div class="icon">
                         <img src="{{ asset('vendor/furni/images/support.svg') }}" alt="Image" class="imf-fluid">
                     </div>
-                    <h3>24/7 Support</h3>
-                    <p>Questions about an order? We're here to help anytime.</p>
+                    <h3>{{ __('site.feature_support_title') }}</h3>
+                    <p>{{ __('site.feature_support_desc') }}</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
@@ -70,8 +89,8 @@
                     <div class="icon">
                         <img src="{{ asset('vendor/furni/images/return.svg') }}" alt="Image" class="imf-fluid">
                     </div>
-                    <h3>Hassle Free Returns</h3>
-                    <p>Not the right fit? Returns are simple and stress-free.</p>
+                    <h3>{{ __('site.feature_returns_title') }}</h3>
+                    <p>{{ __('site.feature_returns_desc') }}</p>
                 </div>
             </div>
         </div>
@@ -90,16 +109,16 @@
                 </div>
             </div>
             <div class="col-lg-5 ps-lg-5">
-                <h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
-                <p>Every piece in our collection is chosen to mix comfort with style, so you can build a home that feels as good as it looks.</p>
+                <h2 class="section-title mb-4">{{ __('site.we_help_title') }}</h2>
+                <p>{{ __('site.we_help_desc') }}</p>
 
                 <ul class="list-unstyled custom-list my-4">
-                    <li>Hand-picked, quality-checked furniture</li>
-                    <li>Fast, reliable delivery to your door</li>
-                    <li>Friendly support before and after your order</li>
-                    <li>Simple, hassle-free returns</li>
+                    <li>{{ __('site.we_help_list_1') }}</li>
+                    <li>{{ __('site.we_help_list_2') }}</li>
+                    <li>{{ __('site.we_help_list_3') }}</li>
+                    <li>{{ __('site.we_help_list_4') }}</li>
                 </ul>
-                <p><a href="#products" class="btn">Explore</a></p>
+                <p><a href="#products" class="btn">{{ __('site.explore') }}</a></p>
             </div>
         </div>
     </div>
@@ -112,7 +131,7 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-md-6">
-                <h2 class="section-title">Popular Picks</h2>
+                <h2 class="section-title">{{ __('site.popular_picks') }}</h2>
             </div>
         </div>
 
@@ -128,11 +147,11 @@
                         <div class="pt-3">
                             <h3>{{ $article->title }}
                                 @if($article->quantity <= 0)
-                                    <span class="badge bg-danger">Out of Stock</span>
+                                    <span class="badge bg-danger">{{ __('site.out_of_stock') }}</span>
                                 @endif
                             </h3>
-                            <p>{{ $article->description ?? 'A quality piece from our collection.' }}</p>
-                            <p class="mb-0">Read More</p>
+                            <p>{{ $article->description ?? __('site.a_quality_piece') }}</p>
+                            <p class="mb-0">{{ __('site.read_more') }}</p>
                         </div>
                     </a>
                 </div>
@@ -148,7 +167,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7 mx-auto text-center">
-                <h2 class="section-title">What Our Customers Say</h2>
+                <h2 class="section-title">{{ __('site.testimonials_title') }}</h2>
             </div>
         </div>
 
@@ -168,14 +187,14 @@
                                 <div class="col-lg-8 mx-auto">
                                     <div class="testimonial-block text-center">
                                         <blockquote class="mb-5">
-                                            <p>&ldquo;Beautiful furniture and the delivery was faster than I expected. The sofa looks even better in my living room than it did online.&rdquo;</p>
+                                            <p>{{ __('site.testimonial_1') }}</p>
                                         </blockquote>
                                         <div class="author-info">
                                             <div class="author-pic">
                                                 <img src="{{ asset('vendor/furni/images/person_4.jpg') }}" alt="Sarah M." class="img-fluid">
                                             </div>
                                             <h3 class="font-weight-bold">Sarah M.</h3>
-                                            <span class="position d-block mb-3">Verified Buyer</span>
+                                            <span class="position d-block mb-3">{{ __('site.verified_buyer') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -187,14 +206,14 @@
                                 <div class="col-lg-8 mx-auto">
                                     <div class="testimonial-block text-center">
                                         <blockquote class="mb-5">
-                                            <p>&ldquo;Ordering was simple and the quality is exactly what was advertised. Already planning my next order with {{ config('app.name', 'this shop') }}.&rdquo;</p>
+                                            <p>{{ __('site.testimonial_2', ['name' => config('app.name', 'this shop')]) }}</p>
                                         </blockquote>
                                         <div class="author-info">
                                             <div class="author-pic">
                                                 <img src="{{ asset('vendor/furni/images/person_1.jpg') }}" alt="David K." class="img-fluid">
                                             </div>
                                             <h3 class="font-weight-bold">David K.</h3>
-                                            <span class="position d-block mb-3">Verified Buyer</span>
+                                            <span class="position d-block mb-3">{{ __('site.verified_buyer') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -206,14 +225,14 @@
                                 <div class="col-lg-8 mx-auto">
                                     <div class="testimonial-block text-center">
                                         <blockquote class="mb-5">
-                                            <p>&ldquo;Great customer support and a smooth checkout. Exactly the easy shopping experience I was hoping for.&rdquo;</p>
+                                            <p>{{ __('site.testimonial_3') }}</p>
                                         </blockquote>
                                         <div class="author-info">
                                             <div class="author-pic">
                                                 <img src="{{ asset('vendor/furni/images/person_3.jpg') }}" alt="Karim B." class="img-fluid">
                                             </div>
                                             <h3 class="font-weight-bold">Karim B.</h3>
-                                            <span class="position d-block mb-3">Verified Buyer</span>
+                                            <span class="position d-block mb-3">{{ __('site.verified_buyer') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -234,7 +253,7 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-md-12">
-                <h2 class="section-title">Tips &amp; Inspiration</h2>
+                <h2 class="section-title">{{ __('site.tips_title') }}</h2>
             </div>
         </div>
 
@@ -243,9 +262,9 @@
                 <div class="post-entry">
                     <span class="post-thumbnail"><img src="{{ asset('vendor/furni/images/post-1.jpg') }}" alt="Image" class="img-fluid"></span>
                     <div class="post-content-entry">
-                        <h3>First Time Home Owner Ideas</h3>
+                        <h3>{{ __('site.blog_1_title') }}</h3>
                         <div class="meta">
-                            <span>Furnishing tips for your first place</span>
+                            <span>{{ __('site.blog_1_meta') }}</span>
                         </div>
                     </div>
                 </div>
@@ -255,9 +274,9 @@
                 <div class="post-entry">
                     <span class="post-thumbnail"><img src="{{ asset('vendor/furni/images/post-2.jpg') }}" alt="Image" class="img-fluid"></span>
                     <div class="post-content-entry">
-                        <h3>How To Keep Your Furniture Clean</h3>
+                        <h3>{{ __('site.blog_2_title') }}</h3>
                         <div class="meta">
-                            <span>Simple care tips that make pieces last</span>
+                            <span>{{ __('site.blog_2_meta') }}</span>
                         </div>
                     </div>
                 </div>
@@ -267,9 +286,9 @@
                 <div class="post-entry">
                     <span class="post-thumbnail"><img src="{{ asset('vendor/furni/images/post-3.jpg') }}" alt="Image" class="img-fluid"></span>
                     <div class="post-content-entry">
-                        <h3>Small Space Furniture Ideas</h3>
+                        <h3>{{ __('site.blog_3_title') }}</h3>
                         <div class="meta">
-                            <span>Make the most of every room</span>
+                            <span>{{ __('site.blog_3_meta') }}</span>
                         </div>
                     </div>
                 </div>

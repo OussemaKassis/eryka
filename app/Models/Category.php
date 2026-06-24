@@ -16,6 +16,16 @@ class Category extends Model
         'parent_id',
     ];
 
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = ucfirst($value);
+    }
+
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = $value === null ? null : ucfirst($value);
+    }
+
     public function articles()
     {
         return $this->hasMany(Article::class);

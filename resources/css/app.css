@@ -1,8 +1,195 @@
 /* resources/css/app.css — overrides layered on top of the Furni template styles */
 
+/* Brand identity — Playfair Display for headings/brand mark, per the visual
+   identity chart; body copy stays on the template's Inter for readability. */
+h1, h2, h3, h4, h5, h6,
+.navbar-brand,
+.footer-logo,
+.section-title,
+.hero h1 {
+    font-family: 'Playfair Display', 'Inter', serif;
+}
+
+/* Category switcher on the Products page — only the active tab gets a pill
+   background, the rest are plain text, like a typical menu/category filter. */
+.category-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px 30px;
+}
+
+.category-pill {
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: #4C403A;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.category-pill:hover {
+    color: #4D5147;
+}
+
+.category-pill.active {
+    background: #4D5147;
+    color: #ffffff;
+}
+
+.category-pill.sub {
+    font-weight: 500;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Products page filter bar — sort + in-stock toggle, sitting beside the
+   category switcher. */
+.products-filter-bar {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.products-filter-bar .form-select {
+    max-width: 200px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4C403A;
+}
+
+.stock-filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #4C403A;
+    cursor: pointer;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.stock-filter-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4D5147;
+    cursor: pointer;
+}
+
+@media (max-width: 991px) {
+    .products-filter-bar {
+        justify-content: flex-start;
+        margin-top: 14px;
+    }
+}
+
+/* Bootstrap ships cold neutral grays for borders/badges by default; swap them
+   for warm tones from the brand palette so the whole UI reads as one piece. */
+.form-control,
+.form-select {
+    border-color: #C7B9A8;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: #E3D9C8 !important;
+}
+
+.dropdown-menu {
+    border-color: #E3D9C8;
+}
+
+hr {
+    border-color: #E3D9C8;
+    opacity: 1;
+}
+
+.bg-secondary {
+    background-color: #D9A48F !important;
+}
+
+.border {
+    border-color: #E3D9C8 !important;
+}
+
+/* Stock badges, recolored from Bootstrap's stock red/yellow/green to warm
+   tones pulled from the brand palette so they don't clash with it. */
+.badge.bg-danger {
+    background-color: #A8503F !important;
+}
+
+.badge.bg-warning {
+    background-color: #DAB88B !important;
+    color: #4C403A !important;
+}
+
+.badge.bg-success {
+    background-color: #4D5147 !important;
+}
+
+/* Soft placeholder for products without a photo yet — a warm gradient with
+   a centered icon reads as "no photo" instead of a blank, broken-looking tile. */
+.slide-placeholder {
+    background: linear-gradient(135deg, #EFE2CE, #E3D9C8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-placeholder i {
+    font-size: 2.5rem;
+    color: #C7B9A8;
+}
+
+/* Contact page "Our Information" list — admin-managed emails/phones/addresses. */
+.contact-info-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+    line-height: 1.6;
+}
+
+.contact-info-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #4D5147;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.contact-info-label {
+    background: #DAB88B;
+    color: #4C403A;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
 html, body {
     overflow-x: hidden;
     max-width: 100%;
+}
+
+/* The About page's "why choose us" photo is nearly full-resolution and towers
+   over the text column at full column width — cap its height and crop nicely. */
+.why-choose-section .img-wrap img {
+    max-height: 480px;
+    width: 100%;
+    object-fit: cover;
 }
 
 /* The template's hero image is hard-coded to max-width:780px and bleeds out of
@@ -10,10 +197,28 @@ html, body {
 .hero-img-wrap img {
     max-width: 100%;
     width: 100%;
+    position: relative;
+    z-index: 2;
 }
 
 .hero-img-wrap:after {
     display: none;
+}
+
+/* The stock hero photo sits close in tone to the olive backdrop and reads
+   flat without it. A soft ivoire glow behind it gives the product separation. */
+.hero-img-wrap:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    height: 90%;
+    max-width: 520px;
+    max-height: 420px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(239, 226, 206, 0.18) 0%, rgba(239, 226, 206, 0) 70%);
+    z-index: 1;
 }
 
 @media (min-width: 992px) {
@@ -27,12 +232,106 @@ html, body {
     }
 }
 
+.hero {
+    position: relative;
+    z-index: 0;
+}
+
+.hero p {
+    color: rgba(239, 226, 206, 0.7) !important;
+}
+
+/* Eases the hard cut from the dark hero block into the light body section below. */
+.hero:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.12));
+    pointer-events: none;
+}
+
+/* Hero slider — full-bleed background slideshow behind the hero text/CTA,
+   cycling through featured products' photos automatically, like a typical
+   e-commerce homepage banner. */
+.hero.hero-bg-slider-mode {
+    position: relative;
+    overflow: hidden;
+    padding: 90px 0;
+    min-height: 460px;
+    display: flex;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .hero.hero-bg-slider-mode {
+        min-height: 600px;
+    }
+}
+
+.hero.hero-bg-slider-mode .hero-slider-track {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    height: 100%;
+    transition: transform 0.8s ease;
+    z-index: 0;
+}
+
+.hero.hero-bg-slider-mode .hero-slide {
+    min-width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(77, 81, 71, 0.92) 0%, rgba(77, 81, 71, 0.65) 50%, rgba(77, 81, 71, 0.25) 100%);
+    z-index: 1;
+}
+
+.hero.hero-bg-slider-mode .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-slider-dots {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 3;
+}
+
+.hero-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-dot:hover,
+.hero-dot.active {
+    background: #D9A48F;
+    transform: scale(1.2);
+}
+
 .slider-container {
     position: relative;
     width: 100%;
     height: 220px;
     overflow: hidden;
-    background: #dce5e4;
+    background: #E3D9C8;
     border-radius: 10px;
 }
 
@@ -47,7 +346,7 @@ html, body {
     height: 100%;
     background-size: cover;
     background-position: center;
-    background-color: #dce5e4;
+    background-color: #E3D9C8;
 }
 
 .slider-nav {
@@ -72,7 +371,7 @@ html, body {
 
 .slider-dot:hover,
 .slider-dot.active {
-    background: #3b5d50;
+    background: #4D5147;
     transform: scale(1.2);
 }
 
@@ -107,23 +406,58 @@ html, body {
     right: 10px;
 }
 
+/* Color swatches on the product detail page — each one is tied to a
+   specific product image and jumps the slider to it when clicked. */
+.color-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #E3D9C8;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.08);
+}
+
+.color-swatch.active {
+    border-color: #4D5147;
+    box-shadow: 0 0 0 2px rgba(77, 81, 71, 0.25);
+}
+
 /* The navbar forces all descendant links to white (for the dark nav bar),
    which bleeds into the Bootstrap dropdown menu's white background and makes
    the category dropdown text invisible. Force it back to dark text there. */
 .custom-navbar .dropdown-menu .dropdown-item {
-    color: #2f2f2f !important;
+    color: #4C403A !important;
 }
 
 .custom-navbar .dropdown-menu .dropdown-item:hover,
-.custom-navbar .dropdown-menu .dropdown-item:focus {
+.custom-navbar .dropdown-menu .dropdown-item:focus,
+.custom-navbar .dropdown-menu .dropdown-item.active {
     color: #ffffff !important;
-    background-color: #3b5d50;
+    background-color: #4D5147;
+}
+
+/* Language switcher sits in .custom-navbar-cta, which doesn't get the white
+   text color the main nav links get — set it explicitly so "EN"/"FR" is visible. */
+.custom-navbar-cta #langSwitcher {
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.custom-navbar-cta #langSwitcher:hover {
+    opacity: 1;
 }
 
 /* Branded footer — dark, on-brand background instead of the template's plain
    white footer, to bookend the page with the same color as the hero/navbar. */
 .footer-section-branded {
-    background: #3b5d50;
+    background: #4D5147;
     color: rgba(255, 255, 255, 0.75);
     position: relative;
     overflow: hidden;
@@ -151,7 +485,7 @@ html, body {
 }
 
 .footer-section-branded a:hover {
-    color: #f9bf29;
+    color: #D9A48F;
 }
 
 .footer-section-branded .footer-heading {

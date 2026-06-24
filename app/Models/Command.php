@@ -10,6 +10,7 @@ class Command extends Model
     use HasFactory;
 
     protected $fillable = [
+        'group_id',
         'article_id',
         'quantity',
         'customer_first_name',
