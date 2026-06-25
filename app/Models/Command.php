@@ -13,6 +13,7 @@ class Command extends Model
         'group_id',
         'article_id',
         'quantity',
+        'color',
         'customer_first_name',
         'customer_last_name',
         'address',

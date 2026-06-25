@@ -15,6 +15,7 @@ return [
     'home_hero_title' => 'Notre collection de meubles',
     'home_hero_subtitle' => 'Découvrez des pièces de qualité fabriquées avec soin, livrées directement chez vous.',
     'about_hero_title' => 'À propos de nous',
+    'about_learn_more' => 'En savoir plus',
     'contact_hero_title' => 'Contactez-nous',
     'contact_hero_subtitle' => 'Une question sur une commande ou un produit ? Envoyez-nous un message.',
     'products_hero_subtitle' => 'Parcourez notre catalogue complet, ou filtrez par catégorie.',
@@ -55,6 +56,10 @@ return [
     'color' => 'Couleur',
     'choose_color' => 'Choisir la couleur :color',
     'shop' => 'Boutique',
+    'description' => 'Description',
+    'details' => 'Détails',
+    'quantity_exceeds_stock_title' => 'Quantité ajustée',
+    'quantity_exceeds_stock_text' => 'Il ne reste que :qty en stock. La quantité a été mise à jour.',
 
     // Home page
     'featured_products' => 'Produits en vedette',
@@ -111,6 +116,11 @@ return [
     'sort_price_desc' => 'Prix : décroissant',
     'sort_name_asc' => 'Nom : A-Z',
     'in_stock_only' => 'En stock uniquement',
+    'search' => 'Rechercher',
+    'search_placeholder' => 'Rechercher des produits...',
+    'price_filter' => 'Prix',
+    'min_price' => 'Min',
+    'max_price' => 'Max',
 
     // Product detail page
     'order_details' => 'Détails de la commande',

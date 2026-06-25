@@ -22,6 +22,8 @@
 @endif
 
 @section('content')
+@include('shop.partials.page-sections', ['sections' => $pageSections])
+
 <div class="untree_co-section">
     <div class="container">
         @if($errors->any())

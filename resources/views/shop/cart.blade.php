@@ -25,6 +25,7 @@
                                 <tr>
                                     <th class="product-thumbnail">{{ __('site.image') }}</th>
                                     <th class="product-name">{{ __('site.product') }}</th>
+                                    <th>{{ __('site.color') }}</th>
                                     <th>{{ __('site.price') }}</th>
                                     <th>{{ __('site.quantity') }}</th>
                                     <th>{{ __('site.total') }}</th>
@@ -42,17 +43,24 @@
                                         <td class="product-name">
                                             <a href="{{ route('shop.product', $item['article']->id) }}" class="h5 text-black">{{ $item['article']->title }}</a>
                                         </td>
+                                        <td>
+                                            @if($item['color'])
+                                                <span class="color-swatch color-swatch-sm" style="background-color: {{ $item['color'] }};" title="{{ $item['color'] }}"></span>
+                                            @else
+                                                &mdash;
+                                            @endif
+                                        </td>
                                         <td>${{ number_format($item['article']->price, 2) }}</td>
                                         <td>
-                                            <form action="{{ route('cart.update', $item['article']->id) }}" method="POST" class="cart-update-form d-flex align-items-center justify-content-center gap-2">
+                                            <form action="{{ route('cart.update', $item['key']) }}" method="POST" class="cart-update-form d-flex align-items-center justify-content-center gap-2">
                                                 @csrf
-                                                <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="{{ $item['article']->quantity }}" class="form-control text-center" style="max-width: 80px;" data-cart-quantity>
+                                                <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" style="max-width: 80px;" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off">
                                                 <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
                                             </form>
                                         </td>
                                         <td data-cart-subtotal>${{ number_format($item['subtotal'], 2) }}</td>
                                         <td>
-                                            <form action="{{ route('cart.remove', $item['article']->id) }}" method="POST">
+                                            <form action="{{ route('cart.remove', $item['key']) }}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm">&times;</button>
                                             </form>
@@ -96,6 +104,16 @@
             return '$' + value.toFixed(2);
         }
 
+        function notifyMaxStock(maxStock) {
+            if (Swal.isVisible()) return;
+            Swal.fire({
+                icon: 'warning',
+                title: @js(__('site.quantity_exceeds_stock_title')),
+                text: @js(__('site.quantity_exceeds_stock_text')).replace(':qty', maxStock),
+                confirmButtonColor: '#4D5147',
+            });
+        }
+
         function recalculate() {
             let grandTotal = 0;
 
@@ -104,7 +122,7 @@
                 const quantityInput = row.querySelector('[data-cart-quantity]');
                 const subtotalEl = row.querySelector('[data-cart-subtotal]');
                 let quantity = parseInt(quantityInput.value, 10);
-                const max = parseInt(quantityInput.max, 10);
+                const max = parseInt(quantityInput.dataset.stock, 10);
 
                 if (isNaN(quantity) || quantity < 1) {
                     quantity = 1;
@@ -122,11 +140,29 @@
             totalEl.textContent = formatMoney(grandTotal);
         }
 
+        const allowedKeys = ['ArrowUp', 'ArrowDown', 'Tab', 'Escape', 'Enter'];
+
         rows.forEach(row => {
             const quantityInput = row.querySelector('[data-cart-quantity]');
             const form = row.querySelector('.cart-update-form');
+            const maxStock = parseInt(quantityInput.dataset.stock, 10);
+
+            quantityInput.addEventListener('keydown', function(e) {
+                if (!allowedKeys.includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+
+            quantityInput.addEventListener('paste', function(e) {
+                e.preventDefault();
+            });
 
             quantityInput.addEventListener('input', function() {
+                const value = parseInt(quantityInput.value, 10);
+                if (!isNaN(value) && !isNaN(maxStock) && value > maxStock) {
+                    notifyMaxStock(maxStock);
+                }
+
                 recalculate();
 
                 clearTimeout(submitTimers.get(quantityInput));

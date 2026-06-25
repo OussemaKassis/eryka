@@ -9,7 +9,7 @@ class PageHero extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['page_key', 'title', 'subtitle'];
+    protected $fillable = ['page_key', 'title', 'subtitle', 'image_path'];
 
     public function setTitleAttribute($value)
     {

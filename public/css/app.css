@@ -1,13 +1,36 @@
 /* resources/css/app.css — overrides layered on top of the Furni template styles */
 
-/* Brand identity — Playfair Display for headings/brand mark, per the visual
-   identity chart; body copy stays on the template's Inter for readability. */
+/* Brand identity — Bitter (slab serif) for the whole site, headings and body
+   alike, replacing the template's Inter. The template hardcodes "Inter" on
+   body and .form-control specifically (not just inherited), so those need
+   an explicit override too, not just a body { font-family } rule. The brand
+   mark itself is the client's logo image (below), not styled text. */
+body,
+.form-control,
+.btn,
+input,
+textarea,
+select {
+    font-family: 'Bitter', serif;
+}
+
 h1, h2, h3, h4, h5, h6,
-.navbar-brand,
-.footer-logo,
 .section-title,
 .hero h1 {
-    font-family: 'Playfair Display', 'Inter', serif;
+    font-family: 'Bitter', serif;
+    font-weight: 700;
+}
+
+/* Logo image — replaces the old text wordmark in the navbar and footer.
+   Both use the white cutout since both sit on the dark olive brand bg. */
+.navbar-brand-logo {
+    height: 34px;
+    width: auto;
+}
+
+.footer-logo-img {
+    height: 30px;
+    width: auto;
 }
 
 /* Category switcher on the Products page — only the active tab gets a pill
@@ -44,18 +67,96 @@ h1, h2, h3, h4, h5, h6,
     opacity: 0.8;
 }
 
-/* Products page filter bar — sort + in-stock toggle, sitting beside the
-   category switcher. */
-.products-filter-bar {
+/* Products page toolbar — search, price range, sort and in-stock toggle,
+   styled as one cohesive card beneath the category switcher. */
+.products-toolbar {
     display: flex;
-    gap: 18px;
     align-items: center;
-    justify-content: flex-end;
+    gap: 18px;
     flex-wrap: wrap;
+    background: #ffffff;
+    border: 1px solid #E3D9C8;
+    border-radius: 16px;
+    padding: 12px 22px;
 }
 
-.products-filter-bar .form-select {
-    max-width: 200px;
+.toolbar-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 240px;
+    min-width: 200px;
+}
+
+.toolbar-search-icon {
+    color: #9C8C7C;
+    font-size: 0.9rem;
+}
+
+.toolbar-search input {
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    color: #4C403A;
+    min-width: 0;
+}
+
+.toolbar-search input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.toolbar-search .btn {
+    padding: 8px 24px;
+    white-space: nowrap;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 28px;
+    background: #E3D9C8;
+    flex-shrink: 0;
+}
+
+.toolbar-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #4C403A;
+    white-space: nowrap;
+}
+
+.toolbar-price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toolbar-price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.toolbar-price-inputs input {
+    width: 72px;
+    border-radius: 30px;
+    text-align: center;
+    padding: 6px 8px;
+    font-size: 0.9rem;
+}
+
+.toolbar-price-currency {
+    color: #9C8C7C;
+    font-size: 0.85rem;
+}
+
+.toolbar-price-sep {
+    color: #C7B9A8;
+}
+
+.toolbar-sort {
+    max-width: 190px;
     border-radius: 30px;
     font-size: 0.9rem;
     font-weight: 600;
@@ -70,7 +171,7 @@ h1, h2, h3, h4, h5, h6,
     font-size: 0.9rem;
     color: #4C403A;
     cursor: pointer;
-    margin: 0;
+    margin: 0 0 0 auto;
     white-space: nowrap;
 }
 
@@ -82,9 +183,26 @@ h1, h2, h3, h4, h5, h6,
 }
 
 @media (max-width: 991px) {
-    .products-filter-bar {
-        justify-content: flex-start;
-        margin-top: 14px;
+    .products-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 20px;
+    }
+
+    .toolbar-divider {
+        display: none;
+    }
+
+    .toolbar-price,
+    .stock-filter-toggle {
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
+    }
+
+    .toolbar-sort {
+        max-width: none;
+        width: 100%;
     }
 }
 
@@ -192,17 +310,64 @@ html, body {
     object-fit: cover;
 }
 
-/* The template's hero image is hard-coded to max-width:780px and bleeds out of
-   its column below the lg breakpoint, causing horizontal scroll on mobile/tablet. */
-.hero-img-wrap img {
-    max-width: 100%;
+/* Page sections (admin-managed via PageSectionResource, shared by every page
+   through partials/page-sections.blade.php) — text+image blocks alternate
+   sides per section; text-only ones become a centered band. Every section
+   (image or not) shares the alternating tint for rhythm. */
+.about-section {
+    padding: 80px 0;
+}
+
+.about-section-alt {
+    background: #F7F1E6;
+}
+
+.about-section .section-title {
+    margin-bottom: 22px;
+}
+
+.about-story-section .img-wrap img {
+    max-height: 460px;
     width: 100%;
-    position: relative;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 24px 48px -16px rgba(76, 64, 58, 0.25);
+}
+
+.about-section p {
+    color: #4C403A;
+    line-height: 1.8;
+}
+
+.about-banner-section p {
+    max-width: 640px;
+    margin: 0 auto 12px;
+}
+
+@media (max-width: 991px) {
+    .about-story-section .row > [class^="col-lg-"]:first-child {
+        margin-bottom: 32px;
+    }
+}
+
+/* The template's hero image is hard-coded to max-width:780px and uses
+   absolute positioning with negative offsets so it intentionally bleeds past
+   its column — fine for the original demo photo, but it pushes any image
+   past the section's edge. Force it to stay inside its column at every
+   breakpoint (the !important beats the template's own min-width:992px rule,
+   which is more specific than a plain class override). */
+.hero-img-wrap img {
+    max-width: 100% !important;
+    width: 100% !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     z-index: 2;
 }
 
 .hero-img-wrap:after {
-    display: none;
+    display: none !important;
 }
 
 /* The stock hero photo sits close in tone to the olive backdrop and reads
@@ -219,17 +384,6 @@ html, body {
     transform: translate(-50%, -50%);
     background: radial-gradient(circle, rgba(239, 226, 206, 0.18) 0%, rgba(239, 226, 206, 0) 70%);
     z-index: 1;
-}
-
-@media (min-width: 992px) {
-    .hero-img-wrap img {
-        max-width: 780px;
-        width: auto;
-    }
-
-    .hero-img-wrap:after {
-        display: block;
-    }
 }
 
 .hero {
@@ -409,22 +563,53 @@ html, body {
 /* Color swatches on the product detail page — each one is tied to a
    specific product image and jumps the slider to it when clicked. */
 .color-swatch {
-    width: 36px;
-    height: 36px;
+    position: relative;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    border: 2px solid #E3D9C8;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #E3D9C8;
     padding: 0;
     cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .color-swatch:hover {
-    transform: scale(1.08);
+    transform: scale(1.15);
 }
 
 .color-swatch.active {
-    border-color: #4D5147;
-    box-shadow: 0 0 0 2px rgba(77, 81, 71, 0.25);
+    box-shadow: 0 0 0 2px #4D5147;
+}
+
+.color-swatch-check {
+    display: none;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7));
+}
+
+.color-swatch.active .color-swatch-check {
+    display: inline-flex;
+}
+
+/* Small, non-interactive variant used to show the chosen color in the cart tables. */
+.color-swatch-sm {
+    width: 20px;
+    height: 20px;
+    cursor: default;
+    box-shadow: 0 0 0 1px #E3D9C8;
+}
+
+.color-current-label {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #8a8a8a;
+    margin-left: 6px;
 }
 
 /* The navbar forces all descendant links to white (for the dark nav bar),
@@ -441,17 +626,94 @@ html, body {
     background-color: #4D5147;
 }
 
-/* Language switcher sits in .custom-navbar-cta, which doesn't get the white
-   text color the main nav links get — set it explicitly so "EN"/"FR" is visible. */
-.custom-navbar-cta #langSwitcher {
+/* Language switcher — a pill-style toggle with a globe icon and a checkmark
+   on the active language, replacing the plain "EN"/"FR" text link (which sat
+   in .custom-navbar-cta and needed its color forced to white explicitly). */
+.lang-switcher-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
     color: #ffffff !important;
     font-weight: 600;
-    font-size: 14px;
-    opacity: 0.85;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    padding: 8px 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 30px;
+    transition: background 0.25s ease, border-color 0.25s ease;
 }
 
-.custom-navbar-cta #langSwitcher:hover {
-    opacity: 1;
+.lang-switcher-toggle i {
+    font-size: 11px;
+}
+
+.lang-switcher-toggle .lang-switcher-caret {
+    font-size: 9px;
+    opacity: 0.7;
+    transition: transform 0.25s ease;
+}
+
+.lang-switcher-toggle:hover,
+.lang-switcher-toggle:focus,
+#langSwitcher.show {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+#langSwitcher.show .lang-switcher-caret {
+    transform: rotate(180deg);
+}
+
+.lang-switcher-menu {
+    min-width: 170px;
+    margin-top: 14px !important;
+    padding: 8px;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 24px 48px -16px rgba(76, 64, 58, 0.35);
+}
+
+.lang-switcher-menu li:not(:first-child) {
+    margin-top: 4px;
+}
+
+.lang-switcher-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    font-weight: 500;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Bootstrap's own .dropdown-item:hover/:focus/.active rule (further up this
+   file, scoped to .custom-navbar) sets the dark background but doesn't know
+   about our border-radius — without !important here the browser's default
+   focus/tap-highlight rectangle can show through with square corners against
+   our rounded pill. */
+.lang-switcher-item:hover,
+.lang-switcher-item:focus,
+.lang-switcher-item.active {
+    border-radius: 10px !important;
+    background-color: #4D5147 !important;
+}
+
+.lang-switcher-item:focus-visible {
+    box-shadow: 0 0 0 2px rgba(76, 64, 58, 0.45);
+}
+
+.lang-switcher-item i {
+    font-size: 11px;
+    color: #4D5147;
+}
+
+.lang-switcher-item:hover i,
+.lang-switcher-item:focus i,
+.lang-switcher-item.active i {
+    color: #ffffff;
 }
 
 /* Branded footer — dark, on-brand background instead of the template's plain

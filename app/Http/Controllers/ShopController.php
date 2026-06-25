@@ -9,6 +9,7 @@ use App\Models\ContactInfo;
 use App\Models\ContactMessage;
 use App\Models\HeroSlide;
 use App\Models\PageHero;
+use App\Models\PageSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -23,11 +24,23 @@ class ShopController extends Controller
         ];
     }
 
+    // Admin-managed text + picture sections for a given page key
+    private function pageSections(string $pageKey)
+    {
+        return PageSection::where('page_key', $pageKey)->where('is_active', true)->orderBy('sort_order')->get();
+    }
+
     // Homepage: featured articles + marketing sections
     public function articlesHome()
     {
         $articles = Article::with('category')->latest()->take(8)->get();
-        return view('shop.home', ['articles' => $articles] + $this->pageHero('home'));
+        $homeSections = $this->pageSections('home');
+        $welcomeSection = $homeSections->first();
+        return view('shop.home', [
+            'articles' => $articles,
+            'welcomeSection' => $welcomeSection,
+            'pageSections' => $homeSections->skip(1),
+        ] + $this->pageHero('home'));
     }
 
     // All products, optionally filtered by category (and its sub-categories)
@@ -50,6 +63,18 @@ class ShopController extends Controller
             $query->where('quantity', '>', 0);
         }
 
+        if ($search = trim((string) $request->query('search'))) {
+            $query->where('title', 'like', '%'.$search.'%');
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', (float) $request->query('min_price'));
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', (float) $request->query('max_price'));
+        }
+
         match ($request->query('sort')) {
             'price_asc' => $query->orderBy('price', 'asc'),
             'price_desc' => $query->orderBy('price', 'desc'),
@@ -69,7 +94,12 @@ class ShopController extends Controller
             ]);
         }
 
-        return view('shop.products', ['articles' => $articles, 'familyCategories' => $familyCategories, 'activeCategory' => $activeCategory] + $hero);
+        return view('shop.products', [
+            'articles' => $articles,
+            'familyCategories' => $familyCategories,
+            'activeCategory' => $activeCategory,
+            'pageSections' => $this->pageSections('products'),
+        ] + $hero);
     }
 
     // Product detail page
@@ -114,13 +144,15 @@ class ShopController extends Controller
 
     public function about()
     {
-        return view('shop.about', $this->pageHero('about'));
+        $pageSections = $this->pageSections('about');
+        return view('shop.about', ['pageSections' => $pageSections] + $this->pageHero('about'));
     }
 
     public function contact()
     {
         $contactInfos = ContactInfo::where('is_active', true)->orderBy('sort_order')->get();
-        return view('shop.contact', ['contactInfos' => $contactInfos] + $this->pageHero('contact'));
+        $pageSections = $this->pageSections('contact');
+        return view('shop.contact', ['contactInfos' => $contactInfos, 'pageSections' => $pageSections] + $this->pageHero('contact'));
     }
 
     public function contactSubmit(Request $request)

@@ -15,6 +15,7 @@ return [
     'home_hero_title' => 'Our Furniture Collection',
     'home_hero_subtitle' => 'Discover quality pieces crafted with care, delivered straight to your door.',
     'about_hero_title' => 'About Us',
+    'about_learn_more' => 'Learn more',
     'contact_hero_title' => 'Contact Us',
     'contact_hero_subtitle' => 'Have a question about an order or a product? Send us a message.',
     'products_hero_subtitle' => 'Browse our full catalog, or filter by category.',
@@ -55,6 +56,10 @@ return [
     'color' => 'Color',
     'choose_color' => 'Choose color :color',
     'shop' => 'Shop',
+    'description' => 'Description',
+    'details' => 'Details',
+    'quantity_exceeds_stock_title' => 'Quantity Adjusted',
+    'quantity_exceeds_stock_text' => 'Only :qty left in stock. We\'ve updated the quantity for you.',
 
     // Home page
     'featured_products' => 'Featured Products',
@@ -111,6 +116,11 @@ return [
     'sort_price_desc' => 'Price: High to Low',
     'sort_name_asc' => 'Name: A-Z',
     'in_stock_only' => 'In Stock Only',
+    'search' => 'Search',
+    'search_placeholder' => 'Search products...',
+    'price_filter' => 'Price',
+    'min_price' => 'Min',
+    'max_price' => 'Max',
 
     // Product detail page
     'order_details' => 'Order Details',

@@ -48,9 +48,13 @@
                 <h1 class="h2 text-black mb-3">{{ $article->title }}</h1>
 
                 @if($article->images->whereNotNull('color')->isNotEmpty())
+                    @php $defaultColor = $article->images->first() && $article->images->first()->color ? $article->images->first()->color : ''; @endphp
                     <div class="mb-4">
-                        <h3 class="h6 text-black mb-2">{{ __('site.color') }}</h3>
-                        <div class="d-flex gap-2">
+                        <h3 class="h6 text-black mb-2">
+                            {{ __('site.color') }}
+                            <span id="color-label" class="color-current-label">{{ $defaultColor }}</span>
+                        </h3>
+                        <div class="d-flex gap-2" id="color-swatches-{{ $article->id }}">
                             @foreach($article->images as $key => $image)
                                 @if($image->color)
                                     <button type="button"
@@ -58,7 +62,10 @@
                                             style="background-color: {{ $image->color }};"
                                             title="{{ $image->color }}"
                                             aria-label="{{ __('site.choose_color', ['color' => $image->color]) }}"
-                                            onclick="selectColorSwatch('{{ $article->id }}', {{ $key }}, this)">
+                                            data-index="{{ $key }}"
+                                            data-color="{{ $image->color }}"
+                                            onclick="goToSlide('{{ $article->id }}', {{ $key }})">
+                                        <span class="color-swatch-check"><i class="fa-solid fa-check"></i></span>
                                     </button>
                                 @endif
                             @endforeach
@@ -77,11 +84,17 @@
                 @endif
 
                 @if($article->description)
-                    <p class="mb-4">{{ $article->description }}</p>
+                    <div class="mb-4">
+                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.description') }}</h3>
+                        <p class="mb-0">{{ $article->description }}</p>
+                    </div>
                 @endif
 
                 @if($article->detail)
-                    <div class="mb-4">{!! $article->detail !!}</div>
+                    <div class="mb-4">
+                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.details') }}</h3>
+                        <div>{!! $article->detail !!}</div>
+                    </div>
                 @endif
 
                 @if(session('success'))
@@ -89,11 +102,12 @@
                 @endif
 
                 @if($article->quantity > 0)
-                    <form action="{{ route('cart.add', $article->id) }}" method="POST" class="d-flex align-items-end gap-2 mb-3 flex-wrap">
+                    <form id="add-to-cart-form" action="{{ route('cart.add', $article->id) }}" method="POST" class="d-flex align-items-end gap-2 mb-3 flex-wrap">
                         @csrf
+                        <input type="hidden" name="color" id="selected-color" value="{{ $defaultColor ?? '' }}">
                         <div class="form-group mb-0" style="max-width: 120px;">
                             <label for="quantity" class="text-black">{{ __('site.quantity') }}</label>
-                            <input type="number" id="quantity" name="quantity" min="1" max="{{ $article->quantity }}" value="1" class="form-control">
+                            <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control" data-stock="{{ $article->quantity }}" inputmode="none" autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-primary">{{ __('site.add_to_cart') }}</button>
                     </form>
@@ -110,12 +124,77 @@
 
 @push('scripts')
 <script>
-    function selectColorSwatch(articleId, index, el) {
-        goToSlide(articleId, index);
-        el.parentElement.querySelectorAll('.color-swatch').forEach(function(swatch) {
-            swatch.classList.remove('active');
+    document.addEventListener('slider:change', function(e) {
+        if (String(e.detail.articleId) !== '{{ $article->id }}') return;
+
+        const swatchContainer = document.getElementById('color-swatches-{{ $article->id }}');
+        if (!swatchContainer) return;
+
+        let matched = null;
+        swatchContainer.querySelectorAll('.color-swatch').forEach(function(swatch) {
+            const isMatch = parseInt(swatch.dataset.index, 10) === e.detail.slideIndex;
+            swatch.classList.toggle('active', isMatch);
+            if (isMatch) matched = swatch;
         });
-        el.classList.add('active');
-    }
+
+        const color = matched ? matched.dataset.color : '';
+        const colorInput = document.getElementById('selected-color');
+        const colorLabel = document.getElementById('color-label');
+        if (colorInput) colorInput.value = color;
+        if (colorLabel) colorLabel.textContent = color;
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('quantity');
+        const addToCartForm = document.getElementById('add-to-cart-form');
+        if (!quantityInput || !addToCartForm) return;
+
+        const maxStock = parseInt(quantityInput.dataset.stock, 10);
+
+        function notifyMaxStock() {
+            if (Swal.isVisible()) return;
+            Swal.fire({
+                icon: 'warning',
+                title: @js(__('site.quantity_exceeds_stock_title')),
+                text: @js(__('site.quantity_exceeds_stock_text')).replace(':qty', maxStock),
+                confirmButtonColor: '#4D5147',
+            });
+        }
+
+        const allowedKeys = ['ArrowUp', 'ArrowDown', 'Tab', 'Escape', 'Enter'];
+        quantityInput.addEventListener('keydown', function(e) {
+            if (!allowedKeys.includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        quantityInput.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+
+        quantityInput.addEventListener('input', function() {
+            const value = parseInt(quantityInput.value, 10);
+            if (!isNaN(value) && value > maxStock) {
+                quantityInput.value = maxStock;
+                notifyMaxStock();
+            }
+        });
+
+        addToCartForm.addEventListener('submit', function(e) {
+            const value = parseInt(quantityInput.value, 10);
+
+            if (isNaN(value) || value < 1) {
+                e.preventDefault();
+                quantityInput.value = 1;
+                return;
+            }
+
+            if (value > maxStock) {
+                e.preventDefault();
+                quantityInput.value = maxStock;
+                notifyMaxStock();
+            }
+        });
+    });
 </script>
 @endpush

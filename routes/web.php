@@ -42,7 +42,7 @@ Route::post('/checkout/{article}', [App\Http\Controllers\ShopController::class, 
 // Cart
 Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{article}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{article}', [App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{article}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update/{key}', [App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove/{key}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
 Route::get('/cart/checkout', [App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
 Route::post('/cart/checkout', [App\Http\Controllers\CartController::class, 'checkoutSubmit'])->name('cart.checkout.submit');

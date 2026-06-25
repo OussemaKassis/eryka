@@ -109,21 +109,31 @@
                 </div>
             </div>
             <div class="col-lg-5 ps-lg-5">
-                <h2 class="section-title mb-4">{{ __('site.we_help_title') }}</h2>
-                <p>{{ __('site.we_help_desc') }}</p>
+                @if($welcomeSection)
+                    <h2 class="section-title mb-4">{{ $welcomeSection->title }}</h2>
+                    @foreach(explode("\n\n", $welcomeSection->body) as $paragraph)
+                        <p>{{ $paragraph }}</p>
+                    @endforeach
+                    <p class="mt-4"><a href="{{ route('shop.about') }}" class="btn">{{ __('site.about_learn_more') }}</a></p>
+                @else
+                    <h2 class="section-title mb-4">{{ __('site.we_help_title') }}</h2>
+                    <p>{{ __('site.we_help_desc') }}</p>
 
-                <ul class="list-unstyled custom-list my-4">
-                    <li>{{ __('site.we_help_list_1') }}</li>
-                    <li>{{ __('site.we_help_list_2') }}</li>
-                    <li>{{ __('site.we_help_list_3') }}</li>
-                    <li>{{ __('site.we_help_list_4') }}</li>
-                </ul>
-                <p><a href="#products" class="btn">{{ __('site.explore') }}</a></p>
+                    <ul class="list-unstyled custom-list my-4">
+                        <li>{{ __('site.we_help_list_1') }}</li>
+                        <li>{{ __('site.we_help_list_2') }}</li>
+                        <li>{{ __('site.we_help_list_3') }}</li>
+                        <li>{{ __('site.we_help_list_4') }}</li>
+                    </ul>
+                    <p><a href="#products" class="btn">{{ __('site.explore') }}</a></p>
+                @endif
             </div>
         </div>
     </div>
 </div>
 <!-- End We Help Section -->
+
+@include('shop.partials.page-sections', ['sections' => $pageSections])
 
 <!-- Start Popular Product -->
 @if($articles->count() > 0)

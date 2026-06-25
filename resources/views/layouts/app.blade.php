@@ -11,7 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
     <link href="{{ asset('vendor/furni/css/tiny-slider.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/furni/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -21,7 +21,9 @@
     <!-- Start Header/Navigation -->
     <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="{{ config('app.name') }} navigation bar">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Shop') }}<span>.</span></a>
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Shop') }}" class="navbar-brand-logo">
+            </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsShop" aria-controls="navbarsShop" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -45,13 +47,25 @@
                 </ul>
 
                 <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li class="dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="langSwitcher" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ strtoupper(app()->getLocale()) }}
+                    <li class="dropdown lang-switcher">
+                        <a class="nav-link lang-switcher-toggle" href="#" id="langSwitcher" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-globe"></i>
+                            <span>{{ strtoupper(app()->getLocale()) }}</span>
+                            <i class="fa-solid fa-chevron-down lang-switcher-caret"></i>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langSwitcher">
-                            <li><a class="dropdown-item {{ app()->getLocale() === 'en' ? 'active' : '' }}" href="{{ route('lang.switch', 'en') }}">English</a></li>
-                            <li><a class="dropdown-item {{ app()->getLocale() === 'fr' ? 'active' : '' }}" href="{{ route('lang.switch', 'fr') }}">Français</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end lang-switcher-menu" aria-labelledby="langSwitcher">
+                            <li>
+                                <a class="dropdown-item lang-switcher-item {{ app()->getLocale() === 'en' ? 'active' : '' }}" href="{{ route('lang.switch', 'en') }}">
+                                    <span>English</span>
+                                    @if(app()->getLocale() === 'en')<i class="fa-solid fa-check"></i>@endif
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item lang-switcher-item {{ app()->getLocale() === 'fr' ? 'active' : '' }}" href="{{ route('lang.switch', 'fr') }}">
+                                    <span>Français</span>
+                                    @if(app()->getLocale() === 'fr')<i class="fa-solid fa-check"></i>@endif
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -71,53 +85,61 @@
     <!-- End Header/Navigation -->
 
     <!-- Start Hero Section -->
-    @hasSection('hero-bg-slides')
-        <div class="hero hero-bg-slider-mode" id="hero-slider">
-            <div class="hero-slider-track">
-                @yield('hero-bg-slides')
-            </div>
-            <div class="hero-overlay"></div>
-
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7 col-md-9">
-                        <div class="intro-excerpt">
-                            <h1>@yield('hero-title', config('app.name', 'Shop'))</h1>
-                            @hasSection('hero-subtitle')
-                                <p class="mb-4">@yield('hero-subtitle')</p>
-                            @endif
-                            @unless(request()->routeIs('shop.products'))
-                                <a href="{{ route('shop.products') }}" class="btn btn-secondary">{{ __('site.hero_shop_now') }}</a>
-                            @endunless
-                        </div>
-                    </div>
+    @if(request()->routeIs('shop.home') || request()->routeIs('shop.products'))
+        @hasSection('hero-bg-slides')
+            <div class="hero hero-bg-slider-mode" id="hero-slider">
+                <div class="hero-slider-track">
+                    @yield('hero-bg-slides')
                 </div>
-            </div>
+                <div class="hero-overlay"></div>
 
-            @yield('hero-slider-dots')
-        </div>
-    @else
-        <div class="hero">
-            <div class="container">
-                <div class="row justify-content-between">
-                    <div class="col-lg-5">
-                        <div class="intro-excerpt">
-                            <h1>@yield('hero-title', config('app.name', 'Shop'))</h1>
-                            @hasSection('hero-subtitle')
-                                <p class="mb-4">@yield('hero-subtitle')</p>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="col-lg-7">
-                        @hasSection('hero-image')
-                            <div class="hero-img-wrap">
-                                @yield('hero-image')
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-9">
+                            <div class="intro-excerpt">
+                                <h1>@yield('hero-title', config('app.name', 'Shop'))</h1>
+                                @hasSection('hero-subtitle')
+                                    <p class="mb-4">@yield('hero-subtitle')</p>
+                                @endif
+                                @unless(request()->routeIs('shop.products'))
+                                    <a href="{{ route('shop.products') }}" class="btn btn-secondary">{{ __('site.hero_shop_now') }}</a>
+                                @endunless
                             </div>
-                        @endif
+                        </div>
+                    </div>
+                </div>
+
+                @yield('hero-slider-dots')
+            </div>
+        @else
+            <div class="hero">
+                <div class="container">
+                    <div class="row justify-content-between">
+                        <div class="col-lg-5">
+                            <div class="intro-excerpt">
+                                <h1>@yield('hero-title', config('app.name', 'Shop'))</h1>
+                                @hasSection('hero-subtitle')
+                                    <p class="mb-4">@yield('hero-subtitle')</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            @if($pageHero?->image_path)
+                                <div class="hero-img-wrap">
+                                    <img src="{{ asset('storage/' . $pageHero->image_path) }}" alt="{{ config('app.name', 'Shop') }}" class="img-fluid">
+                                </div>
+                            @else
+                                @hasSection('hero-image')
+                                    <div class="hero-img-wrap">
+                                        @yield('hero-image')
+                                    </div>
+                                @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     @endif
     <!-- End Hero Section -->
 
@@ -146,7 +168,11 @@
         <div class="container relative">
             <div class="row g-5 mb-5">
                 <div class="col-lg-5">
-                    <div class="mb-4 footer-logo-wrap"><a href="{{ url('/') }}" class="footer-logo">{{ config('app.name', 'Shop') }}<span>.</span></a></div>
+                    <div class="mb-4 footer-logo-wrap">
+                        <a href="{{ url('/') }}" class="footer-logo">
+                            <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Shop') }}" class="footer-logo-img">
+                        </a>
+                    </div>
                     <p class="mb-4">{{ __('site.footer_tagline') }}</p>
 
                     @if(isset($socialLinks) && $socialLinks->isNotEmpty())
@@ -195,6 +221,7 @@
     <script src="{{ asset('vendor/furni/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/furni/js/tiny-slider.js') }}"></script>
     <script src="{{ asset('vendor/furni/js/custom.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         const sliders = {};
@@ -234,6 +261,10 @@
                     dot.classList.remove('active');
                 }
             });
+
+            document.dispatchEvent(new CustomEvent('slider:change', {
+                detail: { articleId: articleId, slideIndex: slider.currentSlide }
+            }));
         }
 
         (function() {

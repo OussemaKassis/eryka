@@ -43,6 +43,13 @@ class PageHeroResource extends Resource
                 Forms\Components\Textarea::make('subtitle')
                     ->label('Subtitle')
                     ->helperText('Leave empty to use the site default for this page.'),
+                Forms\Components\FileUpload::make('image_path')
+                    ->label('Image')
+                    ->helperText('Optional. Shown next to the title when the page has no hero slider images.')
+                    ->image()
+                    ->disk('public')
+                    ->directory('page-heroes')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -56,6 +63,9 @@ class PageHeroResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('title')->placeholder('— using site default —'),
                 Tables\Columns\TextColumn::make('subtitle')->limit(50)->placeholder('— using site default —'),
+                Tables\Columns\ImageColumn::make('image_path')
+                    ->label('Image')
+                    ->disk('public'),
             ])
             ->filters([
                 //

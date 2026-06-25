@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Command;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class CartController extends Controller
@@ -12,17 +13,7 @@ class CartController extends Controller
     public function index()
     {
         $cart = session('cart', []);
-        $articles = Article::with('category')->whereIn('id', array_keys($cart))->get();
-
-        $items = $articles->map(function (Article $article) use ($cart) {
-            $quantity = $cart[$article->id];
-            return [
-                'article' => $article,
-                'quantity' => $quantity,
-                'subtotal' => $article->price * $quantity,
-            ];
-        });
-
+        $items = $this->buildCartItems($cart);
         $total = $items->sum('subtotal');
 
         return view('shop.cart', compact('items', 'total'));
@@ -36,26 +27,39 @@ class CartController extends Controller
             return back()->with('error', "{$article->title} is out of stock.");
         }
 
+        $color = $request->input('color') ?: null;
+        $key = $this->cartKey($article->id, $color);
+
         $cart = session('cart', []);
         $requested = max(1, (int) $request->input('quantity', 1));
-        $newQuantity = min($article->quantity, ($cart[$article->id] ?? 0) + $requested);
-        $cart[$article->id] = $newQuantity;
+        $existingQuantity = $cart[$key]['quantity'] ?? 0;
+
+        $cart[$key] = [
+            'article_id' => $article->id,
+            'color' => $color,
+            'quantity' => min($article->quantity, $existingQuantity + $requested),
+        ];
+
         session(['cart' => $cart]);
 
         return back()->with('success', "{$article->title} added to your cart.");
     }
 
-    public function update(Request $request, $article)
+    public function update(Request $request, $key)
     {
-        $article = Article::findOrFail($article);
-        $quantity = (int) $request->input('quantity', 1);
-
         $cart = session('cart', []);
 
+        if (!isset($cart[$key])) {
+            return redirect()->route('cart.index');
+        }
+
+        $article = Article::findOrFail($cart[$key]['article_id']);
+        $quantity = (int) $request->input('quantity', 1);
+
         if ($quantity <= 0) {
-            unset($cart[$article->id]);
+            unset($cart[$key]);
         } else {
-            $cart[$article->id] = min($quantity, $article->quantity);
+            $cart[$key]['quantity'] = min($quantity, $article->quantity);
         }
 
         session(['cart' => $cart]);
@@ -63,12 +67,10 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Cart updated.');
     }
 
-    public function remove($article)
+    public function remove($key)
     {
-        $article = Article::findOrFail($article);
-
         $cart = session('cart', []);
-        unset($cart[$article->id]);
+        unset($cart[$key]);
         session(['cart' => $cart]);
 
         return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
@@ -77,16 +79,7 @@ class CartController extends Controller
     public function checkout()
     {
         $cart = session('cart', []);
-        $articles = Article::with('category')->whereIn('id', array_keys($cart))->get();
-
-        $items = $articles->map(function (Article $article) use ($cart) {
-            $quantity = $cart[$article->id];
-            return [
-                'article' => $article,
-                'quantity' => $quantity,
-                'subtotal' => $article->price * $quantity,
-            ];
-        });
+        $items = $this->buildCartItems($cart);
 
         if ($items->isEmpty()) {
             return redirect()->route('cart.index');
@@ -114,11 +107,14 @@ class CartController extends Controller
             'phone_number' => 'required|string|max:255',
         ]);
 
-        $articles = Article::whereIn('id', array_keys($cart))->get()->keyBy('id');
+        $articleIds = collect($cart)->pluck('article_id')->unique();
+        $articles = Article::whereIn('id', $articleIds)->get()->keyBy('id');
 
-        foreach ($cart as $articleId => $quantity) {
+        $quantitiesByArticle = collect($cart)->groupBy('article_id')->map(fn (Collection $lines) => $lines->sum('quantity'));
+
+        foreach ($quantitiesByArticle as $articleId => $totalQuantity) {
             $article = $articles->get($articleId);
-            if (!$article || $article->quantity < $quantity) {
+            if (!$article || $article->quantity < $totalQuantity) {
                 return redirect()->route('cart.index')
                     ->with('error', ($article->title ?? 'An item').' no longer has enough stock. Please update your cart.');
             }
@@ -126,18 +122,49 @@ class CartController extends Controller
 
         $groupId = (string) Str::uuid();
 
-        foreach ($cart as $articleId => $quantity) {
+        foreach ($cart as $entry) {
             Command::create($validated + [
                 'group_id' => $groupId,
-                'article_id' => $articleId,
-                'quantity' => $quantity,
+                'article_id' => $entry['article_id'],
+                'color' => $entry['color'],
+                'quantity' => $entry['quantity'],
             ]);
-            $articles->get($articleId)->decrement('quantity', $quantity);
+            $articles->get($entry['article_id'])->decrement('quantity', $entry['quantity']);
         }
 
         session()->forget('cart');
 
         return redirect()->route('shop.home')
             ->with('success', 'Your order has been placed! Thank you for shopping with us.');
+    }
+
+    private function cartKey(int $articleId, ?string $color): string
+    {
+        return $articleId.'-'.($color ? ltrim($color, '#') : 'none');
+    }
+
+    private function buildCartItems(array $cart): Collection
+    {
+        $articleIds = collect($cart)->pluck('article_id')->unique();
+        $articles = Article::with('category')->whereIn('id', $articleIds)->get()->keyBy('id');
+
+        return collect($cart)
+            ->map(function ($entry, $key) use ($articles) {
+                $article = $articles->get($entry['article_id']);
+
+                if (!$article) {
+                    return null;
+                }
+
+                return [
+                    'key' => $key,
+                    'article' => $article,
+                    'color' => $entry['color'],
+                    'quantity' => $entry['quantity'],
+                    'subtotal' => $article->price * $entry['quantity'],
+                ];
+            })
+            ->filter()
+            ->values();
     }
 }

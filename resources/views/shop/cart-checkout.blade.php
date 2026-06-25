@@ -19,7 +19,13 @@
                         <tbody>
                             @foreach($items as $item)
                                 <tr>
-                                    <td>{{ $item['article']->title }} <strong class="mx-2">x</strong> {{ $item['quantity'] }}</td>
+                                    <td>
+                                        {{ $item['article']->title }}
+                                        @if($item['color'])
+                                            <span class="color-swatch color-swatch-sm align-middle mx-1" style="background-color: {{ $item['color'] }};" title="{{ $item['color'] }}"></span>
+                                        @endif
+                                        <strong class="mx-2">x</strong> {{ $item['quantity'] }}
+                                    </td>
                                     <td>${{ number_format($item['subtotal'], 2) }}</td>
                                 </tr>
                             @endforeach

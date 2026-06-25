@@ -27,6 +27,7 @@ class CommandResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('article.title')->label('Article')->disabled(),
+                Forms\Components\TextInput::make('color')->label('Color')->disabled(),
                 Forms\Components\TextInput::make('quantity')->disabled(),
                 Forms\Components\TextInput::make('customer_first_name')->label('First Name')->disabled(),
                 Forms\Components\TextInput::make('customer_last_name')->label('Last Name')->disabled(),
@@ -42,6 +43,7 @@ class CommandResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('article.title')->label('Article'),
+                Tables\Columns\TextColumn::make('color')->label('Color')->placeholder('—'),
                 Tables\Columns\TextColumn::make('quantity'),
                 Tables\Columns\TextColumn::make('subtotal')
                     ->label('Subtotal')
