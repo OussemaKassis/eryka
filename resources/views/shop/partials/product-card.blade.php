@@ -29,14 +29,14 @@
             <h3 class="product-title">{{ $article->title }}</h3>
         </a>
         <strong class="product-price">${{ number_format($article->price, 2) }}</strong>
-        <p class="mt-3 d-flex justify-content-center gap-2">
+        <div class="mt-3 d-grid gap-2 product-actions">
             @if($outOfStock)
                 <span class="btn btn-sm disabled">{{ __('site.out_of_stock') }}</span>
             @else
                 <a href="{{ route('shop.checkout', $article->id) }}" class="btn btn-primary btn-sm">{{ __('site.order_now') }}</a>
             @endif
-            <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#quickview-{{ $article->id }}">{{ __('site.quick_view') }}</button>
-        </p>
+            <button type="button" class="btn btn-outline-brand btn-sm" data-bs-toggle="modal" data-bs-target="#quickview-{{ $article->id }}">{{ __('site.quick_view') }}</button>
+        </div>
     </div>
 </div>
 
@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="{{ route('shop.product', $article->id) }}" class="btn btn-sm">{{ __('site.view_full_details') }}</a>
+                <a href="{{ route('shop.product', $article->id) }}" class="btn btn-outline-brand btn-sm">{{ __('site.view_full_details') }}</a>
                 @if(!$outOfStock)
                     <a href="{{ route('shop.checkout', $article->id) }}" class="btn btn-primary btn-sm">{{ __('site.order_now') }}</a>
                 @endif
