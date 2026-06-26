@@ -22,7 +22,7 @@
 <body>
 
     <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="{{ config('app.name') }} navigation bar">
+    <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark sticky-top" aria-label="{{ config('app.name') }} navigation bar">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Shop') }}" class="navbar-brand-logo">
