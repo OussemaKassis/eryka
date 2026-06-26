@@ -14,9 +14,11 @@ class CartController extends Controller
     {
         $cart = session('cart', []);
         $items = $this->buildCartItems($cart);
-        $total = $items->sum('subtotal');
+        $subtotal = $items->sum('subtotal');
+        $shipping = $items->isEmpty() ? 0 : Command::SHIPPING_FEE;
+        $total = $subtotal + $shipping;
 
-        return view('shop.cart', compact('items', 'total'));
+        return view('shop.cart', compact('items', 'subtotal', 'shipping', 'total'));
     }
 
     public function add(Request $request, $article)
@@ -85,9 +87,11 @@ class CartController extends Controller
             return redirect()->route('cart.index');
         }
 
-        $total = $items->sum('subtotal');
+        $subtotal = $items->sum('subtotal');
+        $shipping = Command::SHIPPING_FEE;
+        $total = $subtotal + $shipping;
 
-        return view('shop.cart-checkout', compact('items', 'total'));
+        return view('shop.cart-checkout', compact('items', 'subtotal', 'shipping', 'total'));
     }
 
     public function checkoutSubmit(Request $request)
@@ -128,6 +132,7 @@ class CartController extends Controller
                 'article_id' => $entry['article_id'],
                 'color' => $entry['color'],
                 'quantity' => $entry['quantity'],
+                'shipping_fee' => Command::SHIPPING_FEE,
             ]);
             $articles->get($entry['article_id'])->decrement('quantity', $entry['quantity']);
         }

@@ -145,5 +145,7 @@ return [
     'order_total' => 'Order Total',
     'shipping_details' => 'Shipping Details',
     'place_order' => 'Place Order',
+    'subtotal' => 'Subtotal',
+    'shipping_fee' => 'Shipping',
 
 ];

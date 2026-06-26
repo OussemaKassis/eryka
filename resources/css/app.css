@@ -842,3 +842,29 @@ html, body {
     border-color: #4D5147;
     color: #ffffff;
 }
+
+/* Price breakdown box (subtotal / shipping / total) shown on the product,
+   checkout and cart pages. */
+.price-breakdown {
+    background: #F7F3EC;
+    border: 1px solid #E5DDD0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 1rem;
+}
+
+.price-breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    color: #6b6b6b;
+}
+
+.price-breakdown-row.price-breakdown-total {
+    border-top: 1px solid #E5DDD0;
+    margin-top: 8px;
+    padding-top: 10px;
+    font-weight: 700;
+    color: #2b2b2b;
+    font-size: 1.1rem;
+}

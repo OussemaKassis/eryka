@@ -145,5 +145,7 @@ return [
     'order_total' => 'Total de la commande',
     'shipping_details' => 'Détails de livraison',
     'place_order' => 'Valider la commande',
+    'subtotal' => 'Sous-total',
+    'shipping_fee' => 'Livraison',
 
 ];

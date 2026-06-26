@@ -53,10 +53,10 @@
             <div class="toolbar-price">
                 <span class="toolbar-label">{{ __('site.price_filter') }}</span>
                 <div class="toolbar-price-inputs">
-                    <span class="toolbar-price-currency">$</span>
+                    <span class="toolbar-price-currency">DT</span>
                     <input type="number" id="price-min" class="form-control" placeholder="{{ __('site.min_price') }}" min="0" inputmode="numeric">
                     <span class="toolbar-price-sep">&ndash;</span>
-                    <span class="toolbar-price-currency">$</span>
+                    <span class="toolbar-price-currency">DT</span>
                     <input type="number" id="price-max" class="form-control" placeholder="{{ __('site.max_price') }}" min="0" inputmode="numeric">
                 </div>
             </div>

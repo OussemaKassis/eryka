@@ -26,12 +26,20 @@
                                         @endif
                                         <strong class="mx-2">x</strong> {{ $item['quantity'] }}
                                     </td>
-                                    <td>${{ number_format($item['subtotal'], 2) }}</td>
+                                    <td>{{ number_format($item['subtotal'], 2) }} DT</td>
                                 </tr>
                             @endforeach
                             <tr>
+                                <td>{{ __('site.subtotal') }}</td>
+                                <td>{{ number_format($subtotal, 2) }} DT</td>
+                            </tr>
+                            <tr>
+                                <td>{{ __('site.shipping_fee') }}</td>
+                                <td>{{ number_format($shipping, 2) }} DT</td>
+                            </tr>
+                            <tr>
                                 <td class="text-black"><strong>{{ __('site.order_total') }}</strong></td>
-                                <td class="text-black"><strong>${{ number_format($total, 2) }}</strong></td>
+                                <td class="text-black"><strong>{{ number_format($total, 2) }} DT</strong></td>
                             </tr>
                         </tbody>
                     </table>

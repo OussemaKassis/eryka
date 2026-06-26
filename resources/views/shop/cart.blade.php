@@ -50,7 +50,7 @@
                                                 &mdash;
                                             @endif
                                         </td>
-                                        <td>${{ number_format($item['article']->price, 2) }}</td>
+                                        <td>{{ number_format($item['article']->price, 2) }} DT</td>
                                         <td>
                                             <form action="{{ route('cart.update', $item['key']) }}" method="POST" class="cart-update-form d-flex align-items-center justify-content-center gap-2">
                                                 @csrf
@@ -62,7 +62,7 @@
                                                 <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
                                             </form>
                                         </td>
-                                        <td data-cart-subtotal>${{ number_format($item['subtotal'], 2) }}</td>
+                                        <td data-cart-subtotal>{{ number_format($item['subtotal'], 2) }} DT</td>
                                         <td>
                                             <form action="{{ route('cart.remove', $item['key']) }}" method="POST">
                                                 @csrf
@@ -79,17 +79,21 @@
 
             <div class="row justify-content-end">
                 <div class="col-md-5">
-                    <div class="p-3 p-lg-4 border bg-white">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <span class="text-black">{{ __('site.total') }}</span>
-                            </div>
-                            <div class="col-md-6 text-end">
-                                <strong class="text-black" data-cart-total>${{ number_format($total, 2) }}</strong>
-                            </div>
+                    <div class="price-breakdown">
+                        <div class="price-breakdown-row">
+                            <span>{{ __('site.subtotal') }}</span>
+                            <span data-cart-subtotal-total>{{ number_format($subtotal, 2) }} DT</span>
                         </div>
-                        <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-lg py-3 w-100">{{ __('site.proceed_to_checkout') }}</a>
+                        <div class="price-breakdown-row">
+                            <span>{{ __('site.shipping_fee') }}</span>
+                            <span>{{ number_format($shipping, 2) }} DT</span>
+                        </div>
+                        <div class="price-breakdown-row price-breakdown-total">
+                            <span>{{ __('site.total') }}</span>
+                            <span data-cart-total>{{ number_format($total, 2) }} DT</span>
+                        </div>
                     </div>
+                    <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-lg py-3 w-100">{{ __('site.proceed_to_checkout') }}</a>
                 </div>
             </div>
         @endif
@@ -102,10 +106,12 @@
     document.addEventListener('DOMContentLoaded', function() {
         const rows = document.querySelectorAll('[data-cart-row]');
         const totalEl = document.querySelector('[data-cart-total]');
+        const subtotalTotalEl = document.querySelector('[data-cart-subtotal-total]');
+        const shippingFee = {{ $shipping }};
         let submitTimers = new WeakMap();
 
         function formatMoney(value) {
-            return '$' + value.toFixed(2);
+            return value.toFixed(2) + ' DT';
         }
 
         function notifyMaxStock(maxStock) {
@@ -141,7 +147,8 @@
                 grandTotal += subtotal;
             });
 
-            totalEl.textContent = formatMoney(grandTotal);
+            if (subtotalTotalEl) subtotalTotalEl.textContent = formatMoney(grandTotal);
+            totalEl.textContent = formatMoney(grandTotal + shippingFee);
         }
 
         const allowedKeys = ['ArrowUp', 'ArrowDown', 'Tab', 'Escape', 'Enter'];

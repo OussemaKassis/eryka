@@ -42,7 +42,7 @@
                     </div>
 
                     <p class="mt-4 mb-0 text-black">{{ $article->description }}</p>
-                    <strong class="product-price d-block mt-3" style="font-size: 1.5rem;">${{ number_format($article->price, 2) }}</strong>
+                    <strong class="product-price d-block mt-3" style="font-size: 1.5rem;">{{ number_format($article->price, 2) }} DT</strong>
                 </div>
             </div>
 
@@ -71,6 +71,23 @@
                                 <input type="text" id="customer_first_name" name="customer_first_name" required class="form-control">
                             </div>
                         </div>
+
+                        @if($article->quantity > 0)
+                            <div class="price-breakdown" id="price-breakdown">
+                                <div class="price-breakdown-row">
+                                    <span>{{ __('site.subtotal') }} (<span data-breakdown-qty>1</span>x)</span>
+                                    <span data-breakdown-subtotal>{{ number_format($article->price, 2) }} DT</span>
+                                </div>
+                                <div class="price-breakdown-row">
+                                    <span>{{ __('site.shipping_fee') }}</span>
+                                    <span>{{ number_format($shipping, 2) }} DT</span>
+                                </div>
+                                <div class="price-breakdown-row price-breakdown-total">
+                                    <span>{{ __('site.total') }}</span>
+                                    <span data-breakdown-total>{{ number_format($article->price + $shipping, 2) }} DT</span>
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="form-group row">
                             <div class="col-md-6">
@@ -108,4 +125,37 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('quantity');
+        if (!quantityInput) return;
+
+        const price = {{ $article->price }};
+        const shippingFee = {{ $shipping }};
+
+        function formatMoney(value) {
+            return value.toFixed(2) + ' DT';
+        }
+
+        function recalcBreakdown() {
+            const qtyEl = document.querySelector('[data-breakdown-qty]');
+            const subtotalEl = document.querySelector('[data-breakdown-subtotal]');
+            const totalEl = document.querySelector('[data-breakdown-total]');
+            if (!qtyEl || !subtotalEl || !totalEl) return;
+
+            let value = parseInt(quantityInput.value, 10);
+            if (isNaN(value) || value < 1) value = 1;
+
+            const subtotal = price * value;
+            qtyEl.textContent = value;
+            subtotalEl.textContent = formatMoney(subtotal);
+            totalEl.textContent = formatMoney(subtotal + shippingFee);
+        }
+
+        quantityInput.addEventListener('input', recalcBreakdown);
+    });
+</script>
+@endpush
 @endsection

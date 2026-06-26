@@ -78,7 +78,8 @@ class ArticleResource extends Resource
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('title')->searchable(),
                 Tables\Columns\TextColumn::make('description')->limit(30),
-                Tables\Columns\TextColumn::make('price')->money('usd'),
+                Tables\Columns\TextColumn::make('price')
+                    ->formatStateUsing(fn (float $state): string => number_format($state, 2) . ' DT'),
                 Tables\Columns\TextColumn::make('quantity')
                     ->label('Stock')
                     ->sortable()

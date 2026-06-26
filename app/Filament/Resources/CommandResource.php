@@ -48,7 +48,10 @@ class CommandResource extends Resource
                 Tables\Columns\TextColumn::make('subtotal')
                     ->label('Subtotal')
                     ->state(fn (Command $record): float => $record->quantity * ($record->article?->price ?? 0))
-                    ->money('usd'),
+                    ->formatStateUsing(fn (float $state): string => number_format($state, 2) . ' DT'),
+                Tables\Columns\TextColumn::make('shipping_fee')
+                    ->label('Shipping (per order)')
+                    ->formatStateUsing(fn (?float $state): string => number_format($state ?? 0, 2) . ' DT'),
                 Tables\Columns\TextColumn::make('customer_first_name')->label('First Name'),
                 Tables\Columns\TextColumn::make('customer_last_name')->label('Last Name'),
                 Tables\Columns\TextColumn::make('city'),

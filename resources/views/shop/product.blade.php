@@ -73,7 +73,7 @@
                     </div>
                 @endif
 
-                <strong class="product-price d-block mb-2" style="font-size: 1.75rem;">${{ number_format($article->price, 2) }}</strong>
+                <strong class="product-price d-block mb-2" style="font-size: 1.75rem;">{{ number_format($article->price, 2) }} DT</strong>
 
                 @if($article->quantity <= 0)
                     <span class="badge bg-danger mb-4">{{ __('site.out_of_stock') }}</span>
@@ -102,6 +102,21 @@
                 @endif
 
                 @if($article->quantity > 0)
+                    <div class="price-breakdown" id="price-breakdown">
+                        <div class="price-breakdown-row">
+                            <span>{{ __('site.subtotal') }} (<span data-breakdown-qty>1</span>x)</span>
+                            <span data-breakdown-subtotal>{{ number_format($article->price, 2) }} DT</span>
+                        </div>
+                        <div class="price-breakdown-row">
+                            <span>{{ __('site.shipping_fee') }}</span>
+                            <span>{{ number_format($shipping, 2) }} DT</span>
+                        </div>
+                        <div class="price-breakdown-row price-breakdown-total">
+                            <span>{{ __('site.total') }}</span>
+                            <span data-breakdown-total>{{ number_format($article->price + $shipping, 2) }} DT</span>
+                        </div>
+                    </div>
+
                     <form id="add-to-cart-form" action="{{ route('cart.add', $article->id) }}" method="POST" class="d-flex align-items-end gap-2 mb-3 flex-wrap">
                         @csrf
                         <input type="hidden" name="color" id="selected-color" value="{{ $defaultColor ?? '' }}">
@@ -154,6 +169,27 @@
         if (!quantityInput || !addToCartForm) return;
 
         const maxStock = parseInt(quantityInput.dataset.stock, 10);
+        const price = {{ $article->price }};
+        const shippingFee = {{ $shipping }};
+
+        function formatMoney(value) {
+            return value.toFixed(2) + ' DT';
+        }
+
+        function recalcBreakdown() {
+            const qtyEl = document.querySelector('[data-breakdown-qty]');
+            const subtotalEl = document.querySelector('[data-breakdown-subtotal]');
+            const totalEl = document.querySelector('[data-breakdown-total]');
+            if (!qtyEl || !subtotalEl || !totalEl) return;
+
+            let value = parseInt(quantityInput.value, 10);
+            if (isNaN(value) || value < 1) value = 1;
+
+            const subtotal = price * value;
+            qtyEl.textContent = value;
+            subtotalEl.textContent = formatMoney(subtotal);
+            totalEl.textContent = formatMoney(subtotal + shippingFee);
+        }
 
         function notifyMaxStock() {
             if (Swal.isVisible()) return;
@@ -182,7 +218,10 @@
                 quantityInput.value = maxStock;
                 notifyMaxStock();
             }
+            recalcBreakdown();
         });
+
+        recalcBreakdown();
 
         document.querySelectorAll('[data-qty-step]').forEach(function(button) {
             button.addEventListener('click', function() {

@@ -106,14 +106,16 @@ class ShopController extends Controller
     public function show($article)
     {
         $article = Article::with('category')->findOrFail($article);
-        return view('shop.product', compact('article'));
+        $shipping = Command::SHIPPING_FEE;
+        return view('shop.product', compact('article', 'shipping'));
     }
 
     // Checkout page for an article
     public function checkout($article)
     {
         $article = Article::with('category')->findOrFail($article);
-        return view('shop.checkout', compact('article'));
+        $shipping = Command::SHIPPING_FEE;
+        return view('shop.checkout', compact('article', 'shipping'));
     }
 
     // Order submission (POST)
@@ -135,6 +137,7 @@ class ShopController extends Controller
         ]);
         $validated['article_id'] = $article->id;
         $validated['group_id'] = (string) Str::uuid();
+        $validated['shipping_fee'] = Command::SHIPPING_FEE;
         Command::create($validated);
         $article->decrement('quantity', $validated['quantity']);
 

@@ -28,7 +28,7 @@
 
             <h3 class="product-title">{{ $article->title }}</h3>
         </a>
-        <strong class="product-price">${{ number_format($article->price, 2) }}</strong>
+        <strong class="product-price">{{ number_format($article->price, 2) }} DT</strong>
         <div class="mt-3 d-flex flex-column align-items-center gap-2 product-actions">
             @if($outOfStock)
                 <span class="btn btn-sm disabled">{{ __('site.out_of_stock') }}</span>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <strong class="product-price d-block mb-3" style="font-size: 1.5rem;">${{ number_format($article->price, 2) }}</strong>
+                        <strong class="product-price d-block mb-3" style="font-size: 1.5rem;">{{ number_format($article->price, 2) }} DT</strong>
                         @if($outOfStock)
                             <span class="badge bg-danger mb-3">{{ __('site.out_of_stock') }}</span>
                         @elseif($lowStock)
