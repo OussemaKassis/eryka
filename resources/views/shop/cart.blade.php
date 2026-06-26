@@ -54,7 +54,11 @@
                                         <td>
                                             <form action="{{ route('cart.update', $item['key']) }}" method="POST" class="cart-update-form d-flex align-items-center justify-content-center gap-2">
                                                 @csrf
-                                                <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" style="max-width: 80px;" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off">
+                                                <div class="qty-stepper">
+                                                    <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
+                                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off">
+                                                    <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
+                                                </div>
                                                 <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
                                             </form>
                                         </td>
@@ -173,6 +177,20 @@
                         headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     }).catch(function() {});
                 }, 600));
+            });
+
+            row.querySelectorAll('[data-qty-step]').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const step = parseInt(button.dataset.qtyStep, 10);
+                    let value = parseInt(quantityInput.value, 10);
+                    if (isNaN(value)) value = 1;
+
+                    value += step;
+                    if (value < 1) value = 1;
+
+                    quantityInput.value = value;
+                    quantityInput.dispatchEvent(new Event('input', { bubbles: true }));
+                });
             });
         });
     });

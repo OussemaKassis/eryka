@@ -771,3 +771,50 @@ html, body {
 .footer-section-branded .border-top.copyright p {
     color: rgba(255, 255, 255, 0.55);
 }
+
+/* Quantity stepper — mobile browsers don't render the native number input's
+   spin arrows and there's no keyboard (inputmode="none"), so without these
+   buttons there's no way to change quantity by touch at all. */
+.qty-stepper {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.qty-stepper .form-control {
+    border: none;
+    border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.qty-stepper .form-control:focus {
+    box-shadow: none;
+}
+
+.qty-stepper-btn {
+    flex: 0 0 40px;
+    min-width: 40px;
+    border: none;
+    background: #f1f1f1;
+    color: #4D5147;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.qty-stepper-btn:hover {
+    background: #e2e2e2;
+}
+
+.qty-stepper .form-control::-webkit-outer-spin-button,
+.qty-stepper .form-control::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.qty-stepper .form-control[type=number] {
+    -moz-appearance: textfield;
+}

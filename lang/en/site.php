@@ -46,6 +46,8 @@ return [
     'no_products_in_category' => 'No products in this category yet.',
     'read_more' => 'Read More',
     'quantity' => 'Quantity',
+    'decrease_quantity' => 'Decrease quantity',
+    'increase_quantity' => 'Increase quantity',
     'price' => 'Price',
     'image' => 'Image',
     'product' => 'Product',

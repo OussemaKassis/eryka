@@ -105,9 +105,13 @@
                     <form id="add-to-cart-form" action="{{ route('cart.add', $article->id) }}" method="POST" class="d-flex align-items-end gap-2 mb-3 flex-wrap">
                         @csrf
                         <input type="hidden" name="color" id="selected-color" value="{{ $defaultColor ?? '' }}">
-                        <div class="form-group mb-0" style="max-width: 120px;">
+                        <div class="form-group mb-0" style="max-width: 150px;">
                             <label for="quantity" class="text-black">{{ __('site.quantity') }}</label>
-                            <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control" data-stock="{{ $article->quantity }}" inputmode="none" autocomplete="off">
+                            <div class="qty-stepper">
+                                <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
+                                <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control text-center" data-stock="{{ $article->quantity }}" inputmode="none" autocomplete="off">
+                                <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary">{{ __('site.add_to_cart') }}</button>
                     </form>
@@ -178,6 +182,24 @@
                 quantityInput.value = maxStock;
                 notifyMaxStock();
             }
+        });
+
+        document.querySelectorAll('[data-qty-step]').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const step = parseInt(button.dataset.qtyStep, 10);
+                let value = parseInt(quantityInput.value, 10);
+                if (isNaN(value)) value = 1;
+
+                value += step;
+                if (value < 1) value = 1;
+                if (value > maxStock) {
+                    value = maxStock;
+                    notifyMaxStock();
+                }
+
+                quantityInput.value = value;
+                quantityInput.dispatchEvent(new Event('input', { bubbles: true }));
+            });
         });
 
         addToCartForm.addEventListener('submit', function(e) {
