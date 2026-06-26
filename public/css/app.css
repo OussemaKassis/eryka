@@ -819,13 +819,15 @@ html, body {
     -moz-appearance: textfield;
 }
 
-/* Product card actions — stacked full-width so a two-word label like
+/* Product card actions — stacked and centered, sized to content rather
+   than stretched to the card's full width, so a two-word label like
    "Aperçu rapide" never wraps mid-button the way it did sitting side by
    side with the order button in a narrow card column. */
 .product-actions .btn,
 .modal-footer .btn {
     white-space: nowrap;
-    padding: 10px 20px;
+    padding: 8px 24px;
+    min-width: 160px;
 }
 
 .btn-outline-brand {
