@@ -27,6 +27,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Eryka')
+            ->brandLogo(asset('images/logo-white.png'))
+            ->brandLogoHeight('2rem')
+            ->favicon(asset('images/favicon/favicon-32.png'))
             ->colors([
                 'primary' => Color::Amber,
             ])
