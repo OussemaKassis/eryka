@@ -903,3 +903,9 @@ html, body {
     visibility: visible;
     transform: translateY(0);
 }
+
+/* Drop shadow under the sticky header, so it visually separates from the
+   page content it now floats over while scrolling. */
+.custom-navbar.sticky-top {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
