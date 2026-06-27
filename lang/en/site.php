@@ -39,6 +39,7 @@ return [
     'buy_now' => 'Buy Now',
     'back_to_shop' => 'Back to Shop',
     'back_to_cart' => 'Back to Cart',
+    'back_to_top' => 'Back to top',
     'view_all_products' => 'View All Products',
     'all_products' => 'All Products',
     'no_products_yet' => 'No products available yet.',

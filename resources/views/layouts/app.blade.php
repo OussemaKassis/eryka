@@ -221,6 +221,10 @@
     </footer>
     <!-- End Footer Section -->
 
+    <button type="button" id="back-to-top" class="back-to-top-btn" aria-label="{{ __('site.back_to_top') }}">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
     <script src="{{ asset('vendor/furni/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/furni/js/tiny-slider.js') }}"></script>
     <script src="{{ asset('vendor/furni/js/custom.js') }}"></script>
@@ -237,6 +241,20 @@
                     totalSlides: slider.children.length
                 };
             });
+
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (backToTopBtn) {
+                function toggleBackToTop() {
+                    backToTopBtn.classList.toggle('is-visible', window.scrollY > 400);
+                }
+
+                window.addEventListener('scroll', toggleBackToTop);
+                toggleBackToTop();
+
+                backToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
         });
 
         function moveSlide(articleId, direction) {

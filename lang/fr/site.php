@@ -39,6 +39,7 @@ return [
     'buy_now' => 'Acheter maintenant',
     'back_to_shop' => 'Retour à la boutique',
     'back_to_cart' => 'Retour au panier',
+    'back_to_top' => 'Retour en haut',
     'view_all_products' => 'Voir tous les produits',
     'all_products' => 'Tous les produits',
     'no_products_yet' => 'Aucun produit disponible pour le moment.',
