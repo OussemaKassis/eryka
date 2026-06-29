@@ -597,19 +597,42 @@ html, body {
     display: inline-flex;
 }
 
+/* Thumbnail strip under the product detail's main image — each thumbnail
+   jumps the slider to its image when clicked, mirroring the color swatches. */
+.thumbnail-strip {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.thumbnail-item {
+    flex: 0 0 70px;
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: #E3D9C8;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.thumbnail-item:hover {
+    border-color: #D9CFBE;
+}
+
+.thumbnail-item.active {
+    border-color: #4D5147;
+}
+
 /* Small, non-interactive variant used to show the chosen color in the cart tables. */
 .color-swatch-sm {
     width: 20px;
     height: 20px;
     cursor: default;
     box-shadow: 0 0 0 1px #E3D9C8;
-}
-
-.color-current-label {
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: #8a8a8a;
-    margin-left: 6px;
 }
 
 /* The navbar forces all descendant links to white (for the dark nav bar),
@@ -647,6 +670,11 @@ html, body {
     font-size: 11px;
 }
 
+.lang-switcher-flag {
+    font-size: 14px;
+    line-height: 1;
+}
+
 .lang-switcher-toggle .lang-switcher-caret {
     font-size: 9px;
     opacity: 0.7;
@@ -665,11 +693,11 @@ html, body {
 }
 
 .lang-switcher-menu {
-    min-width: 170px;
+    min-width: 140px;
     margin-top: 14px !important;
-    padding: 8px;
+    padding: 6px;
     border: none;
-    border-radius: 16px;
+    border-radius: 14px;
     box-shadow: 0 24px 48px -16px rgba(76, 64, 58, 0.35);
 }
 
@@ -681,9 +709,10 @@ html, body {
     display: flex !important;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
     border-radius: 10px !important;
-    padding: 10px 14px !important;
+    padding: 8px 12px !important;
+    font-size: 13px;
     font-weight: 500;
     outline: none;
     -webkit-tap-highlight-color: transparent;

@@ -50,25 +50,26 @@
                 </ul>
 
                 <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                    @php
+                        $langSwitcherLocales = ['en' => ['label' => 'English', 'flag' => '🇬🇧'], 'fr' => ['label' => 'Français', 'flag' => '🇫🇷']];
+                        $langSwitcherLocales = [app()->getLocale() => $langSwitcherLocales[app()->getLocale()]] + $langSwitcherLocales;
+                    @endphp
                     <li class="dropdown lang-switcher">
                         <a class="nav-link lang-switcher-toggle" href="#" id="langSwitcher" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-globe"></i>
+                            <span class="lang-switcher-flag">{{ $langSwitcherLocales[app()->getLocale()]['flag'] }}</span>
                             <span>{{ strtoupper(app()->getLocale()) }}</span>
                             <i class="fa-solid fa-chevron-down lang-switcher-caret"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end lang-switcher-menu" aria-labelledby="langSwitcher">
-                            <li>
-                                <a class="dropdown-item lang-switcher-item {{ app()->getLocale() === 'en' ? 'active' : '' }}" href="{{ route('lang.switch', 'en') }}">
-                                    <span>English</span>
-                                    @if(app()->getLocale() === 'en')<i class="fa-solid fa-check"></i>@endif
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item lang-switcher-item {{ app()->getLocale() === 'fr' ? 'active' : '' }}" href="{{ route('lang.switch', 'fr') }}">
-                                    <span>Français</span>
-                                    @if(app()->getLocale() === 'fr')<i class="fa-solid fa-check"></i>@endif
-                                </a>
-                            </li>
+                            @foreach($langSwitcherLocales as $code => $locale)
+                                <li>
+                                    <a class="dropdown-item lang-switcher-item {{ app()->getLocale() === $code ? 'active' : '' }}" href="{{ route('lang.switch', $code) }}">
+                                        <span class="lang-switcher-flag">{{ $locale['flag'] }}</span>
+                                        <span>{{ $locale['label'] }}</span>
+                                        @if(app()->getLocale() === $code)<i class="fa-solid fa-check"></i>@endif
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </li>
                     <li>

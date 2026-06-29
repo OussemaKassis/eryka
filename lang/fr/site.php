@@ -50,6 +50,7 @@ return [
     'decrease_quantity' => 'Diminuer la quantité',
     'increase_quantity' => 'Augmenter la quantité',
     'price' => 'Prix',
+    'unit_price' => 'Prix unitaire',
     'image' => 'Image',
     'product' => 'Produit',
     'total' => 'Total',

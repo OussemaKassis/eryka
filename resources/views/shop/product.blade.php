@@ -9,32 +9,58 @@
 
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
-                <div class="p-3 p-lg-4 border bg-white">
-                    <div class="product-thumbnail slider-container" style="height: 400px;">
-                        @if($article->quantity <= 0)
-                            <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.out_of_stock') }}</span>
-                        @elseif($article->quantity <= 5)
-                            <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.only_x_left', ['qty' => $article->quantity]) }}</span>
-                        @endif
+                <div class="product-thumbnail slider-container" style="height: auto; aspect-ratio: 4 / 5;">
+                    @if($article->quantity <= 0)
+                        <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.out_of_stock') }}</span>
+                    @elseif($article->quantity <= 5)
+                        <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.only_x_left', ['qty' => $article->quantity]) }}</span>
+                    @endif
 
-                        <div class="slider" id="slider-{{ $article->id }}">
-                            @if($article->images->count() > 0)
-                                @foreach($article->images as $image)
-                                    <div class="slide"
-                                         style="background-image: url('{{ asset('storage/' . $image->image_path) }}')">
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="slide slide-placeholder"><i class="fa-solid fa-couch"></i></div>
-                            @endif
-                        </div>
-
-                        @if($article->images->count() > 1)
-                            <button class="slider-arrow prev" type="button" onclick="moveSlide('{{ $article->id }}', -1)">&#10094;</button>
-                            <button class="slider-arrow next" type="button" onclick="moveSlide('{{ $article->id }}', 1)">&#10095;</button>
+                    <div class="slider" id="slider-{{ $article->id }}">
+                        @if($article->images->count() > 0)
+                            @foreach($article->images as $image)
+                                <div class="slide"
+                                     style="background-image: url('{{ asset('storage/' . $image->image_path) }}')">
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="slide slide-placeholder"><i class="fa-solid fa-couch"></i></div>
                         @endif
                     </div>
+
+                    @if($article->images->count() > 1)
+                        <button class="slider-arrow prev" type="button" onclick="moveSlide('{{ $article->id }}', -1)">&#10094;</button>
+                        <button class="slider-arrow next" type="button" onclick="moveSlide('{{ $article->id }}', 1)">&#10095;</button>
+                    @endif
                 </div>
+
+                @if($article->images->count() > 1)
+                    <div class="thumbnail-strip" id="thumbnail-strip-{{ $article->id }}">
+                        @foreach($article->images as $key => $image)
+                            <button type="button"
+                                    class="thumbnail-item {{ $loop->first ? 'active' : '' }}"
+                                    style="background-image: url('{{ asset('storage/' . $image->image_path) }}');"
+                                    data-index="{{ $key }}"
+                                    aria-label="{{ __('site.image') }} {{ $key + 1 }}"
+                                    onclick="goToSlide('{{ $article->id }}', {{ $key }})">
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if($article->description)
+                    <div class="mt-4">
+                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.description') }}</h3>
+                        <p class="mb-0">{{ $article->description }}</p>
+                    </div>
+                @endif
+
+                @if($article->detail)
+                    <div class="mt-4">
+                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.details') }}</h3>
+                        <div>{!! $article->detail !!}</div>
+                    </div>
+                @endif
             </div>
 
             <div class="col-md-6">
@@ -50,10 +76,7 @@
                 @if($article->images->whereNotNull('color')->isNotEmpty())
                     @php $defaultColor = $article->images->first() && $article->images->first()->color ? $article->images->first()->color : ''; @endphp
                     <div class="mb-4">
-                        <h3 class="h6 text-black mb-2">
-                            {{ __('site.color') }}
-                            <span id="color-label" class="color-current-label">{{ $defaultColor }}</span>
-                        </h3>
+                        <h3 class="h6 text-black mb-2">{{ __('site.color') }}</h3>
                         <div class="d-flex gap-2" id="color-swatches-{{ $article->id }}">
                             @foreach($article->images as $key => $image)
                                 @if($image->color)
@@ -73,7 +96,8 @@
                     </div>
                 @endif
 
-                <strong class="product-price d-block mb-2" style="font-size: 1.75rem;">{{ number_format($article->price, 2) }} DT</strong>
+                <strong class="product-price d-block mb-1" style="font-size: 1.75rem;">{{ number_format($article->price, 2) }} DT</strong>
+                <p class="text-muted small text-uppercase mb-3">{{ __('site.unit_price') }}</p>
 
                 @if($article->quantity <= 0)
                     <span class="badge bg-danger mb-4">{{ __('site.out_of_stock') }}</span>
@@ -81,20 +105,6 @@
                     <span class="badge bg-warning text-dark mb-4">{{ __('site.only_x_left', ['qty' => $article->quantity]) }}</span>
                 @else
                     <span class="badge bg-success mb-4">{{ __('site.in_stock') }}</span>
-                @endif
-
-                @if($article->description)
-                    <div class="mb-4">
-                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.description') }}</h3>
-                        <p class="mb-0">{{ $article->description }}</p>
-                    </div>
-                @endif
-
-                @if($article->detail)
-                    <div class="mb-4">
-                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.details') }}</h3>
-                        <div>{!! $article->detail !!}</div>
-                    </div>
                 @endif
 
                 @if(session('success'))
@@ -130,8 +140,6 @@
                         </div>
                         <button type="submit" class="btn btn-primary">{{ __('site.add_to_cart') }}</button>
                     </form>
-
-                    <a href="{{ route('shop.checkout', $article->id) }}" class="btn btn-secondary">{{ __('site.buy_now') }}</a>
                 @else
                     <span class="btn disabled">{{ __('site.out_of_stock') }}</span>
                 @endif
@@ -146,6 +154,13 @@
     document.addEventListener('slider:change', function(e) {
         if (String(e.detail.articleId) !== '{{ $article->id }}') return;
 
+        const thumbnailStrip = document.getElementById('thumbnail-strip-{{ $article->id }}');
+        if (thumbnailStrip) {
+            thumbnailStrip.querySelectorAll('.thumbnail-item').forEach(function(thumb) {
+                thumb.classList.toggle('active', parseInt(thumb.dataset.index, 10) === e.detail.slideIndex);
+            });
+        }
+
         const swatchContainer = document.getElementById('color-swatches-{{ $article->id }}');
         if (!swatchContainer) return;
 
@@ -158,9 +173,7 @@
 
         const color = matched ? matched.dataset.color : '';
         const colorInput = document.getElementById('selected-color');
-        const colorLabel = document.getElementById('color-label');
         if (colorInput) colorInput.value = color;
-        if (colorLabel) colorLabel.textContent = color;
     });
 
     document.addEventListener('DOMContentLoaded', function() {
