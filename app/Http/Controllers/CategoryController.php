@@ -10,7 +10,7 @@ class CategoryController extends Controller
     {
         $category->load('parent', 'children');
 
-        $articles = \App\Models\Article::with('category')
+        $articles = \App\Models\Article::with('category', 'images')
             ->where('category_id', $category->id)
             ->latest()
             ->get();

@@ -17,14 +17,22 @@ class ContactMessageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
 
+    protected static ?string $navigationLabel = 'Messages de contact';
+
+    protected static ?string $modelLabel = 'message de contact';
+
+    protected static ?string $pluralModelLabel = 'messages de contact';
+
+    protected static ?string $breadcrumb = 'Messages de contact';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->disabled(),
-                TextInput::make('email')->disabled(),
-                TextInput::make('phone')->disabled(),
-                Textarea::make('message')->disabled()->columnSpanFull(),
+                TextInput::make('name')->label('Nom')->disabled(),
+                TextInput::make('email')->label('E-mail')->disabled(),
+                TextInput::make('phone')->label('Téléphone')->disabled(),
+                Textarea::make('message')->label('Message')->disabled()->columnSpanFull(),
             ]);
     }
 
@@ -32,11 +40,11 @@ class ContactMessageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable(),
-                Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('phone')->searchable(),
-                Tables\Columns\TextColumn::make('message')->limit(50),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('name')->label('Nom')->searchable(),
+                Tables\Columns\TextColumn::make('email')->label('E-mail')->searchable(),
+                Tables\Columns\TextColumn::make('phone')->label('Téléphone')->searchable(),
+                Tables\Columns\TextColumn::make('message')->label('Message')->limit(50),
+                Tables\Columns\TextColumn::make('created_at')->label('Créé le')->dateTime()->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([

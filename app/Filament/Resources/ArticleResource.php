@@ -18,27 +18,36 @@ class ArticleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Articles';
+
+    protected static ?string $modelLabel = 'article';
+
+    protected static ?string $pluralModelLabel = 'articles';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
+                    ->label('Titre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description'),
+                Forms\Components\Textarea::make('description')
+                    ->label('Description'),
                 Forms\Components\TextInput::make('price')
+                    ->label('Prix')
                     ->required()
                     ->numeric(),
                 Forms\Components\TextInput::make('quantity')
-                    ->label('Stock Quantity')
-                    ->helperText('How many units are available. Shows as "Out of Stock" on the site when this hits 0.')
+                    ->label('Quantité en stock')
+                    ->helperText('Nombre d\'unités disponibles. Affiché comme « Rupture de stock » sur le site lorsque ce nombre atteint 0.')
                     ->required()
                     ->numeric()
                     ->minValue(0)
                     ->default(0),
-                Forms\Components\RichEditor::make('detail')->nullable(),
+                Forms\Components\RichEditor::make('detail')->label('Détails')->nullable(),
                 Forms\Components\Select::make('category_id')
-                    ->label('Category')
+                    ->label('Catégorie')
                     ->options(fn () => Category::with('parent')->get()->mapWithKeys(
                         fn (Category $category) => [
                             $category->id => $category->parent
@@ -50,7 +59,7 @@ class ArticleResource extends Resource
                     ->required(),
                 Forms\Components\Repeater::make('images')
                     ->relationship('images')
-                    ->label('Article Images (up to 3, each with its own color)')
+                    ->label('Images de l\'article (jusqu\'à 3, chacune avec sa couleur)')
                     ->schema([
                         Forms\Components\FileUpload::make('image_path')
                             ->label('Image')
@@ -59,14 +68,14 @@ class ArticleResource extends Resource
                             ->directory('articles')
                             ->required(),
                         Forms\Components\ColorPicker::make('color')
-                            ->label('Color')
+                            ->label('Couleur')
                             ->required(),
                     ])
                     ->columns(2)
                     ->orderColumn('sort_order')
                     ->reorderable()
                     ->maxItems(3)
-                    ->addActionLabel('Add image')
+                    ->addActionLabel('Ajouter une image')
                     ->columnSpanFull(),
             ]);
     }
@@ -76,9 +85,10 @@ class ArticleResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('title')->searchable(),
-                Tables\Columns\TextColumn::make('description')->limit(30),
+                Tables\Columns\TextColumn::make('title')->label('Titre')->searchable(),
+                Tables\Columns\TextColumn::make('description')->label('Description')->limit(30),
                 Tables\Columns\TextColumn::make('price')
+                    ->label('Prix')
                     ->formatStateUsing(fn (float $state): string => number_format($state, 2) . ' DT'),
                 Tables\Columns\TextColumn::make('quantity')
                     ->label('Stock')
@@ -89,8 +99,8 @@ class ArticleResource extends Resource
                         $state <= 5 => 'warning',
                         default => 'success',
                     })
-                    ->formatStateUsing(fn (int $state): string => $state <= 0 ? 'Out of stock' : (string) $state),
-                Tables\Columns\TextColumn::make('category.title')->label('Category'),
+                    ->formatStateUsing(fn (int $state): string => $state <= 0 ? 'Rupture de stock' : (string) $state),
+                Tables\Columns\TextColumn::make('category.title')->label('Catégorie'),
                 Tables\Columns\ViewColumn::make('images')
                     ->label('Images')
                     ->view('filament.tables.columns.article-images')
@@ -100,7 +110,7 @@ class ArticleResource extends Resource
                             $q->where('image_path', 'like', "%{$search}%");
                         });
                     }),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label('Créé le')->dateTime()->sortable(),
             ])
             ->filters([
                 //

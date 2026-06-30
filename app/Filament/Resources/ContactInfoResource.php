@@ -19,9 +19,11 @@ class ContactInfoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
 
-    protected static ?string $navigationLabel = 'Contact Info';
+    protected static ?string $navigationLabel = 'Coordonnées';
 
-    protected static ?string $modelLabel = 'contact info';
+    protected static ?string $modelLabel = 'coordonnée';
+
+    protected static ?string $pluralModelLabel = 'coordonnées';
 
     public static function form(Form $form): Form
     {
@@ -30,26 +32,26 @@ class ContactInfoResource extends Resource
                 Forms\Components\Select::make('type')
                     ->label('Type')
                     ->options([
-                        'email' => 'Email',
-                        'phone' => 'Phone',
-                        'address' => 'Address',
+                        'email' => 'E-mail',
+                        'phone' => 'Téléphone',
+                        'address' => 'Adresse',
                     ])
                     ->required()
                     ->live(),
                 Forms\Components\TextInput::make('label')
-                    ->label('Label')
-                    ->placeholder('e.g. "Showroom", "Support", "TN"')
-                    ->helperText('Optional short tag shown next to the value (a country code for phones, or a site name for addresses).'),
+                    ->label('Étiquette')
+                    ->placeholder('ex. « Showroom », « Support », « TN »')
+                    ->helperText('Petite étiquette optionnelle affichée à côté de la valeur (un indicatif pays pour les téléphones, ou un nom de site pour les adresses).'),
                 Forms\Components\TextInput::make('value')
                     ->label(fn (Forms\Get $get): string => match ($get('type')) {
-                        'email' => 'Email address',
-                        'phone' => 'Phone number',
-                        'address' => 'Address',
-                        default => 'Value',
+                        'email' => 'Adresse e-mail',
+                        'phone' => 'Numéro de téléphone',
+                        'address' => 'Adresse',
+                        default => 'Valeur',
                     })
                     ->required(),
                 Forms\Components\Toggle::make('is_active')
-                    ->label('Show on contact page')
+                    ->label('Afficher sur la page contact')
                     ->default(true),
             ]);
     }
@@ -60,18 +62,23 @@ class ContactInfoResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('type')
                     ->label('Type')
-                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'email' => 'E-mail',
+                        'phone' => 'Téléphone',
+                        'address' => 'Adresse',
+                        default => ucfirst($state),
+                    })
                     ->badge(),
                 Tables\Columns\TextColumn::make('label')
-                    ->label('Label')
+                    ->label('Étiquette')
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('value')
-                    ->label('Value'),
+                    ->label('Valeur'),
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Actif')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('sort_order')
-                    ->label('Order'),
+                    ->label('Ordre'),
             ])
             ->defaultSort('sort_order')
             ->reorderable('sort_order')

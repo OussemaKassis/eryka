@@ -22,13 +22,13 @@ class OrdersOverview extends BaseWidget
             ->first();
 
         $bestSellerLabel = $bestSeller?->article
-            ? "{$bestSeller->article->title} ({$bestSeller->total_quantity} sold)"
-            : 'No sales yet';
+            ? "{$bestSeller->article->title} ({$bestSeller->total_quantity} vendus)"
+            : 'Aucune vente pour le moment';
 
         return [
-            Stat::make('Orders', $orderCount),
-            Stat::make('Messages Received', $messageCount),
-            Stat::make('Best Seller', $bestSellerLabel),
+            Stat::make('Commandes', $orderCount),
+            Stat::make('Messages reçus', $messageCount),
+            Stat::make('Meilleure vente', $bestSellerLabel),
         ];
     }
 }

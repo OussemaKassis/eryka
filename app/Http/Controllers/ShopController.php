@@ -33,7 +33,7 @@ class ShopController extends Controller
     // Homepage: featured articles + marketing sections
     public function articlesHome()
     {
-        $articles = Article::with('category')->latest()->take(8)->get();
+        $articles = Article::with('category', 'images')->latest()->take(8)->get();
         $homeSections = $this->pageSections('home');
         $welcomeSection = $homeSections->first();
         return view('shop.home', [
@@ -46,7 +46,7 @@ class ShopController extends Controller
     // All products, optionally filtered by category (and its sub-categories)
     public function products(Request $request)
     {
-        $query = Article::with('category');
+        $query = Article::with('category', 'images');
         $activeCategory = null;
 
         if ($categoryId = $request->query('category')) {
@@ -90,6 +90,7 @@ class ShopController extends Controller
             return response()->json([
                 'title' => $activeCategory ? $activeCategory->title : ($hero['pageHero']->title ?? __('site.all_products')),
                 'subtitle' => $activeCategory ? null : ($hero['pageHero']->subtitle ?? __('site.products_hero_subtitle')),
+                'count_label' => __('site.products_found', ['count' => $articles->count()]),
                 'html' => view('shop.partials.products-grid', compact('articles'))->render(),
             ]);
         }

@@ -16,14 +16,18 @@ class PageHeroResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
 
-    protected static ?string $navigationLabel = 'Page Headers';
+    protected static ?string $navigationLabel = 'En-têtes de page';
 
-    protected static ?string $modelLabel = 'page header';
+    protected static ?string $modelLabel = 'en-tête de page';
+
+    protected static ?string $pluralModelLabel = 'en-têtes de page';
+
+    protected static ?string $breadcrumb = 'En-têtes de page';
 
     public const PAGE_OPTIONS = [
-        'home' => 'Home',
-        'about' => 'About Us',
-        'products' => 'Products',
+        'home' => 'Accueil',
+        'about' => 'À propos',
+        'products' => 'Produits',
         'contact' => 'Contact',
     ];
 
@@ -38,14 +42,14 @@ class PageHeroResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->required(),
                 Forms\Components\TextInput::make('title')
-                    ->label('Title')
-                    ->helperText('Leave empty to use the site default for this page.'),
+                    ->label('Titre')
+                    ->helperText('Laissez vide pour utiliser le titre par défaut du site pour cette page.'),
                 Forms\Components\Textarea::make('subtitle')
-                    ->label('Subtitle')
-                    ->helperText('Leave empty to use the site default for this page.'),
+                    ->label('Sous-titre')
+                    ->helperText('Laissez vide pour utiliser le sous-titre par défaut du site pour cette page.'),
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Image')
-                    ->helperText('Optional. Shown next to the title when the page has no hero slider images.')
+                    ->helperText('Optionnel. Affichée à côté du titre lorsque la page n\'a pas d\'images de diaporama.')
                     ->image()
                     ->disk('public')
                     ->directory('page-heroes')
@@ -61,8 +65,8 @@ class PageHeroResource extends Resource
                     ->label('Page')
                     ->formatStateUsing(fn (string $state): string => self::PAGE_OPTIONS[$state] ?? $state)
                     ->badge(),
-                Tables\Columns\TextColumn::make('title')->placeholder('— using site default —'),
-                Tables\Columns\TextColumn::make('subtitle')->limit(50)->placeholder('— using site default —'),
+                Tables\Columns\TextColumn::make('title')->label('Titre')->placeholder('— valeur par défaut du site —'),
+                Tables\Columns\TextColumn::make('subtitle')->label('Sous-titre')->limit(50)->placeholder('— valeur par défaut du site —'),
                 Tables\Columns\ImageColumn::make('image_path')
                     ->label('Image')
                     ->disk('public'),

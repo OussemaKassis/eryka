@@ -19,16 +19,20 @@ class SocialLinkResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-share';
 
-    protected static ?string $navigationLabel = 'Social Links';
+    protected static ?string $navigationLabel = 'Réseaux sociaux';
 
-    protected static ?string $modelLabel = 'social link';
+    protected static ?string $modelLabel = 'réseau social';
+
+    protected static ?string $pluralModelLabel = 'réseaux sociaux';
+
+    protected static ?string $breadcrumb = 'Réseaux sociaux';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('platform')
-                    ->label('Platform')
+                    ->label('Plateforme')
                     ->options([
                         'facebook' => 'Facebook',
                         'instagram' => 'Instagram',
@@ -41,12 +45,12 @@ class SocialLinkResource extends Resource
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('url')
-                    ->label('Profile / Page URL')
+                    ->label('URL du profil / de la page')
                     ->url()
                     ->required()
                     ->placeholder('https://...'),
                 Forms\Components\Toggle::make('is_active')
-                    ->label('Show in footer')
+                    ->label('Afficher dans le pied de page')
                     ->default(true),
             ]);
     }
@@ -56,7 +60,7 @@ class SocialLinkResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('platform')
-                    ->label('Platform')
+                    ->label('Plateforme')
                     ->formatStateUsing(fn (string $state): string => ucfirst($state))
                     ->badge(),
                 Tables\Columns\TextColumn::make('url')
@@ -64,10 +68,10 @@ class SocialLinkResource extends Resource
                     ->limit(40)
                     ->url(fn (SocialLink $record): string => $record->url, true),
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Actif')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('sort_order')
-                    ->label('Order'),
+                    ->label('Ordre'),
             ])
             ->defaultSort('sort_order')
             ->reorderable('sort_order')

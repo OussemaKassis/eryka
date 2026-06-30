@@ -16,9 +16,11 @@ class HeroSlideResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Hero Slider';
+    protected static ?string $navigationLabel = 'Diaporama';
 
-    protected static ?string $modelLabel = 'hero slide';
+    protected static ?string $modelLabel = 'diapositive';
+
+    protected static ?string $pluralModelLabel = 'diapositives';
 
     public static function form(Form $form): Form
     {
@@ -37,7 +39,7 @@ class HeroSlideResource extends Resource
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_active')
-                    ->label('Show on the page')
+                    ->label('Afficher sur la page')
                     ->default(true),
             ]);
     }
@@ -51,13 +53,13 @@ class HeroSlideResource extends Resource
                     ->formatStateUsing(fn (string $state): string => PageHeroResource::PAGE_OPTIONS[$state] ?? $state)
                     ->badge(),
                 Tables\Columns\ImageColumn::make('image_path')
-                    ->label('Preview')
+                    ->label('Aperçu')
                     ->disk('public'),
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Actif')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('sort_order')
-                    ->label('Order'),
+                    ->label('Ordre'),
             ])
             ->defaultSort('sort_order')
             ->reorderable('sort_order')

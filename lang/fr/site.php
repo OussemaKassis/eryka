@@ -34,7 +34,7 @@ return [
     'only_x_left' => 'Plus que :qty en stock',
     'order_now' => 'Commander',
     'quick_view' => 'Aperçu rapide',
-    'view_full_details' => 'Voir tous les détails',
+    'view_full_details' => 'Voir Détails',
     'add_to_cart' => 'Ajouter au panier',
     'buy_now' => 'Acheter maintenant',
     'back_to_shop' => 'Retour à la boutique',
@@ -125,6 +125,11 @@ return [
     'price_filter' => 'Prix',
     'min_price' => 'Min',
     'max_price' => 'Max',
+    'categories' => 'Catégories',
+    'all_categories' => 'Toutes les catégories',
+    'reset_filters' => 'Réinitialiser les filtres',
+    'products_found' => ':count produit(s) trouvé(s)',
+    'sort_by' => 'Trier par :',
 
     // Product detail page
     'order_details' => 'Détails de la commande',

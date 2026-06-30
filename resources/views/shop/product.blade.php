@@ -54,13 +54,6 @@
                         <p class="mb-0">{{ $article->description }}</p>
                     </div>
                 @endif
-
-                @if($article->detail)
-                    <div class="mt-4">
-                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.details') }}</h3>
-                        <div>{!! $article->detail !!}</div>
-                    </div>
-                @endif
             </div>
 
             <div class="col-md-6">
@@ -77,7 +70,7 @@
                     @php $defaultColor = $article->images->first() && $article->images->first()->color ? $article->images->first()->color : ''; @endphp
                     <div class="mb-4">
                         <h3 class="h6 text-black mb-2">{{ __('site.color') }}</h3>
-                        <div class="d-flex gap-2" id="color-swatches-{{ $article->id }}">
+                        <div class="d-flex gap-3" id="color-swatches-{{ $article->id }}">
                             @foreach($article->images as $key => $image)
                                 @if($image->color)
                                     <button type="button"
@@ -88,7 +81,6 @@
                                             data-index="{{ $key }}"
                                             data-color="{{ $image->color }}"
                                             onclick="goToSlide('{{ $article->id }}', {{ $key }})">
-                                        <span class="color-swatch-check"><i class="fa-solid fa-check"></i></span>
                                     </button>
                                 @endif
                             @endforeach
@@ -96,8 +88,8 @@
                     </div>
                 @endif
 
-                <strong class="product-price d-block mb-1" style="font-size: 1.75rem;">{{ number_format($article->price, 2) }} DT</strong>
-                <p class="text-muted small text-uppercase mb-3">{{ __('site.unit_price') }}</p>
+                <strong class="product-price d-block mb-1" style="font-size: 2rem;">{{ number_format($article->price, 2) }} DT</strong>
+                <p class="product-unit-price mb-3">{{ __('site.unit_price') }}</p>
 
                 @if($article->quantity <= 0)
                     <span class="badge bg-danger mb-4">{{ __('site.out_of_stock') }}</span>

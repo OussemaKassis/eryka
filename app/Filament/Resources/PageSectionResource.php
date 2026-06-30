@@ -16,9 +16,13 @@ class PageSectionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
-    protected static ?string $navigationLabel = 'Page Sections';
+    protected static ?string $navigationLabel = 'Sections de page';
 
-    protected static ?string $modelLabel = 'page section';
+    protected static ?string $modelLabel = 'section de page';
+
+    protected static ?string $pluralModelLabel = 'sections de page';
+
+    protected static ?string $breadcrumb = 'Sections de page';
 
     public static function form(Form $form): Form
     {
@@ -30,23 +34,23 @@ class PageSectionResource extends Resource
                     ->default('home')
                     ->required(),
                 Forms\Components\TextInput::make('title')
-                    ->label('Title')
+                    ->label('Titre')
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('body')
-                    ->label('Text')
+                    ->label('Texte')
                     ->rows(5)
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Image')
-                    ->helperText('Optional. Leave empty to show this section as a full-width text band instead of a text + image block.')
+                    ->helperText('Optionnel. Laissez vide pour afficher cette section comme un bandeau de texte pleine largeur plutôt qu\'un bloc texte + image.')
                     ->image()
                     ->disk('public')
                     ->directory('page-sections')
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_active')
-                    ->label('Show on the page')
+                    ->label('Afficher sur la page')
                     ->default(true),
             ]);
     }
@@ -63,15 +67,15 @@ class PageSectionResource extends Resource
                     ->label('Image')
                     ->disk('public'),
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Title'),
+                    ->label('Titre'),
                 Tables\Columns\TextColumn::make('body')
-                    ->label('Text')
+                    ->label('Texte')
                     ->limit(60),
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Actif')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('sort_order')
-                    ->label('Order'),
+                    ->label('Ordre'),
             ])
             ->defaultSort('sort_order')
             ->reorderable('sort_order')

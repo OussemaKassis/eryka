@@ -1,0 +1,24 @@
+/* Order Lines table — alternating background tint per order group so
+   adjacent orders are easy to tell apart at a glance. Filament's compiled
+   CSS bundle is pre-built upstream and doesn't include arbitrary Tailwind
+   color utilities (only gray/primary), so this small stylesheet is loaded
+   separately to supply the tint class used by CommandResource's
+   recordClasses(). */
+.fi-ta-row.order-group-tint {
+    background-color: rgba(245, 158, 11, 0.08);
+}
+
+.dark .fi-ta-row.order-group-tint {
+    background-color: rgba(245, 158, 11, 0.14);
+}
+
+/* Order group header — bold, distinct blue title so each order's heading
+   stands out clearly from the line-item rows underneath it. */
+.fi-ta-group-header h4 {
+    color: #1d4ed8;
+    font-weight: 700;
+}
+
+.dark .fi-ta-group-header h4 {
+    color: #60a5fa;
+}

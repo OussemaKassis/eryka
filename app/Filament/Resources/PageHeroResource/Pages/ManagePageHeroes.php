@@ -10,6 +10,11 @@ class ManagePageHeroes extends ManageRecords
 {
     protected static string $resource = PageHeroResource::class;
 
+    public function getTitle(): string | \Illuminate\Contracts\Support\Htmlable
+    {
+        return 'En-têtes de page';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

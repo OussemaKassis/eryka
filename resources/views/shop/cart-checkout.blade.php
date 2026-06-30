@@ -8,8 +8,8 @@
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
                 <h2 class="h3 mb-3 text-black">{{ __('site.your_order') }}</h2>
-                <div class="p-3 p-lg-4 border bg-white">
-                    <table class="table site-block-order-table mb-4">
+                <div class="checkout-card">
+                    <table class="cart-summary-table mb-4">
                         <thead>
                             <tr>
                                 <th>{{ __('site.product') }}</th>
@@ -37,9 +37,9 @@
                                 <td>{{ __('site.shipping_fee') }}</td>
                                 <td>{{ number_format($shipping, 2) }} DT</td>
                             </tr>
-                            <tr>
-                                <td class="text-black"><strong>{{ __('site.order_total') }}</strong></td>
-                                <td class="text-black"><strong>{{ number_format($total, 2) }} DT</strong></td>
+                            <tr class="cart-summary-total">
+                                <td>{{ __('site.order_total') }}</td>
+                                <td>{{ number_format($total, 2) }} DT</td>
                             </tr>
                         </tbody>
                     </table>
@@ -49,7 +49,7 @@
 
             <div class="col-md-6">
                 <h2 class="h3 mb-3 text-black">{{ __('site.shipping_details') }}</h2>
-                <div class="p-3 p-lg-4 border bg-white">
+                <div class="checkout-card">
                     @if($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">

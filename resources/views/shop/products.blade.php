@@ -27,57 +27,76 @@
 
 <div id="products" class="untree_co-section product-section before-footer-section">
     <div class="container">
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="category-switcher" id="category-switcher">
-                    <a href="{{ route('shop.products') }}" data-category="" class="category-pill {{ !$activeCategory ? 'active' : '' }}">{{ __('site.all_products') }}</a>
-                    @foreach($familyCategories as $family)
-                        <a href="{{ route('shop.products', ['category' => $family->id]) }}" data-category="{{ $family->id }}" class="category-pill {{ $activeCategory?->id === $family->id ? 'active' : '' }}">{{ $family->title }}</a>
-                        @foreach($family->children as $child)
-                            <a href="{{ route('shop.products', ['category' => $child->id]) }}" data-category="{{ $child->id }}" class="category-pill sub {{ $activeCategory?->id === $child->id ? 'active' : '' }}">{{ $child->title }}</a>
-                        @endforeach
-                    @endforeach
+        <div class="row">
+            <div class="col-lg-3 mb-5 mb-lg-0">
+                <div class="shop-sidebar" id="shop-sidebar">
+                    <div class="filter-block">
+                        <h3 class="filter-title">{{ __('site.categories') }}</h3>
+                        <div class="filter-category-list" id="category-filter-list">
+                            <label class="filter-radio">
+                                <input type="radio" name="category-filter" value="" {{ !$activeCategory ? 'checked' : '' }}>
+                                <span>{{ __('site.all_categories') }}</span>
+                            </label>
+                            @foreach($familyCategories as $family)
+                                <label class="filter-radio">
+                                    <input type="radio" name="category-filter" value="{{ $family->id }}" {{ $activeCategory?->id === $family->id ? 'checked' : '' }}>
+                                    <span>{{ $family->title }}</span>
+                                </label>
+                                @foreach($family->children as $child)
+                                    <label class="filter-radio filter-radio-sub">
+                                        <input type="radio" name="category-filter" value="{{ $child->id }}" {{ $activeCategory?->id === $child->id ? 'checked' : '' }}>
+                                        <span>{{ $child->title }}</span>
+                                    </label>
+                                @endforeach
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="filter-block">
+                        <h3 class="filter-title">{{ __('site.search') }}</h3>
+                        <form id="search-form" onsubmit="return false;">
+                            <input type="text" id="search-input" class="form-control filter-search-input" placeholder="{{ __('site.search_placeholder') }}" autocomplete="off">
+                        </form>
+                    </div>
+
+                    <div class="filter-block">
+                        <h3 class="filter-title">{{ __('site.price_filter') }}</h3>
+                        <div class="filter-price-inputs">
+                            <input type="number" id="price-min" class="form-control" placeholder="{{ __('site.min_price') }}" min="0" inputmode="numeric">
+                            <span class="filter-price-sep">&ndash;</span>
+                            <input type="number" id="price-max" class="form-control" placeholder="{{ __('site.max_price') }}" min="0" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <div class="filter-block">
+                        <label class="stock-filter-toggle">
+                            <input type="checkbox" id="stock-filter">
+                            <span>{{ __('site.in_stock_only') }}</span>
+                        </label>
+                    </div>
+
+                    <button type="button" id="filter-reset-btn" class="btn filter-reset-btn w-100">{{ __('site.reset_filters') }}</button>
                 </div>
             </div>
-        </div>
 
-        <div class="products-toolbar mb-4">
-            <form id="search-form" class="toolbar-search" onsubmit="return false;">
-                <i class="fa-solid fa-magnifying-glass toolbar-search-icon"></i>
-                <input type="text" id="search-input" class="form-control" placeholder="{{ __('site.search_placeholder') }}" autocomplete="off">
-                <button type="submit" id="search-btn" class="btn btn-primary btn-sm">{{ __('site.search') }}</button>
-            </form>
+            <div class="col-lg-9">
+                <div class="products-grid-header">
+                    <p class="products-count" id="products-count">{{ __('site.products_found', ['count' => $articles->count()]) }}</p>
+                    <div class="products-sort">
+                        <span class="products-sort-label">{{ __('site.sort_by') }}</span>
+                        <select id="sort-select" class="form-select form-select-sm products-sort-select">
+                            <option value="newest">{{ __('site.sort_newest') }}</option>
+                            <option value="price_asc">{{ __('site.sort_price_asc') }}</option>
+                            <option value="price_desc">{{ __('site.sort_price_desc') }}</option>
+                            <option value="name_asc">{{ __('site.sort_name_asc') }}</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div class="toolbar-divider"></div>
-
-            <div class="toolbar-price">
-                <span class="toolbar-label">{{ __('site.price_filter') }}</span>
-                <div class="toolbar-price-inputs">
-                    <span class="toolbar-price-currency">DT</span>
-                    <input type="number" id="price-min" class="form-control" placeholder="{{ __('site.min_price') }}" min="0" inputmode="numeric">
-                    <span class="toolbar-price-sep">&ndash;</span>
-                    <span class="toolbar-price-currency">DT</span>
-                    <input type="number" id="price-max" class="form-control" placeholder="{{ __('site.max_price') }}" min="0" inputmode="numeric">
+                <div class="row" id="products-grid">
+                    @include('shop.partials.products-grid')
                 </div>
             </div>
-
-            <div class="toolbar-divider"></div>
-
-            <select id="sort-select" class="form-select form-select-sm toolbar-sort">
-                <option value="newest">{{ __('site.sort_newest') }}</option>
-                <option value="price_asc">{{ __('site.sort_price_asc') }}</option>
-                <option value="price_desc">{{ __('site.sort_price_desc') }}</option>
-                <option value="name_asc">{{ __('site.sort_name_asc') }}</option>
-            </select>
-
-            <label class="stock-filter-toggle">
-                <input type="checkbox" id="stock-filter">
-                <span>{{ __('site.in_stock_only') }}</span>
-            </label>
-        </div>
-
-        <div class="row" id="products-grid">
-            @include('shop.partials.products-grid')
         </div>
     </div>
 </div>
@@ -86,7 +105,7 @@
 @push('scripts')
 <script>
 (function() {
-    var switcher = document.getElementById('category-switcher');
+    var sidebar = document.getElementById('shop-sidebar');
     var grid = document.getElementById('products-grid');
     var sortSelect = document.getElementById('sort-select');
     var stockFilter = document.getElementById('stock-filter');
@@ -94,10 +113,12 @@
     var searchInput = document.getElementById('search-input');
     var priceMin = document.getElementById('price-min');
     var priceMax = document.getElementById('price-max');
+    var resetBtn = document.getElementById('filter-reset-btn');
+    var countEl = document.getElementById('products-count');
     var heroTitle = document.querySelector('.hero h1');
     var heroSubtitle = document.querySelector('.hero .intro-excerpt p');
     var baseUrl = '{{ route('shop.products') }}';
-    if (!switcher || !grid) return;
+    if (!sidebar || !grid) return;
 
     function readStateFromLocation() {
         var params = new URLSearchParams(window.location.search);
@@ -131,8 +152,8 @@
         searchInput.value = state.search;
         priceMin.value = state.min_price;
         priceMax.value = state.max_price;
-        switcher.querySelectorAll('.category-pill').forEach(function(pill) {
-            pill.classList.toggle('active', pill.getAttribute('data-category') === state.category);
+        sidebar.querySelectorAll('input[name="category-filter"]').forEach(function(radio) {
+            radio.checked = radio.value === state.category;
         });
     }
 
@@ -148,6 +169,7 @@
                     if (heroSubtitle) heroSubtitle.textContent = data.subtitle || '';
                     grid.style.opacity = 1;
                 }, 200);
+                if (countEl) countEl.textContent = data.count_label;
                 syncControls();
                 if (pushState) {
                     history.pushState({ url: url }, '', url);
@@ -161,11 +183,9 @@
     grid.style.transition = 'opacity 0.2s ease';
     syncControls();
 
-    switcher.addEventListener('click', function(e) {
-        var pill = e.target.closest('.category-pill');
-        if (!pill) return;
-        e.preventDefault();
-        state.category = pill.getAttribute('data-category') || '';
+    sidebar.addEventListener('change', function(e) {
+        if (e.target.name !== 'category-filter') return;
+        state.category = e.target.value;
         load(true);
     });
 
@@ -204,6 +224,11 @@
     priceMax.addEventListener('input', function() {
         state.max_price = priceMax.value;
         debounceLoad();
+    });
+
+    resetBtn.addEventListener('click', function() {
+        state = { category: '', sort: 'newest', in_stock: false, search: '', min_price: '', max_price: '' };
+        load(true);
     });
 
     window.addEventListener('popstate', function() {

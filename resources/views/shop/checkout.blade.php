@@ -9,46 +9,50 @@
 
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
-                <div class="p-3 p-lg-4 border bg-white">
-                    <div class="product-thumbnail slider-container" style="height: auto; aspect-ratio: 4 / 5;">
-                        @if($article->quantity <= 0)
-                            <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">Out of Stock</span>
-                        @elseif($article->quantity <= 5)
-                            <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">Only {{ $article->quantity }} left</span>
-                        @endif
+                <div class="product-thumbnail slider-container" style="height: auto; aspect-ratio: 4 / 5;">
+                    @if($article->quantity <= 0)
+                        <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">Out of Stock</span>
+                    @elseif($article->quantity <= 5)
+                        <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">Only {{ $article->quantity }} left</span>
+                    @endif
 
-                        <div class="slider" id="slider-{{ $article->id }}">
-                            @if($article->images->count() > 0)
-                                @foreach($article->images as $image)
-                                    <div class="slide"
-                                         style="background-image: url('{{ asset('storage/' . $image->image_path) }}')">
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="slide" style="background: #E3D9C8;"></div>
-                            @endif
-                        </div>
-
-                        @if($article->images->count() > 1)
-                            <button class="slider-arrow prev" type="button" onclick="moveSlide('{{ $article->id }}', -1)">&#10094;</button>
-                            <button class="slider-arrow next" type="button" onclick="moveSlide('{{ $article->id }}', 1)">&#10095;</button>
-                            <div class="slider-nav" id="slider-nav-{{ $article->id }}">
-                                @foreach($article->images as $key => $image)
-                                    <span class="slider-dot {{ $loop->first ? 'active' : '' }}"
-                                          onclick="goToSlide('{{ $article->id }}', {{ $key }})"></span>
-                                @endforeach
-                            </div>
+                    <div class="slider" id="slider-{{ $article->id }}">
+                        @if($article->images->count() > 0)
+                            @foreach($article->images as $image)
+                                <div class="slide"
+                                     style="background-image: url('{{ asset('storage/' . $image->image_path) }}')">
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="slide" style="background: #E3D9C8;"></div>
                         @endif
                     </div>
 
-                    <p class="mt-4 mb-0 text-black">{{ $article->description }}</p>
-                    <strong class="product-price d-block mt-3" style="font-size: 1.5rem;">{{ number_format($article->price, 2) }} DT</strong>
+                    @if($article->images->count() > 1)
+                        <button class="slider-arrow prev" type="button" onclick="moveSlide('{{ $article->id }}', -1)">&#10094;</button>
+                        <button class="slider-arrow next" type="button" onclick="moveSlide('{{ $article->id }}', 1)">&#10095;</button>
+                        <div class="slider-nav" id="slider-nav-{{ $article->id }}">
+                            @foreach($article->images as $key => $image)
+                                <span class="slider-dot {{ $loop->first ? 'active' : '' }}"
+                                      onclick="goToSlide('{{ $article->id }}', {{ $key }})"></span>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
+
+                @if($article->description)
+                    <div class="mt-4">
+                        <h3 class="h6 text-black fw-bold mb-1">{{ __('site.description') }}</h3>
+                        <p class="mb-0">{{ $article->description }}</p>
+                    </div>
+                @endif
+
+                <strong class="product-price d-block mt-3" style="font-size: 1.75rem;">{{ number_format($article->price, 2) }} DT</strong>
             </div>
 
             <div class="col-md-6">
                 <h2 class="h3 mb-3 text-black">{{ __('site.order_details') }}</h2>
-                <div class="p-3 p-lg-4 border bg-white">
+                <div class="checkout-card">
                     @if($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">

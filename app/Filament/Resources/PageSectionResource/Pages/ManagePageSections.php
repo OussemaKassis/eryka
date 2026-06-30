@@ -10,6 +10,11 @@ class ManagePageSections extends ManageRecords
 {
     protected static string $resource = PageSectionResource::class;
 
+    public function getTitle(): string | \Illuminate\Contracts\Support\Htmlable
+    {
+        return 'Sections de page';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

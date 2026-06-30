@@ -243,6 +243,18 @@
                 };
             });
 
+            // The header is fixed (always visible, even mid-scroll) rather than
+            // sticky, so it's removed from document flow — push the page content
+            // down by its real rendered height to avoid it overlapping the hero.
+            const navbar = document.querySelector('.custom-navbar');
+            if (navbar) {
+                const setNavbarOffset = () => {
+                    document.body.style.paddingTop = navbar.offsetHeight + 'px';
+                };
+                setNavbarOffset();
+                window.addEventListener('resize', setNavbarOffset);
+            }
+
             const backToTopBtn = document.getElementById('back-to-top');
             if (backToTopBtn) {
                 function toggleBackToTop() {

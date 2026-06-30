@@ -9,7 +9,7 @@
                 <div class="relative group">
                     <img
                         src="{{ $image->image_url }}"
-                        alt="Article Image"
+                        alt="Image de l'article"
                         class="w-10 h-10 object-cover rounded-md border border-gray-200"
                         title="{{ basename($image->image_path) }}"
                     >
@@ -25,7 +25,7 @@
                             href="{{ $image->image_url }}" 
                             target="_blank" 
                             class="text-white p-1 hover:text-gray-200"
-                            title="View full size"
+                            title="Voir en taille réelle"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -38,5 +38,5 @@
         @endforeach
     </div>
 @else
-    <span class="text-gray-400 text-sm">No images</span>
+    <span class="text-gray-400 text-sm">Aucune image</span>
 @endif

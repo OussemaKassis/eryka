@@ -16,23 +16,32 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Catégories';
+
+    protected static ?string $modelLabel = 'catégorie';
+
+    protected static ?string $pluralModelLabel = 'catégories';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
+                    ->label('Titre')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('parent_id')
-                    ->label('Parent Category (Famille)')
-                    ->helperText('Leave empty to make this a top-level "famille". Pick a parent to make this a "sous-famille".')
+                    ->label('Catégorie parente (Famille)')
+                    ->helperText('Laissez vide pour faire de ceci une « famille » de premier niveau. Choisissez un parent pour en faire une « sous-famille ».')
                     ->options(fn (?Category $record) => Category::topLevel()
                         ->when($record, fn ($query) => $query->where('id', '!=', $record->id))
                         ->pluck('title', 'id'))
                     ->searchable()
                     ->nullable(),
-                Forms\Components\Textarea::make('description'),
+                Forms\Components\Textarea::make('description')
+                    ->label('Description'),
                 Forms\Components\FileUpload::make('image')
+                    ->label('Image')
                     ->image()
                     ->disk('public')
                     ->directory('categories')
@@ -45,13 +54,13 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('title')->searchable(),
+                Tables\Columns\TextColumn::make('title')->label('Titre')->searchable(),
                 Tables\Columns\TextColumn::make('parent.title')
                     ->label('Famille')
-                    ->placeholder('— (top-level famille)'),
-                Tables\Columns\TextColumn::make('description')->limit(30),
-                Tables\Columns\ImageColumn::make('image')->disk('public'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
+                    ->placeholder('— (famille de premier niveau)'),
+                Tables\Columns\TextColumn::make('description')->label('Description')->limit(30),
+                Tables\Columns\ImageColumn::make('image')->label('Image')->disk('public'),
+                Tables\Columns\TextColumn::make('created_at')->label('Créé le')->dateTime()->sortable(),
             ])
             ->filters([
                 //

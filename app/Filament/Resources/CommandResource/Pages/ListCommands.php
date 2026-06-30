@@ -10,6 +10,11 @@ class ListCommands extends ListRecords
 {
     protected static string $resource = CommandResource::class;
 
+    public function getTitle(): string | \Illuminate\Contracts\Support\Htmlable
+    {
+        return 'Lignes de commande';
+    }
+
     protected function getHeaderActions(): array
     {
         return [];
