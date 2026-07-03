@@ -28,6 +28,7 @@ class PageHeroResource extends Resource
         'home' => 'Accueil',
         'about' => 'À propos',
         'products' => 'Produits',
+        'actualite' => 'Actualité',
         'contact' => 'Contact',
     ];
 

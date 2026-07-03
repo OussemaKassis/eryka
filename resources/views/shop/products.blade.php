@@ -19,7 +19,12 @@
             </div>
         @endsection
     @endif
-@else
+@elseif($pageHero?->image_path)
+    {{-- Single hero image (no Diaporama slides set) — still rendered full-width
+         via the slider markup, rather than the layout's boxed side-image mode. --}}
+    @section('hero-bg-slides')
+        <div class="hero-slide" style="background-image: url('{{ asset('storage/' . $pageHero->image_path) }}')"></div>
+    @endsection
 @endif
 
 @section('content')
@@ -42,12 +47,6 @@
                                     <input type="radio" name="category-filter" value="{{ $family->id }}" {{ $activeCategory?->id === $family->id ? 'checked' : '' }}>
                                     <span>{{ $family->title }}</span>
                                 </label>
-                                @foreach($family->children as $child)
-                                    <label class="filter-radio filter-radio-sub">
-                                        <input type="radio" name="category-filter" value="{{ $child->id }}" {{ $activeCategory?->id === $child->id ? 'checked' : '' }}>
-                                        <span>{{ $child->title }}</span>
-                                    </label>
-                                @endforeach
                             @endforeach
                         </div>
                     </div>

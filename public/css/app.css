@@ -136,12 +136,6 @@ h1, h2, h3, h4, h5, h6,
     cursor: pointer;
 }
 
-.filter-radio-sub {
-    padding-left: 20px;
-    font-size: 0.86rem;
-    opacity: 0.85;
-}
-
 .filter-search-input {
     border-radius: 30px;
     font-size: 0.9rem;
@@ -448,15 +442,15 @@ body {
 .hero.hero-bg-slider-mode {
     position: relative;
     overflow: hidden;
-    padding: 90px 0;
-    min-height: 460px;
+    padding: 60px 0;
+    min-height: 320px;
     display: flex;
     align-items: center;
 }
 
 @media (min-width: 992px) {
     .hero.hero-bg-slider-mode {
-        min-height: 600px;
+        min-height: 420px;
     }
 }
 
@@ -601,8 +595,8 @@ body {
    instead of a checkmark overlay, for a cleaner, more professional look. */
 .color-swatch {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     border: 2px solid #fff;
     box-shadow: 0 0 0 1px #E3D9C8;
@@ -671,8 +665,8 @@ body {
 /* Smaller than the cart's color-swatch-sm — product cards are compact, so
    the dots stay little instead of competing with the title/price. */
 .product-color-swatches .color-swatch-sm {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
 }
 
 .product-color-more {
@@ -712,9 +706,9 @@ body {
     background-color: #4D5147;
 }
 
-/* Language switcher — a pill-style toggle with a globe icon and a checkmark
-   on the active language, replacing the plain "EN"/"FR" text link (which sat
-   in .custom-navbar-cta and needed its color forced to white explicitly). */
+/* Language switcher — a pill-style toggle with a globe icon, replacing the
+   plain "EN"/"FR" text link (which sat in .custom-navbar-cta and needed its
+   color forced to white explicitly). */
 .lang-switcher-toggle {
     display: inline-flex !important;
     align-items: center;
@@ -751,11 +745,14 @@ body {
 }
 
 .lang-switcher-menu {
-    min-width: 170px;
+    min-width: 0;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
     margin-top: 14px !important;
-    padding: 8px;
+    padding: 6px;
     border: none;
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 24px 48px -16px rgba(76, 64, 58, 0.35);
 }
 
@@ -766,11 +763,11 @@ body {
 .lang-switcher-item {
     display: flex !important;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    border-radius: 10px !important;
-    padding: 10px 14px !important;
-    font-weight: 500;
+    justify-content: center;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+    font-size: 13px;
+    font-weight: 600;
     outline: none;
     -webkit-tap-highlight-color: transparent;
 }
@@ -781,25 +778,13 @@ body {
    focus/tap-highlight rectangle can show through with square corners against
    our rounded pill. */
 .lang-switcher-item:hover,
-.lang-switcher-item:focus,
-.lang-switcher-item.active {
+.lang-switcher-item:focus {
     border-radius: 10px !important;
     background-color: #4D5147 !important;
 }
 
 .lang-switcher-item:focus-visible {
     box-shadow: 0 0 0 2px rgba(76, 64, 58, 0.45);
-}
-
-.lang-switcher-item i {
-    font-size: 11px;
-    color: #4D5147;
-}
-
-.lang-switcher-item:hover i,
-.lang-switcher-item:focus i,
-.lang-switcher-item.active i {
-    color: #ffffff;
 }
 
 /* Branded footer — dark, on-brand background instead of the template's plain
@@ -1005,4 +990,49 @@ body {
     width: 100%;
     z-index: 1030;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Home page section rhythm — the vendor theme's 7rem/12rem padding assumes
+   one spacious section per page; stacking several of them (as the home page
+   does) compounds into a very tall page. These trim the gaps between
+   adjacent sections while keeping a bit more room on the last one before
+   the footer, and add a subtle alternating tint so sections read as
+   distinct bands instead of relying on whitespace alone. */
+.blog-section-tight {
+    padding: 4.5rem 0 2.5rem 0;
+}
+
+.section-compact {
+    padding: 4.5rem 0;
+}
+
+.section-compact-last {
+    padding: 2.5rem 0 6rem 0;
+}
+
+.section-alt {
+    background-color: #F7F1E6;
+}
+
+/* Tips & Inspiration / Actualité card thumbnails — the source photos are
+   large landscape shots, so at full column width they render very tall.
+   Capping the height and cropping with object-fit keeps the cards compact. */
+.post-thumbnail img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* "We Help" section on the home page — an optional admin-uploaded video
+   replacing the default 3-image grid, styled to match its rounded corners.
+   The uploaded video is portrait, so object-fit: contain left empty beige
+   bars down both sides; cover fills the box edge-to-edge with no bars,
+   cropping top/bottom instead (a portrait clip cropped this way reads
+   better than one boxed in on the sides). */
+.we-help-video {
+    display: block;
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    border-radius: 20px;
 }

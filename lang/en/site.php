@@ -5,6 +5,7 @@ return [
     // Navigation
     'nav_home' => 'Home',
     'nav_products' => 'Products',
+    'nav_actualite' => 'News',
     'nav_about' => 'About us',
     'nav_contact' => 'Contact us',
     'nav_cart' => 'Cart',
@@ -18,6 +19,8 @@ return [
     'about_learn_more' => 'Learn more',
     'contact_hero_title' => 'Contact Us',
     'contact_hero_subtitle' => 'Have a question about an order or a product? Send us a message.',
+    'actualite_hero_title' => 'News',
+    'actualite_hero_subtitle' => 'Follow our latest updates and find us on Instagram.',
     'products_hero_subtitle' => 'Browse our full catalog, or filter by category.',
 
     // Footer
@@ -64,6 +67,19 @@ return [
     'details' => 'Details',
     'quantity_exceeds_stock_title' => 'Quantity Adjusted',
     'quantity_exceeds_stock_text' => 'Only :qty left in stock. We\'ve updated the quantity for you.',
+    'an_item' => 'An item',
+
+    // Flash messages
+    'flash_added_to_cart' => ':title added to your cart.',
+    'flash_out_of_stock' => ':title is out of stock.',
+    'flash_cart_updated' => 'Cart updated.',
+    'flash_item_removed' => 'Item removed from cart.',
+    'flash_insufficient_stock' => ':title no longer has enough stock. Please update your cart.',
+    'flash_order_placed' => 'Your order has been placed! Thank you for shopping with us.',
+    'flash_order_submitted' => 'Your order has been submitted!',
+    'flash_contact_thanks' => 'Thanks for reaching out! We will get back to you soon.',
+    'flash_success_title' => 'Success',
+    'flash_error_title' => 'Error',
 
     // Home page
     'featured_products' => 'Featured Products',
@@ -97,6 +113,9 @@ return [
     'blog_2_meta' => 'Simple care tips that make pieces last',
     'blog_3_title' => 'Small Space Furniture Ideas',
     'blog_3_meta' => 'Make the most of every room',
+    'news_section_title' => 'News',
+    'view_all_news' => 'View All News',
+    'no_news_yet' => 'No news yet.',
 
     // About page
     'why_choose_name' => 'Why Choose :name',
@@ -113,7 +132,6 @@ return [
     'send_message' => 'Send Message',
 
     // Products / category pages
-    'sous_familles' => 'Sub-categories',
     'no_products_found' => 'No products found.',
     'sort_newest' => 'Newest',
     'sort_price_asc' => 'Price: Low to High',

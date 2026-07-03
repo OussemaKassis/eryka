@@ -5,10 +5,6 @@
 @section('content')
 <div class="untree_co-section before-footer-section">
     <div class="container">
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         @if($items->isEmpty())
             <div class="row">
                 <div class="col-md-12 text-center">

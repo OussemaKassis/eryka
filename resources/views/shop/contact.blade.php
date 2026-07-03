@@ -92,14 +92,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="text-black" for="email">{{ __('site.email_address') }} <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label class="text-black" for="phone">{{ __('site.phone_number') }} <span class="text-danger">*</span></label>
                                 <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="text-black" for="email">{{ __('site.email_address') }} <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
                             </div>
                         </div>
                     </div>

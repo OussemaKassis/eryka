@@ -41,6 +41,9 @@
                         <a class="nav-link" href="{{ route('shop.products') }}">{{ __('site.nav_products') }}</a>
                     </li>
                     {{-- Categories dropdown hidden from nav per request; routes/controller/views untouched. --}}
+                    <li class="nav-item {{ request()->routeIs('shop.actualite') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('shop.actualite') }}">{{ __('site.nav_actualite') }}</a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('shop.about') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('shop.about') }}">{{ __('site.nav_about') }}</a>
                     </li>
@@ -50,28 +53,7 @@
                 </ul>
 
                 <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    @php
-                        $langSwitcherLocales = ['en' => ['label' => 'English', 'flag' => '🇬🇧'], 'fr' => ['label' => 'Français', 'flag' => '🇫🇷']];
-                        $langSwitcherLocales = [app()->getLocale() => $langSwitcherLocales[app()->getLocale()]] + $langSwitcherLocales;
-                    @endphp
-                    <li class="dropdown lang-switcher">
-                        <a class="nav-link lang-switcher-toggle" href="#" id="langSwitcher" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="lang-switcher-flag">{{ $langSwitcherLocales[app()->getLocale()]['flag'] }}</span>
-                            <span>{{ strtoupper(app()->getLocale()) }}</span>
-                            <i class="fa-solid fa-chevron-down lang-switcher-caret"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end lang-switcher-menu" aria-labelledby="langSwitcher">
-                            @foreach($langSwitcherLocales as $code => $locale)
-                                <li>
-                                    <a class="dropdown-item lang-switcher-item {{ app()->getLocale() === $code ? 'active' : '' }}" href="{{ route('lang.switch', $code) }}">
-                                        <span class="lang-switcher-flag">{{ $locale['flag'] }}</span>
-                                        <span>{{ $locale['label'] }}</span>
-                                        @if(app()->getLocale() === $code)<i class="fa-solid fa-check"></i>@endif
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </li>
+                    {{-- Language switcher hidden for now — French only. --}}
                     <li>
                         <a class="nav-link position-relative" href="{{ route('cart.index') }}" title="{{ __('site.nav_cart') }}" aria-label="{{ __('site.nav_cart') }}">
                             <img src="{{ asset('vendor/furni/images/cart.svg') }}" alt="{{ __('site.nav_cart') }}">
@@ -148,22 +130,6 @@
     <!-- End Hero Section -->
 
     <main>
-        @if(session('success'))
-            <div class="container mt-4">
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="container mt-4">
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            </div>
-        @endif
-
         @yield('content')
     </main>
 
@@ -197,6 +163,7 @@
                     <ul class="list-unstyled">
                         <li><a href="{{ route('shop.home') }}">{{ __('site.nav_home') }}</a></li>
                         <li><a href="{{ route('shop.products') }}">{{ __('site.nav_products') }}</a></li>
+                        <li><a href="{{ route('shop.actualite') }}">{{ __('site.nav_actualite') }}</a></li>
                         <li><a href="{{ route('shop.about') }}">{{ __('site.nav_about') }}</a></li>
                         <li><a href="{{ route('shop.contact') }}">{{ __('site.nav_contact') }}</a></li>
                     </ul>
@@ -206,7 +173,6 @@
                     <h3 class="footer-heading">{{ __('site.footer_shop') }}</h3>
                     <ul class="list-unstyled">
                         <li><a href="{{ route('cart.index') }}">{{ __('site.footer_your_cart') }}</a></li>
-                        <li><a href="{{ url('/admin') }}">{{ __('site.footer_admin_login') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -235,6 +201,17 @@
         const sliders = {};
 
         document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success') || session('error'))
+                Swal.fire({
+                    position: 'center',
+                    icon: @js(session('success') ? 'success' : 'error'),
+                    title: @js(session('success') ?? session('error')),
+                    showConfirmButton: false,
+                    timer: 3500,
+                    timerProgressBar: true,
+                });
+            @endif
+
             document.querySelectorAll('.slider').forEach(slider => {
                 const articleId = slider.id.split('-')[1];
                 sliders[articleId] = {

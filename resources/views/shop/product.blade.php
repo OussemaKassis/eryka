@@ -91,16 +91,10 @@
                 <strong class="product-price d-block mb-1" style="font-size: 2rem;">{{ number_format($article->price, 2) }} DT</strong>
                 <p class="product-unit-price mb-3">{{ __('site.unit_price') }}</p>
 
-                @if($article->quantity <= 0)
-                    <span class="badge bg-danger mb-4">{{ __('site.out_of_stock') }}</span>
-                @elseif($article->quantity <= 5)
+                @if($article->quantity > 0 && $article->quantity <= 5)
                     <span class="badge bg-warning text-dark mb-4">{{ __('site.only_x_left', ['qty' => $article->quantity]) }}</span>
-                @else
+                @elseif($article->quantity > 5)
                     <span class="badge bg-success mb-4">{{ __('site.in_stock') }}</span>
-                @endif
-
-                @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
                 @if($article->quantity > 0)
@@ -132,8 +126,6 @@
                         </div>
                         <button type="submit" class="btn btn-primary">{{ __('site.add_to_cart') }}</button>
                     </form>
-                @else
-                    <span class="btn disabled">{{ __('site.out_of_stock') }}</span>
                 @endif
             </div>
         </div>

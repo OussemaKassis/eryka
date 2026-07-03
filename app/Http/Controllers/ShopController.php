@@ -8,6 +8,7 @@ use App\Models\Command;
 use App\Models\ContactInfo;
 use App\Models\ContactMessage;
 use App\Models\HeroSlide;
+use App\Models\NewsItem;
 use App\Models\PageHero;
 use App\Models\PageSection;
 use Illuminate\Http\Request;
@@ -36,27 +37,24 @@ class ShopController extends Controller
         $articles = Article::with('category', 'images')->latest()->take(8)->get();
         $homeSections = $this->pageSections('home');
         $welcomeSection = $homeSections->first();
+        $newsItems = NewsItem::where('is_active', true)->orderBy('sort_order')->take(3)->get();
         return view('shop.home', [
             'articles' => $articles,
             'welcomeSection' => $welcomeSection,
             'pageSections' => $homeSections->skip(1),
+            'newsItems' => $newsItems,
         ] + $this->pageHero('home'));
     }
 
-    // All products, optionally filtered by category (and its sub-categories)
+    // All products, optionally filtered by category
     public function products(Request $request)
     {
         $query = Article::with('category', 'images');
         $activeCategory = null;
 
         if ($categoryId = $request->query('category')) {
-            $activeCategory = Category::with('children')->findOrFail($categoryId);
-
-            $categoryIds = $activeCategory->children->isNotEmpty()
-                ? $activeCategory->children->pluck('id')->push($activeCategory->id)
-                : [$activeCategory->id];
-
-            $query->whereIn('category_id', $categoryIds);
+            $activeCategory = Category::findOrFail($categoryId);
+            $query->where('category_id', $activeCategory->id);
         }
 
         if ($request->boolean('in_stock')) {
@@ -83,7 +81,7 @@ class ShopController extends Controller
         };
 
         $articles = $query->get();
-        $familyCategories = Category::topLevel()->with('children')->orderBy('title')->get();
+        $familyCategories = Category::orderBy('title')->get();
         $hero = $this->pageHero('products');
 
         if ($request->wantsJson()) {
@@ -143,13 +141,23 @@ class ShopController extends Controller
         $article->decrement('quantity', $validated['quantity']);
 
         return redirect()->route('shop.checkout', $article->id)
-            ->with('success', 'Your order has been submitted!');
+            ->with('success', __('site.flash_order_submitted'));
     }
 
     public function about()
     {
         $pageSections = $this->pageSections('about');
         return view('shop.about', ['pageSections' => $pageSections] + $this->pageHero('about'));
+    }
+
+    public function actualite()
+    {
+        $newsItems = NewsItem::where('is_active', true)->orderBy('sort_order')->get();
+        $pageSections = $this->pageSections('actualite');
+        return view('shop.actualite', [
+            'newsItems' => $newsItems,
+            'pageSections' => $pageSections,
+        ] + $this->pageHero('actualite'));
     }
 
     public function contact()
@@ -169,6 +177,6 @@ class ShopController extends Controller
         ]);
         ContactMessage::create($validated);
         return redirect()->route('shop.contact')
-            ->with('success', 'Thanks for reaching out! We will get back to you soon.');
+            ->with('success', __('site.flash_contact_thanks'));
     }
 }

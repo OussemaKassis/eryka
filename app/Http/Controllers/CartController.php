@@ -26,7 +26,7 @@ class CartController extends Controller
         $article = Article::findOrFail($article);
 
         if ($article->quantity <= 0) {
-            return back()->with('error', "{$article->title} is out of stock.");
+            return back()->with('error', __('site.flash_out_of_stock', ['title' => $article->title]));
         }
 
         $color = $request->input('color') ?: null;
@@ -44,7 +44,7 @@ class CartController extends Controller
 
         session(['cart' => $cart]);
 
-        return back()->with('success', "{$article->title} added to your cart.");
+        return back()->with('success', __('site.flash_added_to_cart', ['title' => $article->title]));
     }
 
     public function update(Request $request, $key)
@@ -66,7 +66,7 @@ class CartController extends Controller
 
         session(['cart' => $cart]);
 
-        return redirect()->route('cart.index')->with('success', 'Cart updated.');
+        return redirect()->route('cart.index')->with('success', __('site.flash_cart_updated'));
     }
 
     public function remove($key)
@@ -75,7 +75,7 @@ class CartController extends Controller
         unset($cart[$key]);
         session(['cart' => $cart]);
 
-        return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
+        return redirect()->route('cart.index')->with('success', __('site.flash_item_removed'));
     }
 
     public function checkout()
@@ -120,7 +120,7 @@ class CartController extends Controller
             $article = $articles->get($articleId);
             if (!$article || $article->quantity < $totalQuantity) {
                 return redirect()->route('cart.index')
-                    ->with('error', ($article->title ?? 'An item').' no longer has enough stock. Please update your cart.');
+                    ->with('error', __('site.flash_insufficient_stock', ['title' => $article->title ?? __('site.an_item')]));
             }
         }
 
@@ -140,7 +140,7 @@ class CartController extends Controller
         session()->forget('cart');
 
         return redirect()->route('shop.home')
-            ->with('success', 'Your order has been placed! Thank you for shopping with us.');
+            ->with('success', __('site.flash_order_placed'));
     }
 
     private function cartKey(int $articleId, ?string $color): string

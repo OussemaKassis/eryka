@@ -5,6 +5,7 @@ return [
     // Navigation
     'nav_home' => 'Accueil',
     'nav_products' => 'Produits',
+    'nav_actualite' => 'Actualité',
     'nav_about' => 'À propos',
     'nav_contact' => 'Contact',
     'nav_cart' => 'Panier',
@@ -18,6 +19,8 @@ return [
     'about_learn_more' => 'En savoir plus',
     'contact_hero_title' => 'Contactez-nous',
     'contact_hero_subtitle' => 'Une question sur une commande ou un produit ? Envoyez-nous un message.',
+    'actualite_hero_title' => 'Actualité',
+    'actualite_hero_subtitle' => 'Suivez nos dernières nouveautés et retrouvez-nous sur Instagram.',
     'products_hero_subtitle' => 'Parcourez notre catalogue complet, ou filtrez par catégorie.',
 
     // Footer
@@ -64,6 +67,19 @@ return [
     'details' => 'Détails',
     'quantity_exceeds_stock_title' => 'Quantité ajustée',
     'quantity_exceeds_stock_text' => 'Il ne reste que :qty en stock. La quantité a été mise à jour.',
+    'an_item' => 'Un article',
+
+    // Flash messages
+    'flash_added_to_cart' => ':title a été ajouté à votre panier.',
+    'flash_out_of_stock' => ':title est en rupture de stock.',
+    'flash_cart_updated' => 'Panier mis à jour.',
+    'flash_item_removed' => 'Article retiré du panier.',
+    'flash_insufficient_stock' => ':title n\'a plus assez de stock. Veuillez mettre à jour votre panier.',
+    'flash_order_placed' => 'Votre commande a été passée ! Merci pour votre achat.',
+    'flash_order_submitted' => 'Votre commande a été soumise !',
+    'flash_contact_thanks' => 'Merci de nous avoir contactés ! Nous vous répondrons bientôt.',
+    'flash_success_title' => 'Succès',
+    'flash_error_title' => 'Erreur',
 
     // Home page
     'featured_products' => 'Produits en vedette',
@@ -97,6 +113,9 @@ return [
     'blog_2_meta' => 'Des astuces simples pour faire durer vos meubles',
     'blog_3_title' => 'Idées meubles pour petits espaces',
     'blog_3_meta' => 'Tirez le meilleur parti de chaque pièce',
+    'news_section_title' => 'Actualités',
+    'view_all_news' => 'Voir toutes les actualités',
+    'no_news_yet' => 'Aucune actualité pour le moment.',
 
     // About page
     'why_choose_name' => 'Pourquoi choisir :name',
@@ -113,7 +132,6 @@ return [
     'send_message' => 'Envoyer le message',
 
     // Products / category pages
-    'sous_familles' => 'Sous-familles',
     'no_products_found' => 'Aucun produit trouvé.',
     'sort_newest' => 'Plus récents',
     'sort_price_asc' => 'Prix : croissant',

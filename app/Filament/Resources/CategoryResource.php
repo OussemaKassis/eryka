@@ -30,14 +30,6 @@ class CategoryResource extends Resource
                     ->label('Titre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('parent_id')
-                    ->label('Catégorie parente (Famille)')
-                    ->helperText('Laissez vide pour faire de ceci une « famille » de premier niveau. Choisissez un parent pour en faire une « sous-famille ».')
-                    ->options(fn (?Category $record) => Category::topLevel()
-                        ->when($record, fn ($query) => $query->where('id', '!=', $record->id))
-                        ->pluck('title', 'id'))
-                    ->searchable()
-                    ->nullable(),
                 Forms\Components\Textarea::make('description')
                     ->label('Description'),
                 Forms\Components\FileUpload::make('image')
@@ -55,9 +47,6 @@ class CategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('title')->label('Titre')->searchable(),
-                Tables\Columns\TextColumn::make('parent.title')
-                    ->label('Famille')
-                    ->placeholder('— (famille de premier niveau)'),
                 Tables\Columns\TextColumn::make('description')->label('Description')->limit(30),
                 Tables\Columns\ImageColumn::make('image')->label('Image')->disk('public'),
                 Tables\Columns\TextColumn::make('created_at')->label('Créé le')->dateTime()->sortable(),

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PageSection extends Model
+class NewsItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['page_key', 'title', 'body', 'image_path', 'video_path', 'sort_order', 'is_active'];
+    protected $fillable = ['title', 'description', 'image_path', 'link_url', 'sort_order', 'is_active'];
 
     protected $casts = [
         'is_active' => 'boolean',

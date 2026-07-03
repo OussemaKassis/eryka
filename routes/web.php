@@ -21,6 +21,7 @@ Route::get('/', [App\Http\Controllers\ShopController::class, 'articlesHome'])->n
 
 // Static pages
 Route::get('/about', [App\Http\Controllers\ShopController::class, 'about'])->name('shop.about');
+Route::get('/actualite', [App\Http\Controllers\ShopController::class, 'actualite'])->name('shop.actualite');
 Route::get('/contact', [App\Http\Controllers\ShopController::class, 'contact'])->name('shop.contact');
 Route::post('/contact', [App\Http\Controllers\ShopController::class, 'contactSubmit'])->name('shop.contact.submit');
 

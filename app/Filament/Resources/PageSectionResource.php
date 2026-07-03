@@ -49,6 +49,14 @@ class PageSectionResource extends Resource
                     ->disk('public')
                     ->directory('page-sections')
                     ->columnSpanFull(),
+                Forms\Components\FileUpload::make('video_path')
+                    ->label('Vidéo')
+                    ->helperText('Optionnel (max 75 Mo). Utilisée uniquement par la première section de la page d\'accueil ("Bienvenue chez Eryka") à la place de la grille d\'images, si renseignée.')
+                    ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/ogg'])
+                    ->maxSize(76800)
+                    ->disk('public')
+                    ->directory('page-section-videos')
+                    ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_active')
                     ->label('Afficher sur la page')
                     ->default(true),
