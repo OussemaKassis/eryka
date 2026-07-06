@@ -58,7 +58,7 @@
                         <a class="nav-link position-relative" href="{{ route('cart.index') }}" title="{{ __('site.nav_cart') }}" aria-label="{{ __('site.nav_cart') }}">
                             <img src="{{ asset('vendor/furni/images/cart.svg') }}" alt="{{ __('site.nav_cart') }}">
                             @if(count(session('cart', [])) > 0)
-                                <span class="badge rounded-pill bg-secondary position-absolute top-0 start-100 translate-middle" style="font-size: 0.6rem;">
+                                <span class="badge rounded-pill cart-badge position-absolute top-0 start-100 translate-middle" style="font-size: 0.6rem;">
                                     {{ count(session('cart', [])) }}
                                 </span>
                             @endif

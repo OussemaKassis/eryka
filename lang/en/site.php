@@ -35,6 +35,9 @@ return [
     'out_of_stock' => 'Out of Stock',
     'in_stock' => 'In Stock',
     'only_x_left' => 'Only :qty left',
+    'x_in_stock' => ':qty in stock',
+    'color_out_of_stock' => 'This color is out of stock',
+    'requested_qty_unavailable' => 'Requested quantity unavailable (:qty in stock)',
     'order_now' => 'Order Now',
     'quick_view' => 'Quick View',
     'view_full_details' => 'View Details',
@@ -44,6 +47,8 @@ return [
     'back_to_cart' => 'Back to Cart',
     'back_to_top' => 'Back to top',
     'view_all_products' => 'View All Products',
+    'previous' => 'Previous',
+    'next' => 'Next',
     'all_products' => 'All Products',
     'no_products_yet' => 'No products available yet.',
     'no_products_found_category' => 'No products found in this category.',
@@ -67,6 +72,10 @@ return [
     'details' => 'Details',
     'quantity_exceeds_stock_title' => 'Quantity Adjusted',
     'quantity_exceeds_stock_text' => 'Only :qty left in stock. We\'ve updated the quantity for you.',
+    'confirm_remove_title' => 'Remove this item?',
+    'confirm_remove_text' => 'This item will be removed from your cart.',
+    'confirm_remove_yes' => 'Yes, remove it',
+    'cancel' => 'Cancel',
     'an_item' => 'An item',
 
     // Flash messages
@@ -106,13 +115,6 @@ return [
     'testimonial_2' => '"Ordering was simple and the quality is exactly what was advertised. Already planning my next order with :name."',
     'testimonial_3' => '"Great customer support and a smooth checkout. Exactly the easy shopping experience I was hoping for."',
     'verified_buyer' => 'Verified Buyer',
-    'tips_title' => 'Tips & Inspiration',
-    'blog_1_title' => 'First Time Home Owner Ideas',
-    'blog_1_meta' => 'Furnishing tips for your first place',
-    'blog_2_title' => 'How To Keep Your Furniture Clean',
-    'blog_2_meta' => 'Simple care tips that make pieces last',
-    'blog_3_title' => 'Small Space Furniture Ideas',
-    'blog_3_meta' => 'Make the most of every room',
     'news_section_title' => 'News',
     'view_all_news' => 'View All News',
     'no_news_yet' => 'No news yet.',
@@ -160,8 +162,9 @@ return [
 
     // Cart page
     'your_cart' => 'Your Cart',
-    'cart_empty' => 'Your cart is empty.',
-    'continue_shopping' => 'Continue Shopping',
+    'cart_empty' => 'Your cart is empty',
+    'cart_empty_desc' => 'Discover our collection and add your favorite pieces to your cart.',
+    'continue_shopping' => 'Discover Our Products',
     'proceed_to_checkout' => 'Proceed to Checkout',
 
     // Checkout pages
@@ -172,5 +175,10 @@ return [
     'place_order' => 'Place Order',
     'subtotal' => 'Subtotal',
     'shipping_fee' => 'Shipping',
+
+    // 404 page
+    'error_404_title' => 'Page Not Found',
+    'error_404_desc' => "This page doesn't exist or has been moved. Head back home or discover our collection.",
+    'error_404_home' => 'Back to Home',
 
 ];

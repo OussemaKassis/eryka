@@ -35,6 +35,9 @@ return [
     'out_of_stock' => 'Rupture de stock',
     'in_stock' => 'En stock',
     'only_x_left' => 'Plus que :qty en stock',
+    'x_in_stock' => ':qty en stock',
+    'color_out_of_stock' => 'Cette couleur est en rupture de stock',
+    'requested_qty_unavailable' => 'Quantité demandée non disponible ',
     'order_now' => 'Commander',
     'quick_view' => 'Aperçu rapide',
     'view_full_details' => 'Voir Détails',
@@ -44,6 +47,8 @@ return [
     'back_to_cart' => 'Retour au panier',
     'back_to_top' => 'Retour en haut',
     'view_all_products' => 'Voir tous les produits',
+    'previous' => 'Précédent',
+    'next' => 'Suivant',
     'all_products' => 'Tous les produits',
     'no_products_yet' => 'Aucun produit disponible pour le moment.',
     'no_products_found_category' => 'Aucun produit trouvé dans cette catégorie.',
@@ -67,6 +72,10 @@ return [
     'details' => 'Détails',
     'quantity_exceeds_stock_title' => 'Quantité ajustée',
     'quantity_exceeds_stock_text' => 'Il ne reste que :qty en stock. La quantité a été mise à jour.',
+    'confirm_remove_title' => 'Supprimer cet article ?',
+    'confirm_remove_text' => 'Cet article sera retiré de votre panier.',
+    'confirm_remove_yes' => 'Oui, supprimer',
+    'cancel' => 'Annuler',
     'an_item' => 'Un article',
 
     // Flash messages
@@ -106,13 +115,6 @@ return [
     'testimonial_2' => '« La commande était simple et la qualité est exactement celle annoncée. Je prévois déjà ma prochaine commande chez :name. »',
     'testimonial_3' => '« Un excellent service client et un passage en caisse fluide. Exactement l\'expérience d\'achat simple que j\'espérais. »',
     'verified_buyer' => 'Acheteur vérifié',
-    'tips_title' => 'Conseils & Inspiration',
-    'blog_1_title' => 'Idées pour les nouveaux propriétaires',
-    'blog_1_meta' => 'Conseils d\'ameublement pour votre premier logement',
-    'blog_2_title' => 'Comment entretenir vos meubles',
-    'blog_2_meta' => 'Des astuces simples pour faire durer vos meubles',
-    'blog_3_title' => 'Idées meubles pour petits espaces',
-    'blog_3_meta' => 'Tirez le meilleur parti de chaque pièce',
     'news_section_title' => 'Actualités',
     'view_all_news' => 'Voir toutes les actualités',
     'no_news_yet' => 'Aucune actualité pour le moment.',
@@ -160,8 +162,9 @@ return [
 
     // Cart page
     'your_cart' => 'Votre panier',
-    'cart_empty' => 'Votre panier est vide.',
-    'continue_shopping' => 'Continuer mes achats',
+    'cart_empty' => 'Votre panier est vide',
+    'cart_empty_desc' => 'Découvrez notre collection et ajoutez vos articles préférés à votre panier.',
+    'continue_shopping' => 'Découvrir nos produits',
     'proceed_to_checkout' => 'Passer à la caisse',
 
     // Checkout pages
@@ -172,5 +175,10 @@ return [
     'place_order' => 'Valider la commande',
     'subtotal' => 'Sous-total',
     'shipping_fee' => 'Livraison',
+
+    // 404 page
+    'error_404_title' => 'Page introuvable',
+    'error_404_desc' => "Cette page n'existe pas ou a été déplacée. Retournez à l'accueil ou découvrez notre collection.",
+    'error_404_home' => "Retour à l'accueil",
 
 ];

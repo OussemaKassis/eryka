@@ -45,7 +45,7 @@ h1, h2, h3, h4, h5, h6,
 /* Products page sidebar — categories (radio list), search, price range and
    stock toggle, all stacked in one card to the left of the product grid. */
 .shop-sidebar {
-    background: #ffffff;
+    background: #FBF7EF;
     border: 1px solid #E3D9C8;
     border-radius: 16px;
     padding: 24px;
@@ -137,6 +137,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .filter-search-input {
+    background-color: #F7F1E6;
     border-radius: 30px;
     font-size: 0.9rem;
 }
@@ -150,6 +151,7 @@ h1, h2, h3, h4, h5, h6,
 .filter-price-inputs input {
     width: 0;
     flex: 1 1 auto;
+    background-color: #F7F1E6;
     border-radius: 30px;
     text-align: center;
     padding: 8px;
@@ -223,6 +225,7 @@ h1, h2, h3, h4, h5, h6,
 
 .products-sort-select {
     max-width: 200px;
+    background-color: #F7F1E6;
     border-radius: 30px;
     font-size: 0.9rem;
     font-weight: 600;
@@ -234,6 +237,13 @@ h1, h2, h3, h4, h5, h6,
 .form-control,
 .form-select {
     border-color: #C7B9A8;
+}
+
+/* Checkout and contact forms get a warm input fill instead of the default
+   white, matching the section tint used elsewhere on those pages. */
+.checkout-card .form-control,
+.contact-form .form-control {
+    background-color: #F7F1E6;
 }
 
 .modal-header,
@@ -505,14 +515,14 @@ body {
 
 .hero-dot:hover,
 .hero-dot.active {
-    background: #D9A48F;
+    background: #DAB88B;
     transform: scale(1.2);
 }
 
 .slider-container {
     position: relative;
     width: 100%;
-    height: 220px;
+    height: 340px;
     overflow: hidden;
     background: #E3D9C8;
     border-radius: 10px;
@@ -616,6 +626,29 @@ body {
     box-shadow: 0 0 0 3px #fff, 0 0 0 5px #4D5147;
 }
 
+/* Out-of-stock color — a red ring + diagonal slash over the swatch (like a
+   "not available" sign), so it reads as unavailable at a glance instead of
+   just looking like any other color option. */
+.color-swatch.out-of-stock {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #A8503F;
+    opacity: 0.55;
+}
+
+.color-swatch.out-of-stock::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -4px;
+    right: -4px;
+    height: 2px;
+    background: #A8503F;
+    transform: rotate(-45deg);
+}
+
+.color-swatch.out-of-stock.active {
+    box-shadow: 0 0 0 3px #fff, 0 0 0 5px #A8503F;
+}
+
 /* Thumbnail strip under the product detail's main image — each thumbnail
    jumps the slider to its image when clicked, mirroring the color swatches. */
 .thumbnail-strip {
@@ -660,6 +693,7 @@ body {
     align-items: center;
     gap: 6px;
     margin: 10px 0 0;
+    min-height: 18px;
 }
 
 /* Smaller than the cart's color-swatch-sm — product cards are compact, so
@@ -704,6 +738,16 @@ body {
 .custom-navbar .dropdown-menu .dropdown-item.active {
     color: #ffffff !important;
     background-color: #4D5147;
+}
+
+/* Nav underline (template default was a dusty rose) and the cart item-count
+   badge share the same brand gold accent. */
+.custom-navbar .custom-navbar-nav li a:before {
+    background: #DAB88B;
+}
+
+.cart-badge {
+    background-color: #DAB88B !important;
 }
 
 /* Language switcher — a pill-style toggle with a globe icon, replacing the
@@ -849,35 +893,139 @@ body {
 .qty-stepper {
     display: flex;
     align-items: stretch;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
+    background: #F7F1E6;
+    border: 1px solid #C7B9A8;
+    border-radius: 30px;
     overflow: hidden;
 }
 
 .qty-stepper .form-control {
+    background: transparent;
     border: none;
     border-radius: 0;
     padding-left: 0;
     padding-right: 0;
+    color: #4C403A;
+    font-weight: 600;
+    /* Quantity is only ever changed via the +/- buttons — this field is a
+       readonly display, not an editable input, so it shouldn't look or act
+       clickable (no cursor, no focus caret). */
+    caret-color: transparent;
+    cursor: default;
+    pointer-events: none;
 }
 
 .qty-stepper .form-control:focus {
+    background: transparent;
     box-shadow: none;
 }
 
 .qty-stepper-btn {
-    flex: 0 0 40px;
-    min-width: 40px;
+    flex: 0 0 36px;
+    min-width: 36px;
     border: none;
-    background: #f1f1f1;
+    background: transparent;
     color: #4D5147;
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .qty-stepper-btn:hover {
-    background: #e2e2e2;
+    background: #EFE7D8;
+}
+
+/* Remove-from-cart — a plain trash icon instead of a boxed Bootstrap
+   button, so it reads as a quiet secondary action next to the qty stepper. */
+.cart-remove-btn {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    color: #9C8C7C;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.cart-remove-btn:hover {
+    color: #A8503F;
+}
+
+/* Mobile cart — the desktop table's columns don't fit a phone screen
+   without horizontal scrolling, so below md it's replaced with one stacked
+   card per item (image + name/color/price, then qty, then subtotal, then
+   remove), each fully visible without scrolling sideways. */
+.cart-mobile-item {
+    background: #ffffff;
+    border: 1px solid #E3D9C8;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.cart-mobile-item-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.cart-mobile-thumb {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #E3D9C8;
+}
+
+.cart-mobile-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-mobile-info {
+    flex: 1 1 auto;
+    padding-top: 2px;
+}
+
+.cart-mobile-title {
+    display: block;
+    font-weight: 700;
+    color: #2b2b2b;
+    text-decoration: none;
+    margin-bottom: 6px;
+}
+
+.cart-mobile-price {
+    margin-top: 6px;
+    font-weight: 700;
+    color: #4C403A;
+}
+
+.cart-mobile-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid #F0E9DC;
+}
+
+.cart-mobile-label {
+    color: #9C8C7C;
+    font-size: 0.9rem;
+}
+
+.cart-mobile-item .cart-remove-form {
+    padding-top: 8px;
+    border-top: 1px solid #F0E9DC;
+}
+
+.cart-mobile-item .cart-remove-btn {
+    font-size: 1.15rem;
 }
 
 .qty-stepper .form-control::-webkit-outer-spin-button,
@@ -899,6 +1047,62 @@ body {
     white-space: nowrap;
     padding: 8px 24px;
     min-width: 160px;
+}
+
+/* Product card — a flex column filling the grid column's stretched height,
+   with the action button pinned to the bottom via margin-top: auto. This
+   keeps the "Voir Détails" button on the same line across cards whether or
+   not a given product has color swatches (which otherwise shortens the
+   card and leaves the button floating higher than its neighbors). */
+.product-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-actions {
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+/* Featured products slider (home page) — the same product-item markup as
+   the grid, but as tiny-slider items instead of Bootstrap columns. */
+.product-slider-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.product-slider-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #C7B9A8;
+    border-radius: 50%;
+    background: #F7F1E6;
+    color: #4D5147;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.product-slider-arrow:hover {
+    background: #EFE7D8;
+}
+
+.product-slider-arrow[disabled] {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.product-slide-item {
+    padding: 0 12px;
+}
+
+.product-slider .tns-outer {
+    padding: 0 !important;
+    margin: 0 -12px;
 }
 
 .btn-outline-brand {
@@ -1035,4 +1239,44 @@ body {
     height: 600px;
     object-fit: cover;
     border-radius: 20px;
+}
+
+/* Empty cart state — a centered icon badge above the heading/description,
+   replacing the single line of plain text with a proper empty-state layout. */
+.cart-empty-state {
+    padding: 3rem 0;
+}
+
+.cart-empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 1.75rem;
+    border-radius: 50%;
+    background: #F7F1E6;
+    color: #DAB88B;
+    font-size: 2.25rem;
+}
+
+/* 404 page — an oversized serif numeral in the brand gold, standing in for
+   an illustration, above the usual heading/description/CTA empty-state. */
+.error-404-state {
+    padding: 4rem 0;
+}
+
+.error-404-number {
+    font-family: 'Bitter', serif;
+    font-weight: 700;
+    font-size: 8rem;
+    line-height: 1;
+    color: #DAB88B;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 576px) {
+    .error-404-number {
+        font-size: 5.5rem;
+    }
 }

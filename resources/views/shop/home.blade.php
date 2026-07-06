@@ -76,78 +76,34 @@
 
 <div id="products" class="untree_co-section product-section section-compact section-alt">
     <div class="container">
-        <div class="row mb-5">
+        <div class="row mb-5 align-items-center">
             <div class="col-md-6">
                 <h2 class="section-title">{{ __('site.featured_products') }}</h2>
             </div>
-            <div class="col-md-6 text-start text-md-end">
+            <div class="col-md-6 d-flex flex-wrap justify-content-start justify-content-md-end align-items-center gap-3">
                 <a href="{{ route('shop.products') }}" class="more">{{ __('site.view_all_products') }}</a>
+                @if($articles->count() > 4)
+                    <div class="product-slider-nav" id="product-slider-nav">
+                        <button type="button" class="product-slider-arrow" aria-label="{{ __('site.previous') }}"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button type="button" class="product-slider-arrow" aria-label="{{ __('site.next') }}"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                @endif
             </div>
         </div>
 
-        <div class="row {{ $articles->count() < 4 ? 'justify-content-center' : '' }}">
-            @forelse($articles as $article)
-                @include('shop.partials.product-card', ['article' => $article])
-            @empty
-                <div class="col-12 text-center">
-                    <p>{{ __('site.no_products_yet') }}</p>
-                </div>
-            @endforelse
-        </div>
+        @if($articles->isEmpty())
+            <p class="text-center">{{ __('site.no_products_yet') }}</p>
+        @else
+            <div class="product-slider" id="product-slider">
+                @foreach($articles as $article)
+                    @include('shop.partials.product-card', ['article' => $article, 'sliderItem' => true])
+                @endforeach
+            </div>
+        @endif
     </div>
 </div>
 
-<!-- Start Blog Section -->
-<div class="blog-section blog-section-tight">
-    <div class="container">
-        <div class="row mb-5">
-            <div class="col-md-12">
-                <h2 class="section-title">{{ __('site.tips_title') }}</h2>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-                <div class="post-entry">
-                    <span class="post-thumbnail"><img src="{{ asset('vendor/furni/images/post-1.jpg') }}" alt="Image" class="img-fluid"></span>
-                    <div class="post-content-entry">
-                        <h3>{{ __('site.blog_1_title') }}</h3>
-                        <div class="meta">
-                            <span>{{ __('site.blog_1_meta') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-                <div class="post-entry">
-                    <span class="post-thumbnail"><img src="{{ asset('vendor/furni/images/post-2.jpg') }}" alt="Image" class="img-fluid"></span>
-                    <div class="post-content-entry">
-                        <h3>{{ __('site.blog_2_title') }}</h3>
-                        <div class="meta">
-                            <span>{{ __('site.blog_2_meta') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-                <div class="post-entry">
-                    <span class="post-thumbnail"><img src="{{ asset('vendor/furni/images/post-3.jpg') }}" alt="Image" class="img-fluid"></span>
-                    <div class="post-content-entry">
-                        <h3>{{ __('site.blog_3_title') }}</h3>
-                        <div class="meta">
-                            <span>{{ __('site.blog_3_meta') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Blog Section -->
-
-<div class="why-choose-section section-compact section-alt">
+<div class="why-choose-section section-compact">
     <div class="container">
         <div class="row justify-content-center text-center mb-3">
             <div class="col-lg-7">
@@ -197,7 +153,7 @@
 
 @if($newsItems->isNotEmpty())
     <!-- Start News/Actualité Section -->
-    <div class="blog-section section-compact-last">
+    <div class="blog-section section-compact-last section-alt">
         <div class="container">
             <div class="row mb-5">
                 <div class="col-md-6">
@@ -232,3 +188,44 @@
     <!-- End News/Actualité Section -->
 @endif
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var slider = document.getElementById('product-slider');
+        var nav = document.getElementById('product-slider-nav');
+        if (!slider || typeof tns !== 'function') return;
+
+        var instance = tns({
+            container: slider,
+            items: 1,
+            gutter: 0,
+            controlsContainer: nav || false,
+            controls: !!nav,
+            nav: false,
+            loop: false,
+            mouseDrag: true,
+            speed: 400,
+            responsive: {
+                576: { items: 2 },
+                992: { items: 4 },
+            },
+        });
+
+        if (nav) {
+            var buttons = nav.querySelectorAll('.product-slider-arrow');
+            var prevBtn = buttons[0];
+            var nextBtn = buttons[1];
+
+            function syncButtons(info) {
+                prevBtn.disabled = info.index <= 0;
+                nextBtn.disabled = info.index >= info.slideCount - info.items;
+            }
+
+            instance.events.on('newBreakpointStart', function(info) { syncButtons(info); });
+            instance.events.on('indexChanged', function(info) { syncButtons(info); });
+            syncButtons(instance.getInfo());
+        }
+    });
+</script>
+@endpush

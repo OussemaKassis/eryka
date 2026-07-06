@@ -10,10 +10,10 @@
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
                 <div class="product-thumbnail slider-container" style="height: auto; aspect-ratio: 4 / 5;">
-                    @if($article->quantity <= 0)
+                    @if($article->effective_quantity <= 0)
                         <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.out_of_stock') }}</span>
-                    @elseif($article->quantity <= 5)
-                        <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.only_x_left', ['qty' => $article->quantity]) }}</span>
+                    @elseif($article->effective_quantity <= 5)
+                        <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.only_x_left', ['qty' => $article->effective_quantity]) }}</span>
                     @endif
 
                     <div class="slider" id="slider-{{ $article->id }}">
@@ -66,20 +66,27 @@
                 </p>
                 <h1 class="h2 text-black mb-3">{{ $article->title }}</h1>
 
-                @if($article->images->whereNotNull('color')->isNotEmpty())
-                    @php $defaultColor = $article->images->first() && $article->images->first()->color ? $article->images->first()->color : ''; @endphp
+                @php
+                    $hasColors = $article->images->whereNotNull('color')->isNotEmpty();
+                    $defaultColorImage = $hasColors ? $article->images->first(fn ($img) => $img->color) : null;
+                    $defaultColor = $defaultColorImage->color ?? '';
+                    $initialStock = $hasColors ? ($defaultColorImage->quantity ?? 0) : $article->effective_quantity;
+                @endphp
+
+                @if($hasColors)
                     <div class="mb-4">
                         <h3 class="h6 text-black mb-2">{{ __('site.color') }}</h3>
                         <div class="d-flex gap-3" id="color-swatches-{{ $article->id }}">
                             @foreach($article->images as $key => $image)
                                 @if($image->color)
                                     <button type="button"
-                                            class="color-swatch {{ $loop->first ? 'active' : '' }}"
+                                            class="color-swatch {{ $loop->first ? 'active' : '' }} {{ $image->quantity <= 0 ? 'out-of-stock' : '' }}"
                                             style="background-color: {{ $image->color }};"
-                                            title="{{ $image->color }}"
+                                            title="{{ $image->color }}{{ $image->quantity <= 0 ? ' — ' . __('site.color_out_of_stock') : '' }}"
                                             aria-label="{{ __('site.choose_color', ['color' => $image->color]) }}"
                                             data-index="{{ $key }}"
                                             data-color="{{ $image->color }}"
+                                            data-quantity="{{ $image->quantity }}"
                                             onclick="goToSlide('{{ $article->id }}', {{ $key }})">
                                     </button>
                                 @endif
@@ -91,13 +98,13 @@
                 <strong class="product-price d-block mb-1" style="font-size: 2rem;">{{ number_format($article->price, 2) }} DT</strong>
                 <p class="product-unit-price mb-3">{{ __('site.unit_price') }}</p>
 
-                @if($article->quantity > 0 && $article->quantity <= 5)
-                    <span class="badge bg-warning text-dark mb-4">{{ __('site.only_x_left', ['qty' => $article->quantity]) }}</span>
-                @elseif($article->quantity > 5)
+                @if($article->effective_quantity > 0 && $article->effective_quantity <= 5)
+                    <span class="badge bg-warning text-dark mb-4">{{ __('site.only_x_left', ['qty' => $article->effective_quantity]) }}</span>
+                @elseif($article->effective_quantity > 5)
                     <span class="badge bg-success mb-4">{{ __('site.in_stock') }}</span>
                 @endif
 
-                @if($article->quantity > 0)
+                @if($article->effective_quantity > 0)
                     <div class="price-breakdown" id="price-breakdown">
                         <div class="price-breakdown-row">
                             <span>{{ __('site.subtotal') }} (<span data-breakdown-qty>1</span>x)</span>
@@ -113,18 +120,33 @@
                         </div>
                     </div>
 
-                    <form id="add-to-cart-form" action="{{ route('cart.add', $article->id) }}" method="POST" class="d-flex align-items-end gap-2 mb-3 flex-wrap">
+                    <form id="add-to-cart-form" action="{{ route('cart.add', $article->id) }}" method="POST" class="mb-3">
                         @csrf
                         <input type="hidden" name="color" id="selected-color" value="{{ $defaultColor ?? '' }}">
-                        <div class="form-group mb-0" style="max-width: 150px;">
-                            <label for="quantity" class="text-black">{{ __('site.quantity') }}</label>
-                            <div class="qty-stepper">
-                                <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
-                                <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control text-center" data-stock="{{ $article->quantity }}" inputmode="none" autocomplete="off">
-                                <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
-                            </div>
+
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <label for="quantity" class="text-black mb-0">{{ __('site.quantity') }}</label>
+                            @if($hasColors)
+                                <span id="color-stock-badge" class="badge {{ $initialStock > 0 ? 'bg-success' : 'bg-secondary' }}">{{ __('site.x_in_stock', ['qty' => $initialStock]) }}</span>
+                            @endif
                         </div>
-                        <button type="submit" class="btn btn-primary">{{ __('site.add_to_cart') }}</button>
+
+                        <div class="d-flex align-items-end gap-2 flex-wrap">
+                            <div class="form-group mb-0" style="max-width: 150px;">
+                                <div class="qty-stepper">
+                                    <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
+                                    <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control text-center" data-stock="{{ $initialStock }}" inputmode="none" autocomplete="off" readonly>
+                                    <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="add-to-cart-btn" {{ $initialStock <= 0 ? 'disabled' : '' }}>{{ __('site.add_to_cart') }}</button>
+                        </div>
+
+                        @if($hasColors)
+                            <p id="color-stock-warning" class="text-danger small mt-2 mb-0" style="{{ $initialStock > 0 ? 'display:none;' : '' }}">
+                                <i class="fa-solid fa-triangle-exclamation"></i> {{ __('site.requested_qty_unavailable', ['qty' => $initialStock]) }}
+                            </p>
+                        @endif
                     </form>
                 @endif
             </div>
@@ -158,6 +180,36 @@
         const color = matched ? matched.dataset.color : '';
         const colorInput = document.getElementById('selected-color');
         if (colorInput) colorInput.value = color;
+
+        if (!matched || matched.dataset.quantity === undefined) return;
+
+        const stock = parseInt(matched.dataset.quantity, 10) || 0;
+        const quantityInput = document.getElementById('quantity');
+        const stockBadge = document.getElementById('color-stock-badge');
+        const stockWarning = document.getElementById('color-stock-warning');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+
+        if (quantityInput) {
+            quantityInput.dataset.stock = stock;
+            if (stock <= 0) {
+                quantityInput.value = 1;
+            } else if (parseInt(quantityInput.value, 10) > stock) {
+                quantityInput.value = stock;
+            }
+            quantityInput.parentElement.querySelectorAll('.qty-stepper-btn').forEach(function(btn) {
+                btn.disabled = stock <= 0;
+            });
+            quantityInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        if (stockBadge) {
+            stockBadge.textContent = @js(__('site.x_in_stock')).replace(':qty', stock);
+            stockBadge.classList.toggle('bg-success', stock > 0);
+            stockBadge.classList.toggle('bg-secondary', stock <= 0);
+        }
+
+        if (stockWarning) stockWarning.style.display = stock <= 0 ? '' : 'none';
+        if (addToCartBtn) addToCartBtn.disabled = stock <= 0;
     });
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -165,7 +217,12 @@
         const addToCartForm = document.getElementById('add-to-cart-form');
         if (!quantityInput || !addToCartForm) return;
 
-        const maxStock = parseInt(quantityInput.dataset.stock, 10);
+        // Read fresh each time rather than caching once — the selected
+        // color's stock (and therefore this cap) can change after a swatch
+        // click, updated via quantityInput.dataset.stock.
+        function getMaxStock() {
+            return parseInt(quantityInput.dataset.stock, 10);
+        }
         const price = {{ $article->price }};
         const shippingFee = {{ $shipping }};
 
@@ -193,7 +250,7 @@
             Swal.fire({
                 icon: 'warning',
                 title: @js(__('site.quantity_exceeds_stock_title')),
-                text: @js(__('site.quantity_exceeds_stock_text')).replace(':qty', maxStock),
+                text: @js(__('site.quantity_exceeds_stock_text')).replace(':qty', getMaxStock()),
                 confirmButtonColor: '#4D5147',
             });
         }
@@ -211,8 +268,9 @@
 
         quantityInput.addEventListener('input', function() {
             const value = parseInt(quantityInput.value, 10);
-            if (!isNaN(value) && value > maxStock) {
-                quantityInput.value = maxStock;
+            const max = getMaxStock();
+            if (!isNaN(value) && max > 0 && value > max) {
+                quantityInput.value = max;
                 notifyMaxStock();
             }
             recalcBreakdown();
@@ -228,8 +286,10 @@
 
                 value += step;
                 if (value < 1) value = 1;
-                if (value > maxStock) {
-                    value = maxStock;
+
+                const max = getMaxStock();
+                if (max > 0 && value > max) {
+                    value = max;
                     notifyMaxStock();
                 }
 
@@ -239,6 +299,13 @@
         });
 
         addToCartForm.addEventListener('submit', function(e) {
+            const max = getMaxStock();
+
+            if (max <= 0) {
+                e.preventDefault();
+                return;
+            }
+
             const value = parseInt(quantityInput.value, 10);
 
             if (isNaN(value) || value < 1) {
@@ -247,9 +314,9 @@
                 return;
             }
 
-            if (value > maxStock) {
+            if (value > max) {
                 e.preventDefault();
-                quantityInput.value = maxStock;
+                quantityInput.value = max;
                 notifyMaxStock();
             }
         });

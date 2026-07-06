@@ -81,7 +81,7 @@
             <div class="col-lg-7">
                 <h2 class="section-title mb-4">{{ __('site.contact_form_title') }}</h2>
 
-                <form action="{{ route('shop.contact.submit') }}" method="POST">
+                <form action="{{ route('shop.contact.submit') }}" method="POST" class="contact-form">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -109,7 +109,9 @@
                         <textarea name="message" id="message" cols="30" rows="6" class="form-control" required>{{ old('message') }}</textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">{{ __('site.send_message') }}</button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">{{ __('site.send_message') }}</button>
+                    </div>
                 </form>
             </div>
         </div>

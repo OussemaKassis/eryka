@@ -13,11 +13,13 @@ class ArticleImage extends Model
         'article_id',
         'image_path',
         'color',
+        'quantity',
         'sort_order'
     ];
 
     protected $casts = [
         'sort_order' => 'integer',
+        'quantity' => 'integer',
     ];
 
     public function article()

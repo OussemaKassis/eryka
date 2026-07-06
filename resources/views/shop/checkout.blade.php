@@ -10,10 +10,10 @@
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
                 <div class="product-thumbnail slider-container" style="height: auto; aspect-ratio: 4 / 5;">
-                    @if($article->quantity <= 0)
+                    @if($article->effective_quantity <= 0)
                         <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">Out of Stock</span>
-                    @elseif($article->quantity <= 5)
-                        <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">Only {{ $article->quantity }} left</span>
+                    @elseif($article->effective_quantity <= 5)
+                        <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">Only {{ $article->effective_quantity }} left</span>
                     @endif
 
                     <div class="slider" id="slider-{{ $article->id }}">
@@ -99,7 +99,7 @@
                             <textarea id="address" name="address" required class="form-control" rows="3"></textarea>
                         </div>
 
-                        @if($article->quantity > 0)
+                        @if($article->effective_quantity > 0)
                             <div class="price-breakdown" id="price-breakdown">
                                 <div class="price-breakdown-row">
                                     <span>{{ __('site.subtotal') }} (<span data-breakdown-qty>1</span>x)</span>
@@ -121,12 +121,12 @@
                                 <label for="quantity" class="text-black">{{ __('site.quantity') }} <span class="text-danger">*</span></label>
                                 <div class="qty-stepper">
                                     <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
-                                    <input type="number" id="quantity" name="quantity" min="1" max="{{ $article->quantity }}" value="1" required class="form-control text-center" data-stock="{{ $article->quantity }}" inputmode="none" autocomplete="off" {{ $article->quantity <= 0 ? 'disabled' : '' }}>
+                                    <input type="number" id="quantity" name="quantity" min="1" max="{{ $article->effective_quantity }}" value="1" required class="form-control text-center" data-stock="{{ $article->effective_quantity }}" inputmode="none" autocomplete="off" readonly {{ $article->effective_quantity <= 0 ? 'disabled' : '' }}>
                                     <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-lg py-3 flex-grow-1" {{ $article->quantity <= 0 ? 'disabled' : '' }}>
-                                {{ $article->quantity <= 0 ? __('site.out_of_stock') : __('site.submit_order') }}
+                            <button type="submit" class="btn btn-primary btn-lg py-3 flex-grow-1" {{ $article->effective_quantity <= 0 ? 'disabled' : '' }}>
+                                {{ $article->effective_quantity <= 0 ? __('site.out_of_stock') : __('site.submit_order') }}
                             </button>
                         </div>
                     </form>

@@ -34,7 +34,7 @@ class ShopController extends Controller
     // Homepage: featured articles + marketing sections
     public function articlesHome()
     {
-        $articles = Article::with('category', 'images')->latest()->take(8)->get();
+        $articles = Article::with('category', 'images')->latest()->take(4)->get();
         $homeSections = $this->pageSections('home');
         $welcomeSection = $homeSections->first();
         $newsItems = NewsItem::where('is_active', true)->orderBy('sort_order')->take(3)->get();
@@ -121,8 +121,9 @@ class ShopController extends Controller
     public function orderSubmit(Request $request, $article)
     {
         $article = Article::findOrFail($article);
+        $stock = $article->effective_quantity;
         $validated = $request->validate([
-            'quantity' => ['required', 'integer', 'min:1', 'max:' . max($article->quantity, 0)],
+            'quantity' => ['required', 'integer', 'min:1', 'max:' . max($stock, 0)],
             'customer_first_name' => 'required|string|max:255',
             'customer_last_name' => 'required|string|max:255',
             'address' => 'required|string',
@@ -130,8 +131,8 @@ class ShopController extends Controller
             'email' => 'required|email|max:255',
             'phone_number' => 'required|string|max:255',
         ], [
-            'quantity.max' => $article->quantity > 0
-                ? "Only {$article->quantity} left in stock."
+            'quantity.max' => $stock > 0
+                ? "Only {$stock} left in stock."
                 : 'This product is out of stock.',
         ]);
         $validated['article_id'] = $article->id;

@@ -7,15 +7,20 @@
     <div class="container">
         @if($items->isEmpty())
             <div class="row">
-                <div class="col-md-12 text-center">
-                    <p class="mb-4">{{ __('site.cart_empty') }}</p>
-                    <a href="{{ route('shop.home') }}" class="btn btn-primary">{{ __('site.continue_shopping') }}</a>
+                <div class="col-md-12 text-center cart-empty-state">
+                    <div class="cart-empty-icon">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <h2 class="h3 mb-3 text-black">{{ __('site.cart_empty') }}</h2>
+                    <p class="mb-4">{{ __('site.cart_empty_desc') }}</p>
+                    <a href="{{ route('shop.products') }}" class="btn btn-primary">{{ __('site.continue_shopping') }}</a>
                 </div>
             </div>
         @else
             <div class="row mb-5">
                 <div class="col-md-12">
-                    <div class="site-blocks-table">
+                    <!-- Desktop/tablet: full table -->
+                    <div class="site-blocks-table d-none d-md-block">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -30,7 +35,7 @@
                             </thead>
                             <tbody>
                                 @foreach($items as $item)
-                                    <tr data-cart-row data-price="{{ $item['article']->price }}">
+                                    <tr data-cart-row data-cart-key="{{ $item['key'] }}" data-price="{{ $item['article']->price }}">
                                         <td class="product-thumbnail">
                                             @if($item['article']->images->first())
                                                 <img src="{{ asset('storage/' . $item['article']->images->first()->image_path) }}" alt="Image" class="img-fluid">
@@ -52,7 +57,7 @@
                                                 @csrf
                                                 <div class="qty-stepper">
                                                     <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
-                                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off">
+                                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off" readonly>
                                                     <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
                                                 </div>
                                                 <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
@@ -60,15 +65,64 @@
                                         </td>
                                         <td data-cart-subtotal>{{ number_format($item['subtotal'], 2) }} DT</td>
                                         <td>
-                                            <form action="{{ route('cart.remove', $item['key']) }}" method="POST">
+                                            <form action="{{ route('cart.remove', $item['key']) }}" method="POST" class="cart-remove-form">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm">&times;</button>
+                                                <button type="submit" class="cart-remove-btn" aria-label="{{ __('site.remove') }}">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Mobile: one card per item, no horizontal scrolling -->
+                    <div class="cart-mobile-list d-md-none">
+                        @foreach($items as $item)
+                            <div class="cart-mobile-item" data-cart-row data-cart-key="{{ $item['key'] }}" data-price="{{ $item['article']->price }}">
+                                <div class="cart-mobile-item-top">
+                                    <div class="cart-mobile-thumb">
+                                        @if($item['article']->images->first())
+                                            <img src="{{ asset('storage/' . $item['article']->images->first()->image_path) }}" alt="Image" class="img-fluid">
+                                        @endif
+                                    </div>
+                                    <div class="cart-mobile-info">
+                                        <a href="{{ route('shop.product', $item['article']->id) }}" class="cart-mobile-title">{{ $item['article']->title }}</a>
+                                        @if($item['color'])
+                                            <span class="color-swatch color-swatch-sm" style="background-color: {{ $item['color'] }};" title="{{ $item['color'] }}"></span>
+                                        @endif
+                                        <div class="cart-mobile-price">{{ number_format($item['article']->price, 2) }} DT</div>
+                                    </div>
+                                </div>
+
+                                <div class="cart-mobile-row">
+                                    <span class="cart-mobile-label">{{ __('site.quantity') }}</span>
+                                    <form action="{{ route('cart.update', $item['key']) }}" method="POST" class="cart-update-form d-flex align-items-center justify-content-center gap-2">
+                                        @csrf
+                                        <div class="qty-stepper">
+                                            <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
+                                            <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off" readonly>
+                                            <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
+                                        </div>
+                                        <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
+                                    </form>
+                                </div>
+
+                                <div class="cart-mobile-row">
+                                    <span class="cart-mobile-label">{{ __('site.subtotal') }}</span>
+                                    <strong data-cart-subtotal>{{ number_format($item['subtotal'], 2) }} DT</strong>
+                                </div>
+
+                                <form action="{{ route('cart.remove', $item['key']) }}" method="POST" class="cart-remove-form text-center">
+                                    @csrf
+                                    <button type="submit" class="cart-remove-btn" aria-label="{{ __('site.remove') }}">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -106,6 +160,17 @@
         const shippingFee = {{ $shipping }};
         let submitTimers = new WeakMap();
 
+        // Each cart line is rendered twice — once in the desktop table, once
+        // in the mobile card list — shown/hidden by breakpoint. Group them
+        // by cart key so the total is computed once per item (not once per
+        // representation) and both stay visually in sync.
+        const rowsByKey = new Map();
+        rows.forEach(row => {
+            const key = row.dataset.cartKey;
+            if (!rowsByKey.has(key)) rowsByKey.set(key, []);
+            rowsByKey.get(key).push(row);
+        });
+
         function formatMoney(value) {
             return value.toFixed(2) + ' DT';
         }
@@ -120,26 +185,52 @@
             });
         }
 
+        document.querySelectorAll('.cart-remove-form').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: @js(__('site.confirm_remove_title')),
+                    text: @js(__('site.confirm_remove_text')),
+                    showCancelButton: true,
+                    confirmButtonText: @js(__('site.confirm_remove_yes')),
+                    cancelButtonText: @js(__('site.cancel')),
+                    confirmButtonColor: '#A8503F',
+                    cancelButtonColor: '#9C8C7C',
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
         function recalculate() {
             let grandTotal = 0;
 
-            rows.forEach(row => {
-                const price = parseFloat(row.dataset.price);
-                const quantityInput = row.querySelector('[data-cart-quantity]');
-                const subtotalEl = row.querySelector('[data-cart-subtotal]');
-                let quantity = parseInt(quantityInput.value, 10);
-                const max = parseInt(quantityInput.dataset.stock, 10);
+            rowsByKey.forEach(rowGroup => {
+                const primary = rowGroup[0];
+                const price = parseFloat(primary.dataset.price);
+                const primaryInput = primary.querySelector('[data-cart-quantity]');
+                const max = parseInt(primaryInput.dataset.stock, 10);
+                let quantity = parseInt(primaryInput.value, 10);
 
                 if (isNaN(quantity) || quantity < 1) {
                     quantity = 1;
                 }
                 if (!isNaN(max) && quantity > max) {
                     quantity = max;
-                    quantityInput.value = max;
                 }
 
                 const subtotal = price * quantity;
-                subtotalEl.textContent = formatMoney(subtotal);
+
+                rowGroup.forEach(row => {
+                    const quantityInput = row.querySelector('[data-cart-quantity]');
+                    const subtotalEl = row.querySelector('[data-cart-subtotal]');
+                    if (parseInt(quantityInput.value, 10) !== quantity) quantityInput.value = quantity;
+                    if (subtotalEl) subtotalEl.textContent = formatMoney(subtotal);
+                });
+
                 grandTotal += subtotal;
             });
 
@@ -169,6 +260,17 @@
                 if (!isNaN(value) && !isNaN(maxStock) && value > maxStock) {
                     notifyMaxStock(maxStock);
                 }
+
+                // This row is the one the user actually edited — push its
+                // value into the other representation of the same item
+                // (desktop row vs. mobile card) before recalculating, so
+                // recalculate() has a single, already-agreed-on quantity
+                // to read per item.
+                (rowsByKey.get(row.dataset.cartKey) || []).forEach(sibling => {
+                    if (sibling === row) return;
+                    const siblingInput = sibling.querySelector('[data-cart-quantity]');
+                    if (siblingInput.value !== quantityInput.value) siblingInput.value = quantityInput.value;
+                });
 
                 recalculate();
 

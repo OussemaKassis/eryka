@@ -24,12 +24,13 @@ class CartController extends Controller
     public function add(Request $request, $article)
     {
         $article = Article::findOrFail($article);
+        $color = $request->input('color') ?: null;
+        $stock = $article->quantityForColor($color);
 
-        if ($article->quantity <= 0) {
+        if ($stock <= 0) {
             return back()->with('error', __('site.flash_out_of_stock', ['title' => $article->title]));
         }
 
-        $color = $request->input('color') ?: null;
         $key = $this->cartKey($article->id, $color);
 
         $cart = session('cart', []);
@@ -39,7 +40,7 @@ class CartController extends Controller
         $cart[$key] = [
             'article_id' => $article->id,
             'color' => $color,
-            'quantity' => min($article->quantity, $existingQuantity + $requested),
+            'quantity' => min($stock, $existingQuantity + $requested),
         ];
 
         session(['cart' => $cart]);
@@ -56,12 +57,13 @@ class CartController extends Controller
         }
 
         $article = Article::findOrFail($cart[$key]['article_id']);
+        $stock = $article->quantityForColor($cart[$key]['color'] ?? null);
         $quantity = (int) $request->input('quantity', 1);
 
         if ($quantity <= 0) {
             unset($cart[$key]);
         } else {
-            $cart[$key]['quantity'] = min($quantity, $article->quantity);
+            $cart[$key]['quantity'] = min($quantity, $stock);
         }
 
         session(['cart' => $cart]);
@@ -114,11 +116,15 @@ class CartController extends Controller
         $articleIds = collect($cart)->pluck('article_id')->unique();
         $articles = Article::whereIn('id', $articleIds)->get()->keyBy('id');
 
-        $quantitiesByArticle = collect($cart)->groupBy('article_id')->map(fn (Collection $lines) => $lines->sum('quantity'));
+        // Each cart entry is already unique per (article, color), so stock is
+        // checked per entry rather than summed across an article's colors —
+        // an article with 3 red + 2 blue in the cart needs 3 in stock for
+        // red and 2 for blue, not 5 of either.
+        foreach ($cart as $entry) {
+            $article = $articles->get($entry['article_id']);
+            $stock = $article ? $article->quantityForColor($entry['color']) : 0;
 
-        foreach ($quantitiesByArticle as $articleId => $totalQuantity) {
-            $article = $articles->get($articleId);
-            if (!$article || $article->quantity < $totalQuantity) {
+            if ($stock < $entry['quantity']) {
                 return redirect()->route('cart.index')
                     ->with('error', __('site.flash_insufficient_stock', ['title' => $article->title ?? __('site.an_item')]));
             }
@@ -134,7 +140,16 @@ class CartController extends Controller
                 'quantity' => $entry['quantity'],
                 'shipping_fee' => Command::SHIPPING_FEE,
             ]);
-            $articles->get($entry['article_id'])->decrement('quantity', $entry['quantity']);
+
+            $article = $articles->get($entry['article_id']);
+            $colorImages = $article->images->whereNotNull('color');
+            $image = $entry['color'] ? $colorImages->firstWhere('color', $entry['color']) : null;
+
+            if ($image) {
+                $image->decrement('quantity', $entry['quantity']);
+            } else {
+                $article->decrement('quantity', $entry['quantity']);
+            }
         }
 
         session()->forget('cart');

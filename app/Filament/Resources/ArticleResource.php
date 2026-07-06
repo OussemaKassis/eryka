@@ -40,7 +40,7 @@ class ArticleResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('quantity')
                     ->label('Quantité en stock')
-                    ->helperText('Nombre d\'unités disponibles. Affiché comme « Rupture de stock » sur le site lorsque ce nombre atteint 0.')
+                    ->helperText('Nombre d\'unités disponibles. Affiché comme « Rupture de stock » sur le site lorsque ce nombre atteint 0. Ignoré si des quantités par couleur sont renseignées ci-dessous — dans ce cas, leur somme fait foi.')
                     ->required()
                     ->numeric()
                     ->minValue(0)
@@ -68,10 +68,15 @@ class ArticleResource extends Resource
                             ->directory('articles')
                             ->required(),
                         Forms\Components\ColorPicker::make('color')
-                            ->label('Couleur')
-                            ->required(),
+                            ->label('Couleur'),
+                        Forms\Components\TextInput::make('quantity')
+                            ->label('Quantité pour cette couleur')
+                            ->helperText('Ex : 3 pour cette couleur. Si au moins une couleur a une quantité, le stock du site utilise leur somme et ignore le champ « Quantité en stock » ci-dessus.')
+                            ->numeric()
+                            ->minValue(0)
+                            ->default(0),
                     ])
-                    ->columns(2)
+                    ->columns(3)
                     ->orderColumn('sort_order')
                     ->reorderable()
                     ->maxItems(3)
@@ -93,6 +98,7 @@ class ArticleResource extends Resource
                 Tables\Columns\TextColumn::make('quantity')
                     ->label('Stock')
                     ->sortable()
+                    ->getStateUsing(fn ($record): int => $record->effective_quantity)
                     ->badge()
                     ->color(fn (int $state): string => match (true) {
                         $state <= 0 => 'danger',
