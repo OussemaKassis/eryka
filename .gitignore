@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Database dumps contain customer PII (orders, contact messages) and
+# admin credentials — never committed, only used to seed a new deploy.
+/database/backups
