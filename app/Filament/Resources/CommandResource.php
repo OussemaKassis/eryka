@@ -17,6 +17,8 @@ class CommandResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
+    protected static ?int $navigationSort = -1;
+
     protected static ?string $navigationLabel = 'Commandes';
 
     protected static ?string $modelLabel = 'ligne de commande';
