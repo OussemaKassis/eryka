@@ -16,6 +16,8 @@ class NewsItemResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
+    protected static ?int $navigationSort = 6;
+
     protected static ?string $navigationLabel = 'Actualités';
 
     protected static ?string $modelLabel = 'actualité';

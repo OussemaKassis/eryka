@@ -19,6 +19,8 @@ class ContactInfoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
 
+    protected static ?int $navigationSort = 3;
+
     protected static ?string $navigationLabel = 'Coordonnées';
 
     protected static ?string $modelLabel = 'coordonnée';

@@ -16,6 +16,8 @@ class HeroSlideResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 5;
+
     protected static ?string $navigationLabel = 'Diaporama';
 
     protected static ?string $modelLabel = 'diapositive';

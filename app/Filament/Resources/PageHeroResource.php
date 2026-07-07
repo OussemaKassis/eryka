@@ -16,6 +16,8 @@ class PageHeroResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
 
+    protected static ?int $navigationSort = 7;
+
     protected static ?string $navigationLabel = 'En-têtes de page';
 
     protected static ?string $modelLabel = 'en-tête de page';

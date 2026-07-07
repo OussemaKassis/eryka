@@ -19,6 +19,8 @@ class SocialLinkResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-share';
 
+    protected static ?int $navigationSort = 9;
+
     protected static ?string $navigationLabel = 'Réseaux sociaux';
 
     protected static ?string $modelLabel = 'réseau social';

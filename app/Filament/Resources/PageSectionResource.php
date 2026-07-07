@@ -16,6 +16,8 @@ class PageSectionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
+    protected static ?int $navigationSort = 8;
+
     protected static ?string $navigationLabel = 'Sections de page';
 
     protected static ?string $modelLabel = 'section de page';
@@ -52,7 +54,7 @@ class PageSectionResource extends Resource
                 Forms\Components\FileUpload::make('video_path')
                     ->label('Vidéo')
                     ->helperText('Optionnel (max 75 Mo). Utilisée uniquement par la première section de la page d\'accueil ("Bienvenue chez Eryka") à la place de la grille d\'images, si renseignée.')
-                    ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/ogg'])
+                    ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'])
                     ->maxSize(76800)
                     ->disk('public')
                     ->directory('page-section-videos')
