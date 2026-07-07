@@ -452,7 +452,7 @@ body {
 .hero.hero-bg-slider-mode {
     position: relative;
     overflow: hidden;
-    padding: 60px 0;
+    /*padding: 60px 0;*/
     min-height: 320px;
     display: flex;
     align-items: center;
