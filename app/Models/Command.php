@@ -11,6 +11,11 @@ class Command extends Model
 
     public const SHIPPING_FEE = 7.00;
 
+    public static function shippingFee(): float
+    {
+        return SiteSetting::current()->shipping_fee ?? self::SHIPPING_FEE;
+    }
+
     protected $fillable = [
         'group_id',
         'article_id',

@@ -1,6 +1,5 @@
 @php
     $outOfStock = $article->effective_quantity <= 0;
-    $lowStock = !$outOfStock && $article->effective_quantity <= 5;
     $cardColors = $article->images->pluck('color')->filter()->unique()->values();
     $cardColorsMax = 4;
     $sliderItem = $sliderItem ?? false;
@@ -12,8 +11,6 @@
             <div class="product-thumbnail slider-container">
                 @if($outOfStock)
                     <span class="badge bg-danger position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.out_of_stock') }}</span>
-                @elseif($lowStock)
-                    <span class="badge bg-warning text-dark position-absolute" style="top: 10px; left: 10px; z-index: 11;">{{ __('site.only_x_left', ['qty' => $article->effective_quantity]) }}</span>
                 @endif
 
                 <div class="slider" id="slider-{{ $article->id }}">

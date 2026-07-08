@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\SiteSetting;
 use App\Models\SocialLink;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\View;
@@ -37,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
                 'socialLinks',
                 SocialLink::where('is_active', true)->orderBy('sort_order')->get()
             );
+
+            $view->with('siteSettings', SiteSetting::current());
         });
     }
 }

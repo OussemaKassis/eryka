@@ -82,22 +82,24 @@
             </div>
             <div class="col-md-6 d-flex flex-wrap justify-content-start justify-content-md-end align-items-center gap-3">
                 <a href="{{ route('shop.products') }}" class="more">{{ __('site.view_all_products') }}</a>
-                @if($articles->count() > 4)
-                    <div class="product-slider-nav" id="product-slider-nav">
-                        <button type="button" class="product-slider-arrow" aria-label="{{ __('site.previous') }}"><i class="fa-solid fa-chevron-left"></i></button>
-                        <button type="button" class="product-slider-arrow" aria-label="{{ __('site.next') }}"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
-                @endif
             </div>
         </div>
 
         @if($articles->isEmpty())
             <p class="text-center">{{ __('site.no_products_yet') }}</p>
         @else
-            <div class="product-slider" id="product-slider">
-                @foreach($articles as $article)
-                    @include('shop.partials.product-card', ['article' => $article, 'sliderItem' => true])
-                @endforeach
+            <div class="product-slider-wrap">
+                @if($articles->count() > 1)
+                    <div class="product-slider-nav" id="product-slider-nav">
+                        <button type="button" class="product-slider-arrow" data-controls="prev" aria-label="{{ __('site.previous') }}"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button type="button" class="product-slider-arrow" data-controls="next" aria-label="{{ __('site.next') }}"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                @endif
+                <div class="product-slider" id="product-slider">
+                    @foreach($articles as $article)
+                        @include('shop.partials.product-card', ['article' => $article, 'sliderItem' => true])
+                    @endforeach
+                </div>
             </div>
         @endif
     </div>
@@ -196,36 +198,25 @@
         var nav = document.getElementById('product-slider-nav');
         if (!slider || typeof tns !== 'function') return;
 
-        var instance = tns({
+        tns({
             container: slider,
             items: 1,
             gutter: 0,
-            controlsContainer: nav || false,
+            controlsContainer: nav ? '#product-slider-nav' : false,
             controls: !!nav,
             nav: false,
-            loop: false,
+            loop: true,
             mouseDrag: true,
             speed: 400,
+            autoplay: true,
+            autoplayTimeout: 2000,
+            autoplayHoverPause: true,
+            autoplayButtonOutput: false,
             responsive: {
                 576: { items: 2 },
                 992: { items: 4 },
             },
         });
-
-        if (nav) {
-            var buttons = nav.querySelectorAll('.product-slider-arrow');
-            var prevBtn = buttons[0];
-            var nextBtn = buttons[1];
-
-            function syncButtons(info) {
-                prevBtn.disabled = info.index <= 0;
-                nextBtn.disabled = info.index >= info.slideCount - info.items;
-            }
-
-            instance.events.on('newBreakpointStart', function(info) { syncButtons(info); });
-            instance.events.on('indexChanged', function(info) { syncButtons(info); });
-            syncButtons(instance.getInfo());
-        }
     });
 </script>
 @endpush

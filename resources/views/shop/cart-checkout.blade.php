@@ -34,7 +34,7 @@
                                 <td>{{ number_format($subtotal, 2) }} DT</td>
                             </tr>
                             <tr>
-                                <td>{{ __('site.shipping_fee') }}</td>
+                                <td>{{ __('site.shipping_fee') }} <small class="price-breakdown-note">({{ __('site.shipping_cod_note') }})</small></td>
                                 <td>{{ number_format($shipping, 2) }} DT</td>
                             </tr>
                             <tr class="cart-summary-total">
@@ -43,7 +43,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <a href="{{ route('cart.index') }}" class="btn btn-sm">&larr; {{ __('site.back_to_cart') }}</a>
+                    <a href="{{ route('cart.index') }}" class="btn btn-primary btn-sm">&larr; {{ __('site.back_to_cart') }}</a>
                 </div>
             </div>
 

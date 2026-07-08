@@ -143,7 +143,7 @@
                             <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Shop') }}" class="footer-logo-img">
                         </a>
                     </div>
-                    <p class="mb-4">{{ __('site.footer_tagline') }}</p>
+                    <p class="mb-4">{{ $siteSettings->footer_tagline ?: __('site.footer_tagline') }}</p>
 
                     @if(isset($socialLinks) && $socialLinks->isNotEmpty())
                         <ul class="list-unstyled custom-social">

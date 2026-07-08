@@ -105,7 +105,7 @@ class ShopController extends Controller
     public function show($article)
     {
         $article = Article::with('category')->findOrFail($article);
-        $shipping = Command::SHIPPING_FEE;
+        $shipping = Command::shippingFee();
         return view('shop.product', compact('article', 'shipping'));
     }
 
@@ -113,7 +113,7 @@ class ShopController extends Controller
     public function checkout($article)
     {
         $article = Article::with('category')->findOrFail($article);
-        $shipping = Command::SHIPPING_FEE;
+        $shipping = Command::shippingFee();
         return view('shop.checkout', compact('article', 'shipping'));
     }
 
@@ -137,12 +137,24 @@ class ShopController extends Controller
         ]);
         $validated['article_id'] = $article->id;
         $validated['group_id'] = (string) Str::uuid();
-        $validated['shipping_fee'] = Command::SHIPPING_FEE;
+        $validated['shipping_fee'] = Command::shippingFee();
         Command::create($validated);
         $article->decrement('quantity', $validated['quantity']);
 
-        return redirect()->route('shop.checkout', $article->id)
-            ->with('success', __('site.flash_order_submitted'));
+        return redirect()->route('order.success')->with('order_placed', true);
+    }
+
+    // Order confirmation page — reached only right after a successful order;
+    // the "order_placed" flash value is consumed on this request, so a
+    // refresh or direct visit bounces back to the homepage instead of
+    // re-showing a stale confirmation.
+    public function orderSuccess()
+    {
+        if (!session('order_placed')) {
+            return redirect()->route('shop.home');
+        }
+
+        return view('shop.order-success');
     }
 
     public function about()

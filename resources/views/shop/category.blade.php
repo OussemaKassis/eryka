@@ -6,7 +6,7 @@
 @section('content')
 <div id="products" class="untree_co-section product-section before-footer-section">
     <div class="container">
-        <a href="{{ route('shop.products') }}" class="btn btn-sm mb-5">&larr; {{ __('site.all_products') }}</a>
+        <a href="{{ route('shop.products') }}" class="btn btn-primary btn-sm mb-5">&larr; {{ __('site.all_products') }}</a>
 
         <div class="row">
             @forelse($articles as $article)

@@ -349,6 +349,50 @@ body {
     object-fit: cover;
 }
 
+/* The theme's feature-icon circle backdrop (.feature .icon:before) is
+   oversized relative to the small SVG icons, reading as a heavy blob. */
+.why-choose-section .feature .icon:before {
+    width: 22px;
+    height: 22px;
+    right: -5px;
+}
+
+/* Trim the tall top/bottom gap this section inherits from
+   .section-compact — it reads as excess empty space above/below the cards. */
+.why-choose-section.section-compact {
+    padding: 2.5rem 0;
+}
+
+/* Featured products section (home page) — trim its top/bottom padding a
+   bit further than the shared .section-compact default. */
+#products.section-compact {
+    padding: 3rem 0;
+}
+
+/* The products page sits right under a compact hero on mobile; the theme's
+   before-footer-section padding (7rem top / 12rem bottom, !important) leaves
+   a huge empty gap above the product count line. Trim it there on mobile. */
+@media (max-width: 991.98px) {
+    #products.before-footer-section,
+    #product-detail.before-footer-section,
+    #cart-page.before-footer-section {
+        padding-top: 2rem !important;
+        padding-bottom: 4rem !important;
+    }
+}
+
+/* Match the hero's "Acheter maintenant" (.btn-secondary) to the plain .btn
+   style used by "En savoir plus" — same text/background, same hover. */
+.btn.btn-secondary {
+    color: #ffffff;
+    background: #4C403A;
+    border-color: #4C403A;
+}
+.btn.btn-secondary:hover {
+    background: #3D332E;
+    border-color: #3D332E;
+}
+
 /* Page sections (admin-managed via PageSectionResource, shared by every page
    through partials/page-sections.blade.php) — text+image blocks alternate
    sides per section; text-only ones become a centered band. Every section
@@ -751,6 +795,26 @@ body {
     background-color: #DAB88B !important;
 }
 
+/* Collapsed mobile menu — Bootstrap's default nav-item list is left-aligned
+   and reuses the same small font as the desktop bar; center it and bump the
+   text up a size so it reads as a proper full-width mobile menu. */
+@media (max-width: 767.98px) {
+    .custom-navbar-nav,
+    .custom-navbar-cta {
+        text-align: center;
+        align-items: center;
+    }
+
+    .custom-navbar-nav .nav-link {
+        font-size: 1.15rem;
+        padding: 0.65rem 0;
+    }
+
+    .custom-navbar-cta {
+        justify-content: center;
+    }
+}
+
 /* Language switcher — a pill-style toggle with a globe icon, replacing the
    plain "EN"/"FR" text link (which sat in .custom-navbar-cta and needed its
    color forced to white explicitly). */
@@ -1039,6 +1103,42 @@ body {
     -moz-appearance: textfield;
 }
 
+/* On the mobile cart cards the stepper has no wrapping max-width (unlike
+   the product page, which constrains it via an inline style on its parent)
+   so it stretches to fill the whole row — shrink it back down and make the
+   buttons a little more compact to match the rest of the card's density. */
+.cart-mobile-row .qty-stepper {
+    max-width: 130px;
+}
+
+.cart-mobile-row .qty-stepper-btn {
+    flex-basis: 32px;
+    min-width: 32px;
+    font-size: 16px;
+}
+
+.cart-mobile-row .qty-stepper .form-control {
+    font-size: 0.9rem;
+}
+
+/* Same problem on the desktop cart table — the "Quantité" cell has no
+   width cap so the stepper stretches to fill the whole column, looking
+   oversized next to the other compact cells. Shrink and center it. */
+.site-blocks-table .qty-stepper {
+    max-width: 130px;
+    margin: 0 auto;
+}
+
+.site-blocks-table .qty-stepper-btn {
+    flex-basis: 32px;
+    min-width: 32px;
+    font-size: 16px;
+}
+
+.site-blocks-table .qty-stepper .form-control {
+    font-size: 0.9rem;
+}
+
 /* Product card actions — stacked and centered, sized to content rather
    than stretched to the card's full width, so a two-word label like
    "Aperçu rapide" never wraps mid-button the way it did sitting side by
@@ -1067,10 +1167,25 @@ body {
 }
 
 /* Featured products slider (home page) — the same product-item markup as
-   the grid, but as tiny-slider items instead of Bootstrap columns. */
+   the grid, but as tiny-slider items instead of Bootstrap columns. Nav
+   arrows are overlaid on the image itself (like the product-detail gallery
+   arrows) rather than sitting up in the section header, away from what
+   they control. */
+.product-slider-wrap {
+    position: relative;
+}
+
 .product-slider-nav {
+    position: absolute;
+    top: 0;
+    left: 22px;
+    right: 22px;
+    height: 340px;
+    z-index: 15;
     display: flex;
-    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
 }
 
 .product-slider-arrow {
@@ -1079,17 +1194,18 @@ body {
     justify-content: center;
     width: 40px;
     height: 40px;
-    border: 1px solid #C7B9A8;
+    border: none;
     border-radius: 50%;
-    background: #F7F1E6;
-    color: #4D5147;
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
     font-size: 14px;
     cursor: pointer;
+    pointer-events: auto;
     transition: background-color 0.2s ease;
 }
 
 .product-slider-arrow:hover {
-    background: #EFE7D8;
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .product-slider-arrow[disabled] {
@@ -1104,6 +1220,29 @@ body {
 .product-slider .tns-outer {
     padding: 0 !important;
     margin: 0 -12px;
+}
+
+/* On phones the fixed 340px thumbnail height (shared with the product grid)
+   makes a single slide dominate the screen — trim it down a bit so the card
+   fits more comfortably above the fold. The nav's height is kept equal to
+   the image height so its flex-centered arrows land on the image's
+   vertical middle without hand-computing a top offset. */
+@media (max-width: 575.98px) {
+    #product-slider .slider-container {
+        height: 280px;
+    }
+
+    .product-slider-nav {
+        height: 280px;
+        left: 14px;
+        right: 14px;
+    }
+
+    .product-slider-arrow {
+        width: 34px;
+        height: 34px;
+        font-size: 12px;
+    }
 }
 
 .btn-outline-brand {
@@ -1132,6 +1271,7 @@ body {
 .price-breakdown-row {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     padding: 4px 0;
     color: #6b6b6b;
     font-size: 1.05rem;
@@ -1144,6 +1284,145 @@ body {
     font-weight: 700;
     color: #2b2b2b;
     font-size: 1.25rem;
+}
+
+/* The shipping row's label can carry a long cash-on-delivery note; let the
+   label wrap/stack freely but never let the amount on the right shrink or
+   wrap onto a second line (was breaking into "8.00" / "DT"). */
+.price-breakdown-row > span:first-child {
+    min-width: 0;
+    padding-right: 12px;
+}
+
+.price-breakdown-row > span:last-child {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.price-breakdown-note {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.78rem;
+    color: #948b7c;
+    font-weight: 400;
+}
+
+/* Add-to-cart confirmation modal (product page) */
+.cart-confirm-modal {
+    border-radius: 14px;
+    border: none;
+    overflow: hidden;
+}
+
+.cart-confirm-modal .modal-header {
+    border-bottom: 1px solid #E5DDD0;
+    padding: 1.25rem 1.5rem;
+}
+
+.cart-confirm-modal .modal-title {
+    font-weight: 700;
+    color: #2b2b2b;
+}
+
+.cart-confirm-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.cart-confirm-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.cart-confirm-continue-btn,
+.cart-confirm-buy-now-btn {
+    flex: 1;
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border: none;
+    text-align: center;
+}
+
+.cart-confirm-continue-btn {
+    background: #DAB88B;
+    color: #4C403A;
+}
+
+.cart-confirm-continue-btn:hover {
+    background: #C9A06D;
+    color: #4C403A;
+}
+
+.cart-confirm-buy-now-btn {
+    background: #4D5147;
+    color: #ffffff;
+}
+
+.cart-confirm-buy-now-btn:hover {
+    background: #3A3D33;
+    color: #ffffff;
+}
+
+.cart-confirm-product {
+    display: flex;
+    gap: 14px;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #E5DDD0;
+}
+
+.cart-confirm-product-img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.cart-confirm-product-info h6 {
+    color: #2b2b2b;
+    font-weight: 700;
+}
+
+.cart-confirm-badge {
+    background: #F7F3EC;
+    color: #6b6b6b;
+    font-weight: 500;
+    border: 1px solid #E5DDD0;
+}
+
+.cart-confirm-color-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-left: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.cart-confirm-summary {
+    background: #F7F3EC;
+    border: 1px solid #E5DDD0;
+    border-radius: 10px;
+    padding: 16px 20px;
+}
+
+.cart-confirm-summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    color: #6b6b6b;
+}
+
+.cart-confirm-summary-total {
+    border-top: 1px solid #E5DDD0;
+    margin-top: 8px;
+    padding-top: 10px;
+    font-weight: 700;
+    color: #2b2b2b;
+    font-size: 1.1rem;
 }
 
 /* Back-to-top button — fixed bottom-right, hidden until scrolled down
@@ -1195,6 +1474,19 @@ body {
     width: 100%;
     z-index: 1030;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Trim the mobile header a touch — the body's padding-top auto-follows this
+   via JS (see navbar.offsetHeight below), so shrinking it here is enough. */
+@media (max-width: 767.98px) {
+    .custom-navbar {
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+    }
+
+    .navbar-brand-logo {
+        height: 28px;
+    }
 }
 
 /* Home page section rhythm — the vendor theme's 7rem/12rem padding assumes
@@ -1279,5 +1571,32 @@ body {
 @media (max-width: 576px) {
     .error-404-number {
         font-size: 5.5rem;
+    }
+}
+
+/* Order success page — a filled check circle in brand green standing in
+   for an illustration, same empty-state layout as the 404 page. */
+.order-success-state {
+    padding: 4rem 0;
+}
+
+.order-success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #4D5147;
+    color: #ffffff;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 576px) {
+    .order-success-icon {
+        width: 88px;
+        height: 88px;
+        font-size: 2.25rem;
     }
 }

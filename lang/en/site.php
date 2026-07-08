@@ -84,11 +84,13 @@ return [
     'flash_cart_updated' => 'Cart updated.',
     'flash_item_removed' => 'Item removed from cart.',
     'flash_insufficient_stock' => ':title no longer has enough stock. Please update your cart.',
-    'flash_order_placed' => 'Your order has been placed! Thank you for shopping with us.',
-    'flash_order_submitted' => 'Your order has been submitted!',
     'flash_contact_thanks' => 'Thanks for reaching out! We will get back to you soon.',
     'flash_success_title' => 'Success',
     'flash_error_title' => 'Error',
+
+    // Order success page
+    'order_success_title' => 'Order Confirmed',
+    'order_success_message' => 'Your order has been placed successfully. We will contact you as soon as possible to arrange delivery. Thank you for your trust, and feel free to keep browsing.',
 
     // Home page
     'featured_products' => 'Featured Products',
@@ -175,6 +177,14 @@ return [
     'place_order' => 'Place Order',
     'subtotal' => 'Subtotal',
     'shipping_fee' => 'Shipping',
+    'shipping_cod_note' => 'cash payment on delivery',
+
+    // Add-to-cart confirmation modal
+    'cart_confirm_title' => 'Order Confirmation',
+    'cart_confirm_continue' => 'Continue Shopping',
+    'cart_confirm_buy_now' => 'Buy Now',
+    'cart_confirm_total_products' => 'Products Total',
+    'cart_confirm_items_count' => '{0} Your cart is empty|{1} There is :count product in your cart|[2,*] There are :count products in your cart',
 
     // 404 page
     'error_404_title' => 'Page Not Found',

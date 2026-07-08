@@ -5,7 +5,7 @@
 @section('content')
 <div class="untree_co-section before-footer-section">
     <div class="container">
-        <a href="{{ url('/') }}" class="btn btn-sm mb-5">&larr; {{ __('site.back_to_shop') }}</a>
+        <a href="{{ url('/') }}" class="btn btn-primary btn-sm mb-5">&larr; {{ __('site.back_to_shop') }}</a>
 
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
@@ -102,11 +102,11 @@
                         @if($article->effective_quantity > 0)
                             <div class="price-breakdown" id="price-breakdown">
                                 <div class="price-breakdown-row">
-                                    <span>{{ __('site.subtotal') }} (<span data-breakdown-qty>1</span>x)</span>
+                                    <span>{{ __('site.subtotal') }} (x<span data-breakdown-qty>1</span>)</span>
                                     <span data-breakdown-subtotal>{{ number_format($article->price, 2) }} DT</span>
                                 </div>
                                 <div class="price-breakdown-row">
-                                    <span>{{ __('site.shipping_fee') }}</span>
+                                    <span>{{ __('site.shipping_fee') }} <small class="price-breakdown-note">({{ __('site.shipping_cod_note') }})</small></span>
                                     <span>{{ number_format($shipping, 2) }} DT</span>
                                 </div>
                                 <div class="price-breakdown-row price-breakdown-total">

@@ -40,6 +40,9 @@ Route::get('/checkout/{article}', [App\Http\Controllers\ShopController::class, '
 // Order submission (POST)
 Route::post('/checkout/{article}', [App\Http\Controllers\ShopController::class, 'orderSubmit'])->name('shop.order.submit');
 
+// Order confirmation page (shared by the single-product and cart checkout flows)
+Route::get('/order/success', [App\Http\Controllers\ShopController::class, 'orderSuccess'])->name('order.success');
+
 // Cart
 Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{article}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');

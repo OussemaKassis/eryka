@@ -84,17 +84,19 @@ return [
     'flash_cart_updated' => 'Panier mis à jour.',
     'flash_item_removed' => 'Article retiré du panier.',
     'flash_insufficient_stock' => ':title n\'a plus assez de stock. Veuillez mettre à jour votre panier.',
-    'flash_order_placed' => 'Votre commande a été passée ! Merci pour votre achat.',
-    'flash_order_submitted' => 'Votre commande a été soumise !',
     'flash_contact_thanks' => 'Merci de nous avoir contactés ! Nous vous répondrons bientôt.',
     'flash_success_title' => 'Succès',
     'flash_error_title' => 'Erreur',
 
+    // Order success page
+    'order_success_title' => 'Commande confirmée',
+    'order_success_message' => 'Votre commande a été passée avec succès. Nous vous contacterons le plus tôt possible pour l\'envoi. Merci pour votre confiance, et n\'hésitez pas à continuer votre shopping.',
+
     // Home page
     'featured_products' => 'Produits en vedette',
     'why_choose_us' => 'Pourquoi nous choisir',
-    'feature_shipping_title' => 'Livraison rapide & gratuite',
-    'feature_shipping_desc' => 'Chaque commande est expédiée rapidement, sans frais supplémentaires.',
+    'feature_shipping_title' => 'Livraison rapide',
+    'feature_shipping_desc' => 'Chaque commande est expédiée rapidement.',
     'feature_easy_title' => 'Achat facile',
     'feature_easy_desc' => 'Parcourez, choisissez une pièce, et passez votre commande en quelques secondes.',
     'feature_support_title' => 'Support 24/7',
@@ -165,7 +167,7 @@ return [
     'cart_empty' => 'Votre panier est vide',
     'cart_empty_desc' => 'Découvrez notre collection et ajoutez vos articles préférés à votre panier.',
     'continue_shopping' => 'Découvrir nos produits',
-    'proceed_to_checkout' => 'Passer à la caisse',
+    'proceed_to_checkout' => 'Commander',
 
     // Checkout pages
     'checkout' => 'Paiement',
@@ -175,6 +177,14 @@ return [
     'place_order' => 'Valider la commande',
     'subtotal' => 'Sous-total',
     'shipping_fee' => 'Livraison',
+    'shipping_cod_note' => 'Paiement en espèces à l\'arrivée du livreur',
+
+    // Add-to-cart confirmation modal
+    'cart_confirm_title' => 'Confirmation de commande',
+    'cart_confirm_continue' => 'Continuer mes achats',
+    'cart_confirm_buy_now' => 'Acheter maintenant',
+    'cart_confirm_total_products' => 'Total produits',
+    'cart_confirm_items_count' => '{0} Votre panier est vide|{1} Il y a :count produit dans votre panier|[2,*] Il y a :count produits dans votre panier',
 
     // 404 page
     'error_404_title' => 'Page introuvable',

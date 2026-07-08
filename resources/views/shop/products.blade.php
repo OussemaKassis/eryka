@@ -33,7 +33,7 @@
 <div id="products" class="untree_co-section product-section before-footer-section">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 mb-5 mb-lg-0">
+            <div class="col-lg-3 mb-5 mb-lg-0 order-2 order-lg-1">
                 <div class="shop-sidebar" id="shop-sidebar">
                     <div class="filter-block">
                         <h3 class="filter-title">{{ __('site.categories') }}</h3>
@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-9">
+            <div class="col-lg-9 order-1 order-lg-2">
                 <div class="products-grid-header">
                     <p class="products-count" id="products-count">{{ __('site.products_found', ['count' => $articles->count()]) }}</p>
                     <div class="products-sort">

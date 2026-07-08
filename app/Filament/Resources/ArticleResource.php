@@ -34,8 +34,6 @@ class ArticleResource extends Resource
                     ->label('Titre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->label('Description'),
                 Forms\Components\TextInput::make('price')
                     ->label('Prix')
                     ->required()
@@ -91,9 +89,10 @@ class ArticleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')
+                    ->label('N°')
+                    ->getStateUsing(fn ($rowLoop): int => $rowLoop->iteration),
                 Tables\Columns\TextColumn::make('title')->label('Titre')->searchable(),
-                Tables\Columns\TextColumn::make('description')->label('Description')->limit(30),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Prix')
                     ->formatStateUsing(fn (float $state): string => number_format($state, 2) . ' DT'),

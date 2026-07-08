@@ -47,7 +47,9 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')
+                    ->label('N°')
+                    ->getStateUsing(fn ($rowLoop): int => $rowLoop->iteration),
                 Tables\Columns\TextColumn::make('title')->label('Titre')->searchable(),
                 Tables\Columns\TextColumn::make('description')->label('Description')->limit(30),
                 Tables\Columns\ImageColumn::make('image')->label('Image')->disk('public'),

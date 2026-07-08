@@ -3,7 +3,7 @@
 @section('hero-title', __('site.your_cart'))
 
 @section('content')
-<div class="untree_co-section before-footer-section">
+<div id="cart-page" class="untree_co-section before-footer-section">
     <div class="container">
         @if($items->isEmpty())
             <div class="row">
@@ -57,7 +57,7 @@
                                                 @csrf
                                                 <div class="qty-stepper">
                                                     <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
-                                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off" readonly>
+                                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantityForColor($item['color']) }}" inputmode="none" autocomplete="off" readonly>
                                                     <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
                                                 </div>
                                                 <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
@@ -103,7 +103,7 @@
                                         @csrf
                                         <div class="qty-stepper">
                                             <button type="button" class="qty-stepper-btn" data-qty-step="-1" aria-label="{{ __('site.decrease_quantity') }}">&minus;</button>
-                                            <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantity }}" inputmode="none" autocomplete="off" readonly>
+                                            <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="form-control text-center" data-cart-quantity data-stock="{{ $item['article']->quantityForColor($item['color']) }}" inputmode="none" autocomplete="off" readonly>
                                             <button type="button" class="qty-stepper-btn" data-qty-step="1" aria-label="{{ __('site.increase_quantity') }}">&plus;</button>
                                         </div>
                                         <noscript><button type="submit" class="btn btn-sm">{{ __('site.update') }}</button></noscript>
@@ -135,7 +135,7 @@
                             <span data-cart-subtotal-total>{{ number_format($subtotal, 2) }} DT</span>
                         </div>
                         <div class="price-breakdown-row">
-                            <span>{{ __('site.shipping_fee') }}</span>
+                            <span>{{ __('site.shipping_fee') }} <small class="price-breakdown-note">({{ __('site.shipping_cod_note') }})</small></span>
                             <span>{{ number_format($shipping, 2) }} DT</span>
                         </div>
                         <div class="price-breakdown-row price-breakdown-total">

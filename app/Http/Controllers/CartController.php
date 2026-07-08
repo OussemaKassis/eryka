@@ -15,7 +15,7 @@ class CartController extends Controller
         $cart = session('cart', []);
         $items = $this->buildCartItems($cart);
         $subtotal = $items->sum('subtotal');
-        $shipping = $items->isEmpty() ? 0 : Command::SHIPPING_FEE;
+        $shipping = $items->isEmpty() ? 0 : Command::shippingFee();
         $total = $subtotal + $shipping;
 
         return view('shop.cart', compact('items', 'subtotal', 'shipping', 'total'));
@@ -28,7 +28,13 @@ class CartController extends Controller
         $stock = $article->quantityForColor($color);
 
         if ($stock <= 0) {
-            return back()->with('error', __('site.flash_out_of_stock', ['title' => $article->title]));
+            $message = __('site.flash_out_of_stock', ['title' => $article->title]);
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 422);
+            }
+
+            return back()->with('error', $message);
         }
 
         $key = $this->cartKey($article->id, $color);
@@ -44,6 +50,34 @@ class CartController extends Controller
         ];
 
         session(['cart' => $cart]);
+
+        if ($request->wantsJson()) {
+            $items = $this->buildCartItems($cart);
+            $subtotal = $items->sum('subtotal');
+            $shipping = Command::shippingFee();
+            $count = $items->count();
+
+            $colorImages = $article->images->whereNotNull('color');
+            $image = $color ? $colorImages->firstWhere('color', $color) : $article->images->first();
+
+            return response()->json([
+                'success' => true,
+                'article' => [
+                    'title' => $article->title,
+                    'price' => $article->price,
+                    'description' => $article->description,
+                    'image' => $image ? asset('storage/' . $image->image_path) : null,
+                ],
+                'color' => $color,
+                'quantity' => $cart[$key]['quantity'],
+                'cart' => [
+                    'countLabel' => trans_choice('site.cart_confirm_items_count', $count, ['count' => $count]),
+                    'subtotal' => $subtotal,
+                    'shipping' => $shipping,
+                    'total' => $subtotal + $shipping,
+                ],
+            ]);
+        }
 
         return back()->with('success', __('site.flash_added_to_cart', ['title' => $article->title]));
     }
@@ -90,7 +124,7 @@ class CartController extends Controller
         }
 
         $subtotal = $items->sum('subtotal');
-        $shipping = Command::SHIPPING_FEE;
+        $shipping = Command::shippingFee();
         $total = $subtotal + $shipping;
 
         return view('shop.cart-checkout', compact('items', 'subtotal', 'shipping', 'total'));
@@ -138,7 +172,7 @@ class CartController extends Controller
                 'article_id' => $entry['article_id'],
                 'color' => $entry['color'],
                 'quantity' => $entry['quantity'],
-                'shipping_fee' => Command::SHIPPING_FEE,
+                'shipping_fee' => Command::shippingFee(),
             ]);
 
             $article = $articles->get($entry['article_id']);
@@ -154,8 +188,7 @@ class CartController extends Controller
 
         session()->forget('cart');
 
-        return redirect()->route('shop.home')
-            ->with('success', __('site.flash_order_placed'));
+        return redirect()->route('order.success')->with('order_placed', true);
     }
 
     private function cartKey(int $articleId, ?string $color): string
