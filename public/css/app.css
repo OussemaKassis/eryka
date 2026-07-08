@@ -14,16 +14,6 @@ select {
     font-family: 'Bitter', serif;
 }
 
-/* The template's product-card hover reveals a tan background box that grows
-   from the bottom (.product-item:before) as the thumbnail lifts — since the
-   image is opaque, only a thin sliver of that box peeks out above it, and
-   that sliver shows the box's flat side rather than its rounded corner,
-   clashing with the thumbnail's own rounded corners. Disable the box reveal
-   entirely so hovering doesn't introduce a mismatched square edge. */
-.product-section .product-item:hover:before {
-    height: 0%;
-}
-
 /* The template ships a cramped 14px body size — bump it so paragraph text,
    form labels and price figures (description, price breakdown, quantity
    labels, etc.) are comfortably readable instead of looking undersized
