@@ -46,10 +46,10 @@
                     </div>
                 @endif
 
-                @if($article->description)
+                @if($article->detail)
                     <div class="mt-4">
                         <h3 class="h6 text-black fw-bold mb-1">{{ __('site.description') }}</h3>
-                        <p class="mb-0">{{ $article->description }}</p>
+                        <div class="mb-0">{!! $article->detail !!}</div>
                     </div>
                 @endif
             </div>
