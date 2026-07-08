@@ -381,16 +381,26 @@ body {
     }
 }
 
-/* Match the hero's "Acheter maintenant" (.btn-secondary) to the plain .btn
-   style used by "En savoir plus" — same text/background, same hover. */
+/* Unify every plain-.btn / .btn-secondary button (hero "Acheter maintenant",
+   "En savoir plus", "Découvrir") to the same brand green as .btn-primary
+   ("Ajouter au panier") instead of the theme's default dark brown / tan. */
+.btn {
+    background: #4D5147;
+    border-color: #4D5147;
+}
+.btn:hover {
+    background: #3A3D33;
+    border-color: #3A3D33;
+}
+
 .btn.btn-secondary {
     color: #ffffff;
-    background: #4C403A;
-    border-color: #4C403A;
+    background: #4D5147;
+    border-color: #4D5147;
 }
 .btn.btn-secondary:hover {
-    background: #3D332E;
-    border-color: #3D332E;
+    background: #3A3D33;
+    border-color: #3A3D33;
 }
 
 /* Page sections (admin-managed via PageSectionResource, shared by every page
