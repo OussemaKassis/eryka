@@ -382,9 +382,9 @@ body {
     }
 }
 
-/* Unify every plain-.btn / .btn-secondary button (hero "Acheter maintenant",
-   "En savoir plus", "Découvrir") to the same brand green as .btn-primary
-   ("Ajouter au panier") instead of the theme's default dark brown / tan. */
+/* Unify plain-.btn buttons ("En savoir plus", "Découvrir") to the same
+   brand green as .btn-primary ("Ajouter au panier") instead of the theme's
+   default dark brown. */
 .btn {
     background: #4D5147;
     border-color: #4D5147;
@@ -394,14 +394,17 @@ body {
     border-color: #3A3D33;
 }
 
+/* The hero's "Acheter maintenant" (.btn-secondary) instead matches the
+   brand gold used by the cart notification badge and nav underline. */
 .btn.btn-secondary {
-    color: #ffffff;
-    background: #4D5147;
-    border-color: #4D5147;
+    color: #4C403A;
+    background: #DAB88B;
+    border-color: #DAB88B;
 }
 .btn.btn-secondary:hover {
-    background: #3A3D33;
-    border-color: #3A3D33;
+    background: #C9A06D;
+    border-color: #C9A06D;
+    color: #4C403A;
 }
 
 /* Page sections (admin-managed via PageSectionResource, shared by every page
