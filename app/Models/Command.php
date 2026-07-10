@@ -38,4 +38,14 @@ class Command extends Model
     {
         return $this->belongsTo(Article::class);
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $command) {
+            if (is_null($command->sort_order)) {
+                static::query()->increment('sort_order');
+                $command->sort_order = 0;
+            }
+        });
+    }
 }
