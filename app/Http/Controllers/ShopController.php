@@ -37,7 +37,7 @@ class ShopController extends Controller
         $articles = Article::with('category', 'images')->latest()->take(4)->get();
         $homeSections = $this->pageSections('home');
         $welcomeSection = $homeSections->first();
-        $newsItems = NewsItem::where('is_active', true)->orderBy('sort_order')->take(3)->get();
+        $newsItems = NewsItem::where('is_active', true)->latest()->take(3)->get();
         return view('shop.home', [
             'articles' => $articles,
             'welcomeSection' => $welcomeSection,
@@ -165,7 +165,7 @@ class ShopController extends Controller
 
     public function actualite()
     {
-        $newsItems = NewsItem::where('is_active', true)->orderBy('sort_order')->get();
+        $newsItems = NewsItem::where('is_active', true)->latest()->get();
         $pageSections = $this->pageSections('actualite');
         return view('shop.actualite', [
             'newsItems' => $newsItems,

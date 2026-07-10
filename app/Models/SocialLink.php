@@ -30,4 +30,14 @@ class SocialLink extends Model
     {
         return self::PLATFORM_ICONS[$this->platform] ?? 'fa-solid fa-link';
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $link) {
+            if (is_null($link->sort_order)) {
+                static::query()->increment('sort_order');
+                $link->sort_order = 0;
+            }
+        });
+    }
 }

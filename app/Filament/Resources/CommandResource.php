@@ -97,9 +97,12 @@ class CommandResource extends Resource
                             $record->created_at->locale('fr')->translatedFormat('j M Y H:i'),
                         );
                     })
+                    ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('sort_order', $direction))
                     ->collapsible(),
             ])
             ->defaultGroup('group_id')
+            ->defaultSort('sort_order')
+            ->reorderable('sort_order')
             ->recordClasses(function (Command $record) {
                 static $colorByGroup = [];
                 static $nextColor = 0;
