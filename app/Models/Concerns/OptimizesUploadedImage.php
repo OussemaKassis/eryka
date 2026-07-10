@@ -9,15 +9,26 @@ trait OptimizesUploadedImage
     public static function bootOptimizesUploadedImage(): void
     {
         static::created(function ($model) {
-            if ($model->image_path) {
-                ImageOptimizer::optimize('public', $model->image_path);
-            }
+            self::optimizeAndPersist($model);
         });
 
         static::updated(function ($model) {
-            if ($model->wasChanged('image_path') && $model->image_path) {
-                ImageOptimizer::optimize('public', $model->image_path);
+            if ($model->wasChanged('image_path')) {
+                self::optimizeAndPersist($model);
             }
         });
+    }
+
+    protected static function optimizeAndPersist($model): void
+    {
+        if (! $model->image_path) {
+            return;
+        }
+
+        $newPath = ImageOptimizer::optimize('public', $model->image_path);
+
+        if ($newPath !== $model->image_path) {
+            $model->updateQuietly(['image_path' => $newPath]);
+        }
     }
 }

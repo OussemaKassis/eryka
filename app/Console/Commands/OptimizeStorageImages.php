@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Support\ImageOptimizer;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class OptimizeStorageImages extends Command
@@ -11,6 +12,19 @@ class OptimizeStorageImages extends Command
     protected $signature = 'images:optimize';
 
     protected $description = 'Resize and compress oversized images already stored on the public disk';
+
+    /**
+     * Tables (and their image_path column) that store a reference to a
+     * path on the public disk — kept in sync when optimize() renames a
+     * file (opaque PNG converted to JPEG).
+     */
+    protected const IMAGE_PATH_TABLES = [
+        'article_images',
+        'hero_slides',
+        'news_items',
+        'page_heroes',
+        'page_sections',
+    ];
 
     public function handle(): int
     {
@@ -20,12 +34,21 @@ class OptimizeStorageImages extends Command
 
         $totalBefore = 0;
         $totalAfter = 0;
+        $renamed = 0;
 
-        $this->withProgressBar($files, function (string $path) use (&$totalBefore, &$totalAfter) {
+        $this->withProgressBar($files, function (string $path) use (&$totalBefore, &$totalAfter, &$renamed) {
             $before = Storage::disk('public')->size($path);
-            ImageOptimizer::optimize('public', $path);
+            $newPath = ImageOptimizer::optimize('public', $path);
+
+            if ($newPath !== $path) {
+                foreach (self::IMAGE_PATH_TABLES as $table) {
+                    DB::table($table)->where('image_path', $path)->update(['image_path' => $newPath]);
+                }
+                $renamed++;
+            }
+
             clearstatcache();
-            $after = Storage::disk('public')->size($path);
+            $after = Storage::disk('public')->size($newPath);
 
             $totalBefore += $before;
             $totalAfter += $after;
@@ -33,8 +56,9 @@ class OptimizeStorageImages extends Command
 
         $this->newLine(2);
         $this->info(sprintf(
-            'Optimized %d images: %s -> %s (saved %s)',
+            'Optimized %d images (%d converted PNG -> JPEG): %s -> %s (saved %s)',
             $files->count(),
+            $renamed,
             $this->formatBytes($totalBefore),
             $this->formatBytes($totalAfter),
             $this->formatBytes($totalBefore - $totalAfter)
