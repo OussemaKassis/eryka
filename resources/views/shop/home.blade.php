@@ -166,24 +166,32 @@
                 </div>
             </div>
 
-            <div class="row">
-                @foreach($newsItems as $item)
-                    <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-                        <div class="post-entry">
-                            <a href="{{ $item->link_url }}" target="_blank" rel="noopener noreferrer">
-                                <span class="post-thumbnail"><img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}" class="img-fluid" loading="lazy" decoding="async"></span>
-                                <div class="post-content-entry">
-                                    <h3>{{ $item->title }}</h3>
-                                    @if($item->description)
-                                        <div class="meta">
-                                            <span>{{ $item->description }}</span>
-                                        </div>
-                                    @endif
-                                </div>
-                            </a>
-                        </div>
+            <div class="product-slider-wrap">
+                @if($newsItems->count() > 1)
+                    <div class="product-slider-nav" id="news-slider-nav">
+                        <button type="button" class="product-slider-arrow" data-controls="prev" aria-label="{{ __('site.previous') }}"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button type="button" class="product-slider-arrow" data-controls="next" aria-label="{{ __('site.next') }}"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
-                @endforeach
+                @endif
+                <div class="product-slider" id="news-slider">
+                    @foreach($newsItems as $item)
+                        <div class="product-slide-item">
+                            <div class="post-entry">
+                                <a href="{{ $item->link_url }}" target="_blank" rel="noopener noreferrer">
+                                    <span class="post-thumbnail"><img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}" class="img-fluid" loading="lazy" decoding="async"></span>
+                                    <div class="post-content-entry">
+                                        <h3>{{ $item->title }}</h3>
+                                        @if($item->description)
+                                            <div class="meta">
+                                                <span>{{ $item->description }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
@@ -215,6 +223,30 @@
             responsive: {
                 576: { items: 2 },
                 992: { items: 4 },
+            },
+        });
+
+        var newsSlider = document.getElementById('news-slider');
+        var newsNav = document.getElementById('news-slider-nav');
+        if (!newsSlider || typeof tns !== 'function') return;
+
+        tns({
+            container: newsSlider,
+            items: 1,
+            gutter: 0,
+            controlsContainer: newsNav ? '#news-slider-nav' : false,
+            controls: !!newsNav,
+            nav: false,
+            loop: true,
+            mouseDrag: true,
+            speed: 400,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
+            autoplayButtonOutput: false,
+            responsive: {
+                576: { items: 2 },
+                992: { items: 3 },
             },
         });
     });
