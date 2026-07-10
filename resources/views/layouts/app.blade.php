@@ -112,7 +112,7 @@
                         <div class="col-lg-7">
                             @if($pageHero?->image_path)
                                 <div class="hero-img-wrap">
-                                    <img src="{{ asset('storage/' . $pageHero->image_path) }}" alt="{{ config('app.name', 'Shop') }}" class="img-fluid">
+                                    <img src="{{ asset('storage/' . $pageHero->image_path) }}" alt="{{ config('app.name', 'Shop') }}" class="img-fluid" fetchpriority="high">
                                 </div>
                             @else
                                 @hasSection('hero-image')
@@ -140,7 +140,7 @@
                 <div class="col-lg-5">
                     <div class="mb-4 footer-logo-wrap">
                         <a href="{{ url('/') }}" class="footer-logo">
-                            <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Shop') }}" class="footer-logo-img">
+                            <img src="{{ asset('images/logo-white.png') }}" alt="{{ config('app.name', 'Shop') }}" class="footer-logo-img" loading="lazy" decoding="async">
                         </a>
                     </div>
                     <p class="mb-4">{{ $siteSettings->footer_tagline ?: __('site.footer_tagline') }}</p>

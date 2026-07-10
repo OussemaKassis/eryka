@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\OptimizesUploadedImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PageHero extends Model
 {
-    use HasFactory;
+    use HasFactory, OptimizesUploadedImage;
 
     protected $fillable = ['page_key', 'title', 'subtitle', 'image_path'];
 

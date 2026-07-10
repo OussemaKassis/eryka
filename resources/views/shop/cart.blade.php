@@ -38,7 +38,7 @@
                                     <tr data-cart-row data-cart-key="{{ $item['key'] }}" data-price="{{ $item['article']->price }}">
                                         <td class="product-thumbnail">
                                             @if($item['article']->images->first())
-                                                <img src="{{ asset('storage/' . $item['article']->images->first()->image_path) }}" alt="Image" class="img-fluid">
+                                                <img src="{{ asset('storage/' . $item['article']->images->first()->image_path) }}" alt="Image" class="img-fluid" loading="lazy" decoding="async">
                                             @endif
                                         </td>
                                         <td class="product-name">
@@ -85,7 +85,7 @@
                                 <div class="cart-mobile-item-top">
                                     <div class="cart-mobile-thumb">
                                         @if($item['article']->images->first())
-                                            <img src="{{ asset('storage/' . $item['article']->images->first()->image_path) }}" alt="Image" class="img-fluid">
+                                            <img src="{{ asset('storage/' . $item['article']->images->first()->image_path) }}" alt="Image" class="img-fluid" loading="lazy" decoding="async">
                                         @endif
                                     </div>
                                     <div class="cart-mobile-info">

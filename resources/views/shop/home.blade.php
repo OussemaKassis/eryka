@@ -41,9 +41,9 @@
                     <video class="we-help-video" src="{{ asset('storage/' . $welcomeSection->video_path) }}" autoplay muted loop playsinline></video>
                 @else
                     <div class="imgs-grid">
-                        <div class="grid grid-1"><img src="{{ asset('vendor/furni/images/img-grid-1.jpg') }}" alt="{{ config('app.name', 'Shop') }}"></div>
-                        <div class="grid grid-2"><img src="{{ asset('vendor/furni/images/img-grid-2.jpg') }}" alt="{{ config('app.name', 'Shop') }}"></div>
-                        <div class="grid grid-3"><img src="{{ asset('vendor/furni/images/img-grid-3.jpg') }}" alt="{{ config('app.name', 'Shop') }}"></div>
+                        <div class="grid grid-1"><img src="{{ asset('vendor/furni/images/img-grid-1.jpg') }}" alt="{{ config('app.name', 'Shop') }}" loading="lazy" decoding="async"></div>
+                        <div class="grid grid-2"><img src="{{ asset('vendor/furni/images/img-grid-2.jpg') }}" alt="{{ config('app.name', 'Shop') }}" loading="lazy" decoding="async"></div>
+                        <div class="grid grid-3"><img src="{{ asset('vendor/furni/images/img-grid-3.jpg') }}" alt="{{ config('app.name', 'Shop') }}" loading="lazy" decoding="async"></div>
                     </div>
                 @endif
             </div>
@@ -171,7 +171,7 @@
                     <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                         <div class="post-entry">
                             <a href="{{ $item->link_url }}" target="_blank" rel="noopener noreferrer">
-                                <span class="post-thumbnail"><img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}" class="img-fluid"></span>
+                                <span class="post-thumbnail"><img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}" class="img-fluid" loading="lazy" decoding="async"></span>
                                 <div class="post-content-entry">
                                     <h3>{{ $item->title }}</h3>
                                     @if($item->description)

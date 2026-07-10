@@ -41,7 +41,7 @@
                 <div class="col-12 col-sm-6 col-md-4 mb-4">
                     <div class="post-entry">
                         <a href="{{ $item->link_url }}" target="_blank" rel="noopener noreferrer">
-                            <span class="post-thumbnail"><img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}" class="img-fluid"></span>
+                            <span class="post-thumbnail"><img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}" class="img-fluid" loading="lazy" decoding="async"></span>
                             <div class="post-content-entry">
                                 <h3>{{ $item->title }}</h3>
                                 @if($item->description)

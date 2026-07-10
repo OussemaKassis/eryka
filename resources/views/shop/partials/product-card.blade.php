@@ -16,8 +16,11 @@
                 <div class="slider" id="slider-{{ $article->id }}">
                     @if($article->images->count() > 0)
                         @foreach($article->images as $image)
-                            <div class="slide"
-                                 style="background-image: url('{{ asset('storage/' . $image->image_path) }}')">
+                            <div class="slide">
+                                <img src="{{ asset('storage/' . $image->image_path) }}"
+                                     alt="{{ $article->title }}"
+                                     loading="lazy"
+                                     decoding="async">
                             </div>
                         @endforeach
                     @else

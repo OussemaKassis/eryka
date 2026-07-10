@@ -12,7 +12,7 @@
 
                     <div class="col-lg-5">
                         <div class="img-wrap">
-                            <img src="{{ asset('storage/' . $section->image_path) }}" alt="{{ $section->title }}" class="img-fluid">
+                            <img src="{{ asset('storage/' . $section->image_path) }}" alt="{{ $section->title }}" class="img-fluid" loading="lazy" decoding="async">
                         </div>
                     </div>
                 </div>
