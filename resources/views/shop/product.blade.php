@@ -5,7 +5,7 @@
 @section('content')
 <div id="product-detail" class="untree_co-section before-footer-section">
     <div class="container">
-        <a href="{{ url('/') }}" class="btn btn-primary btn-sm mb-5">&larr; {{ __('site.back_to_shop') }}</a>
+        <a href="{{ route('shop.products') }}" class="btn btn-primary btn-sm mb-5">&larr; {{ __('site.back_to_shop') }}</a>
 
         <div class="row">
             <div class="col-md-6 mb-5 mb-md-0">
