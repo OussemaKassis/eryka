@@ -10,7 +10,7 @@ class CategoryController extends Controller
     {
         $articles = \App\Models\Article::with('category', 'images')
             ->where('category_id', $category->id)
-            ->latest()
+            ->orderBy('sort_order')
             ->get();
 
         return view('shop.category', compact('category', 'articles'));

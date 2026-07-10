@@ -34,7 +34,7 @@ class ShopController extends Controller
     // Homepage: featured articles + marketing sections
     public function articlesHome()
     {
-        $articles = Article::with('category', 'images')->latest()->take(4)->get();
+        $articles = Article::with('category', 'images')->orderBy('sort_order')->take(4)->get();
         $homeSections = $this->pageSections('home');
         $welcomeSection = $homeSections->first();
         $newsItems = NewsItem::where('is_active', true)->latest()->take(3)->get();
@@ -77,7 +77,7 @@ class ShopController extends Controller
             'price_asc' => $query->orderBy('price', 'asc'),
             'price_desc' => $query->orderBy('price', 'desc'),
             'name_asc' => $query->orderBy('title', 'asc'),
-            default => $query->latest(),
+            default => $query->orderBy('sort_order'),
         };
 
         $articles = $query->get();

@@ -95,4 +95,14 @@ class Article extends Model
 
         return $image ? (int) $image->quantity : 0;
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $article) {
+            if (is_null($article->sort_order)) {
+                static::query()->increment('sort_order');
+                $article->sort_order = 0;
+            }
+        });
+    }
 }
